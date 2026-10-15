@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mini-suite 管理后台</title>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; margin: 0; background: #F6F5F2; color: #2C2C2A; }
+  header { background: #534AB7; color: #fff; padding: 14px 28px; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 17px; margin: 0; font-weight: 500; }
+  .stats { font-size: 12px; opacity: .9; }
+  main { padding: 20px; max-width: 1080px; margin: 0 auto; }
+  .card { background: #fff; border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+  h2 { font-size: 14px; color: #3C3489; margin: 0 0 12px; font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid #F1EFE8; }
+  th { color: #888780; font-weight: 400; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 12px; }
+  .pending { background: #FAEEDA; color: #854F0B; }
+  .paid { background: #E1F5EE; color: #0F6E56; }
+  .shipped { background: #E6F1FB; color: #185FA5; }
+  .done { background: #EEEDFE; color: #534AB7; }
+  .closed { background: #F1EFE8; color: #888780; }
+  button { border: none; border-radius: 8px; padding: 5px 12px; font-size: 12px; cursor: pointer; background: #EEEDFE; color: #534AB7; margin-right: 6px; }
+  button.warn { background: #FCEBEB; color: #A32D2D; }
+  button.primary { background: #534AB7; color: #fff; }
+  input, select, textarea { border: 1px solid #D3D1C7; border-radius: 8px; padding: 6px 10px; font-size: 13px; margin: 2px 4px 2px 0; }
+  .form-row { margin: 6px 0; }
+  .empty { color: #888780; font-size: 13px; padding: 14px 0; }
+  dialog { border: none; border-radius: 14px; padding: 22px; width: 420px; }
+  dialog::backdrop { background: rgba(44,44,42,.35); }
+  .thumb { width: 46px; height: 46px; object-fit: cover; border-radius: 8px; background: #F6F5F2; }
+  .grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .media-item { width: 110px; text-align: center; font-size: 12px; color: #888780; }
+  .media-item img { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .tab { padding: 5px 14px; border-radius: 16px; font-size: 13px; cursor: pointer; background: #F1EFE8; color: #5F5E5A; }
+  .tab.on { background: #534AB7; color: #fff; }
+  .toast { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); background: #2C2C2A; color: #fff; padding: 8px 18px; border-radius: 18px; font-size: 13px; opacity: 0; transition: opacity .25s; pointer-events: none; }
+  .toast.show { opacity: .92; }
+</style>
+</head>
+<body>
+<header>
+  <h1>mini-suite 管理后台</h1>
+  <div class="stats" id="stats">加载中…</div>
+</header>
+<main>
+  <div class="card">
+    <h2>商品管理 <button class="primary" onclick="openGoodsDlg()">+ 新增商品</button></h2>
+    <table id="goods-table">
+      <tr><th>ID</th><th>图片</th><th>名称</th><th>价格</th><th>库存</th><th>上架</th><th>操作</th></tr>
+      {% for g in goods %}
+      <tr>
+        <td>{{ g.id }}</td>
+        <td>{% if g.images %}<img class="thumb" src="{{ g.images.split(',')[0] }}">{% else %}-{% endif %}</td>
+        <td>{{ g.name }}</td>
+        <td>¥{{ g.price }}</td>
+        <td>{{ g.stock }}</td>
+        <td>{{ '是' if g.on_sale else '否' }}</td>
+        <td>
+          <button onclick="toggleGoods({{ g.id }})">{{ '下架' if g.on_sale else '上架' }}</button>
+          <button onclick='openGoodsDlg({"id": {{ g.id }}, "name": {{ g.name | tojson }}, "price": {{ g.price }}, "stock": {{ g.stock }}, "images": {{ g.images | tojson }}, "detail": {{ g.detail | tojson }}})'>编辑</button>
+          <button class="warn" onclick="delGoods({{ g.id }})">删除</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% if not goods %}<div class="empty">暂无商品</div>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>订单管理</h2>
+    <table id="order-table">
+      <tr><th>订单号</th><th>金额</th><th>状态</th><th>时间</th><th>操作</th></tr>
+      {% for o in orders %}
+      <tr>
+        <td>{{ o.order_no }}</td>
+        <td>¥{{ o.total }}</td>
+        <td><span class="badge {{ o.status }}">{{ o.status }}</span></td>
+        <td>{{ o.created_at.strftime('%m-%d %H:%M') if o.created_at else '' }}</td>
+        <td id="ops-{{ o.order_no }}"></td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% if not orders %}<div class="empty">暂无订单</div>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>媒体库（壁纸 / 表情包） <input type="file" id="upload-file" accept="image/*" hidden onchange="doUpload(this)">
+      <select id="upload-type"><option value="wallpaper">壁纸</option><option value="emoji">表情包</option></select>
+      <button class="primary" onclick="document.getElementById('upload-file').click()">上传图片</button>
+    </h2>
+    <div class="tabs">
+      <div class="tab on" data-type="wallpaper" onclick="switchMedia(this)">壁纸</div>
+      <div class="tab" data-type="emoji" onclick="switchMedia(this)">表情包</div>
+    </div>
+    <div class="grid" id="media-grid"></div>
+  </div>
+</main>
+
+<dialog id="goods-dlg">
+  <h2 style="margin-top:0">编辑商品</h2>
+  <div class="form-row"><input id="g-name" placeholder="商品名称" style="width:88%"></div>
+  <div class="form-row">¥ <input id="g-price" type="number" step="0.01" style="width:100"> 库存 <input id="g-stock" type="number" style="width:80"></div>
+  <div class="form-row"><input id="g-images" placeholder="图片路径，逗号分隔（/static/goods/xx.jpg）" style="width:88%"></div>
+  <div class="form-row"><textarea id="g-detail" placeholder="商品详情" style="width:88%;height:70px"></textarea></div>
+  <div style="text-align:right;margin-top:14px">
+    <button onclick="document.getElementById('goods-dlg').close()">取消</button>
+    <button class="primary" onclick="saveGoods()">保存</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let editId = null;
+let mediaType = 'wallpaper';
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1600);
+}
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.detail || r.status); }
+  return r.json();
+}
+
+// ---- 商品 ----
+function openGoodsDlg(g) {
+  editId = g ? g.id : null;
+  document.getElementById('g-name').value = g ? g.name : '';
+  document.getElementById('g-price').value = g ? g.price : '';
+  document.getElementById('g-stock').value = g ? g.stock : 999;
+  document.getElementById('g-images').value = g ? g.images : '';
+  document.getElementById('g-detail').value = g ? g.detail : '';
+  document.getElementById('goods-dlg').showModal();
+}
+async function saveGoods() {
+  const body = JSON.stringify({
+    name: document.getElementById('g-name').value,
+    price: parseFloat(document.getElementById('g-price').value) || 0,
+    stock: parseInt(document.getElementById('g-stock').value) || 0,
+    images: document.getElementById('g-images').value,
+    detail: document.getElementById('g-detail').value,
+    category_id: null
+  });
+  try {
+    if (editId) await api('/admin/api/goods/' + editId, {method:'PUT', body, headers:{'Content-Type':'application/json'}});
+    else await api('/admin/api/goods', {method:'POST', body, headers:{'Content-Type':'application/json'}});
+    toast('已保存'); location.reload();
+  } catch (e) { toast('失败: ' + e.message); }
+}
+async function delGoods(id) {
+  if (!confirm('确认删除该商品？')) return;
+  try { await api('/admin/api/goods/' + id, {method:'DELETE'}); toast('已删除'); location.reload(); }
+  catch (e) { toast('失败: ' + e.message); }
+}
+async function toggleGoods(id) {
+  try { await api('/admin/api/goods/' + id + '/toggle', {method:'POST'}); location.reload(); }
+  catch (e) { toast('失败: ' + e.message); }
+}
+
+// ---- 订单 ----
+const FLOW = {pending: [['paid','确认收款'], ['closed','取消']], paid: [['shipped','发货'], ['closed','关闭']],
+              shipped: [['done','完成']], done: [], closed: []};
+function renderOrderOps() {
+  document.querySelectorAll('[id^=ops-]').forEach(el => {
+    const no = el.id.slice(4);
+    const row = el.closest('tr');
+    const status = row.querySelector('.badge').textContent.trim();
+    el.innerHTML = (FLOW[status] || []).map(([to, label]) =>
+      `<button onclick="advance('${no}','${to}')">${label}</button>`).join('');
+  });
+}
+async function advance(no, to) {
+  const fd = new URLSearchParams(); fd.append('to', to);
+  try { await api('/admin/api/order/' + no + '/status', {method:'POST', body: fd}); location.reload(); }
+  catch (e) { toast('失败: ' + e.message); }
+}
+
+// ---- 媒体 ----
+function switchMedia(el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  mediaType = el.dataset.type;
+  document.getElementById('upload-type').value = mediaType;
+  loadMedia();
+}
+async function loadMedia() {
+  const items = await api('/admin/api/media?type=' + mediaType);
+  document.getElementById('media-grid').innerHTML = items.map(m => `
+    <div class="media-item"><img src="${m.path}"><br>${m.title || ''}<br>
+    <button class="warn" onclick="delMedia(${m.id})">删除</button></div>`).join('') || '<div class="empty">暂无内容，点右上角上传</div>';
+}
+async function delMedia(id) {
+  if (!confirm('确认删除？文件也会一并移除')) return;
+  try { await api('/admin/api/media/' + id, {method:'DELETE'}); loadMedia(); }
+  catch (e) { toast('失败: ' + e.message); }
+}
+async function doUpload(input) {
+  const fd = new FormData();
+  fd.append('file', input.files[0]);
+  try {
+    await api('/admin/api/upload/' + document.getElementById('upload-type').value, {method:'POST', body: fd});
+    toast('上传成功'); loadMedia();
+  } catch (e) { toast('失败: ' + e.message); }
+  input.value = '';
+}
+
+// ---- 统计 ----
+async function loadStats() {
+  const s = await api('/admin/api/stats');
+  document.getElementById('stats').textContent =
+    `商品 ${s.goods} · 订单 ${s.orders} · 诗词 ${s.poetry}（唐 ${s.poetry_tang} / 词 ${s.poetry_song}）`;
+}
+
+renderOrderOps();
+loadMedia();
+loadStats();
+</script>
+</body>
+</html>

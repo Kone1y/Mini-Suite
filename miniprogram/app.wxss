@@ -1,0 +1,75 @@
+page {
+  background: #F6F5F2;
+  font-size: 28rpx;
+  color: #2C2C2A;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* ===== 卡片：描边+双层投影增强层次 ===== */
+.card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin: 20rpx 24rpx;
+  border: 1rpx solid #EFEEE9;
+  box-shadow: 0 4rpx 16rpx rgba(44, 44, 42, 0.05), 0 1rpx 3rpx rgba(44, 44, 42, 0.03);
+}
+
+/* ===== 主按钮：紫渐变 + 悬浮投影 + 按压下沉 ===== */
+.btn-primary {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 60%, #463DA3 100%);
+  color: #FFFFFF;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+  box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.28);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+
+.btn-primary::after { border: none; }
+
+.btn-primary[disabled] {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 60%, #463DA3 100%);
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+/* 按钮通用按压态（配合 hover-class="btn-hover"） */
+.btn-hover {
+  transform: scale(0.97);
+  box-shadow: 0 2rpx 6rpx rgba(83, 74, 183, 0.2);
+}
+
+/* ===== 次级按钮（描边款）===== */
+.btn-ghost {
+  background: #FFFFFF;
+  color: #534AB7;
+  border: 2rpx solid #534AB7;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+}
+.btn-ghost::after { border: none; }
+
+/* ===== 通用按压卡片 ===== */
+.press {
+  transition: transform 0.12s ease;
+}
+.press-active {
+  transform: scale(0.96);
+  opacity: 0.85;
+}
+
+.hint { color: #888780; font-size: 24rpx; }
+.center { text-align: center; }
+
+/* ===== 徽标 pill ===== */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999rpx;
+  padding: 4rpx 16rpx;
+  font-size: 20rpx;
+  line-height: 1.5;
+}

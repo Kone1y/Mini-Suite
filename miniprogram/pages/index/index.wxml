@@ -1,0 +1,68 @@
+<view class="page">
+  <!-- 默认壁纸背景（image 组件方案，WXSS 不支持本地路径背景） -->
+  <image class="page-bg" src="/assets/wallpapers/bg1.jpg" mode="aspectFill"></image>
+  <view class="page-veil"></view>
+
+  <!-- ===== 深色沉浸 hero：点阵背景 + 渐变大标题 + 打字机 ===== -->
+  <view class="hero">
+    <view class="hero-dots"></view>
+    <view class="hero-glow g1"></view>
+    <view class="hero-glow g2"></view>
+    <view class="hero-top">
+      <view class="hero-date">{{dateLine}}</view>
+      <view class="hero-status {{backendOk === false ? 'bad' : 'ok'}}" wx:if="{{backendOk !== null}}">
+        {{backendOk ? '● 在线' : '○ 离线'}}
+      </view>
+    </view>
+    <view class="hero-emoji">{{greeting.emoji}}</view>
+    <view class="hero-title">百宝小屋</view>
+    <view class="hero-typed">{{typed}}<text class="cursor">|</text></view>
+    <view class="hero-tags">
+      <view class="tag">🎮 {{stats[1].value}} 款游戏</view>
+      <view class="tag">🧰 {{stats[2].value}} 件工具</view>
+      <view class="tag">📖 内容馆</view>
+    </view>
+  </view>
+
+  <!-- ===== 数据统计条 ===== -->
+  <view class="stat-bar">
+    <view class="stat" wx:for="{{stats}}" wx:key="label">
+      <view class="stat-v">{{item.value}}</view>
+      <view class="stat-l">{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- ===== 模块大卡轮播（杂志风） ===== -->
+  <view class="sec-title">✦ 探索模块</view>
+  <swiper class="mod-swiper" previous-margin="28rpx" next-margin="28rpx" bindchange="onSwiper" circular>
+    <swiper-item wx:for="{{modules}}" wx:key="key">
+      <view class="mag-card" data-key="{{item.key}}" bindtap="goHall">
+        <!-- 模块色只做点缀：顶部色带 + 右上色晕 + 图标底色 -->
+        <view class="mag-accent" style="background: linear-gradient(90deg, {{item.color}}, {{item.color2}})"></view>
+        <view class="mag-halo" style="background: {{item.color2}}"></view>
+        <view class="mag-num">0{{index + 1}}</view>
+        <view class="mag-deco"></view>
+        <view class="mag-icon" style="background: linear-gradient(135deg, {{item.color}}, {{item.color2}})">{{item.icon}}</view>
+        <view class="mag-title">{{item.title}}</view>
+        <view class="mag-desc">{{item.desc}}</view>
+        <view class="mag-foot">
+          <text class="mag-count">{{item.tools.length}} 个条目</text>
+          <text class="mag-go">进入 ›</text>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- ===== 当前模块精选（色砖直通） ===== -->
+  <view class="sec-title">✦ {{modules[curIdx].title}} · 精选</view>
+  <view class="picks">
+    <view class="pick" wx:for="{{picks}}" wx:key="url" data-url="{{item.url}}" bindtap="goPick">
+      <view class="pick-brick" style="background: linear-gradient(135deg, {{item.brick.c1}}, {{item.brick.c2}})">
+        <text>{{item.icon}}</text>
+      </view>
+      <view class="pick-name">{{item.name}}</view>
+    </view>
+  </view>
+
+  <view class="foot-brand">— 百宝小屋 · 让日常更顺手 —</view>
+</view>

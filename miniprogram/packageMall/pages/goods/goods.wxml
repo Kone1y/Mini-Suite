@@ -1,0 +1,34 @@
+<view class="page">
+  <view class="goods-grid">
+    <view class="goods-card" wx:for="{{items}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail" hover-class="press-active">
+      <view class="goods-img-wrap">
+        <image class="goods-img" src="{{item.cover}}" mode="aspectFill" lazy-load />
+        <view class="sold-badge" wx:if="{{item.sold > 0}}">已售 {{item.sold}}</view>
+        <view class="sold-badge zero" wx:elif="{{item.sold === 0}}">新品</view>
+      </view>
+      <view class="goods-body">
+        <view class="goods-name">{{item.name}}</view>
+        <view class="goods-foot">
+          <view class="goods-price">
+            <text class="price-sym">¥</text>
+            <text class="price-num">{{item.price}}</text>
+          </view>
+          <view class="goods-go">详情 ›</view>
+        </view>
+      </view>
+    </view>
+    <!-- 奇数商品留白占位：保证末尾单独一张卡居左、网格线对齐 -->
+    <view class="goods-card ghost" wx:if="{{items.length % 2 === 1}}"></view>
+  </view>
+
+  <view class="load-line" wx:if="{{loading}}">加载中…</view>
+  <view class="load-line" wx:elif="{{noMore && items.length}}">— 到底啦 —</view>
+  <view class="load-line empty" wx:elif="{{!items.length && !loading}}">
+    <view class="empty-icon">🛍️</view>
+    <view>暂无商品（后台上架后显示）</view>
+  </view>
+
+  <view class="cart-fab" hover-class="fab-active" bindtap="goCart">
+    <text class="fab-icon">🛒</text>
+  </view>
+</view>

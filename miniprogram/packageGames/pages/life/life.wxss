@@ -1,0 +1,173 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #F3F1FE 0%, #ECEAF8 100%);
+  padding: 24rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 玩法说明卡 */
+.intro-card {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  box-shadow: 0 6rpx 18rpx rgba(83, 74, 183, 0.10);
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+.intro-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 26rpx;
+}
+.intro-title {
+  font-size: 27rpx;
+  font-weight: 700;
+  color: #534AB7;
+}
+.intro-arrow {
+  font-size: 22rpx;
+  color: #9B98AE;
+}
+.intro-body {
+  padding: 0 26rpx 22rpx;
+  border-top: 1rpx solid #F0EEF8;
+}
+.intro-p {
+  font-size: 24rpx;
+  color: #5F5E5A;
+  line-height: 1.7;
+  margin-top: 14rpx;
+}
+.intro-li {
+  font-size: 24rpx;
+  color: #5F5E5A;
+  line-height: 1.8;
+  padding-left: 16rpx;
+}
+.intro-p .em, .intro-li .em { font-weight: 700; color: #534AB7; }
+
+/* 顶栏 */
+.topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22rpx;
+}
+.stat { text-align: center; min-width: 130rpx; }
+.stat.right { text-align: center; }
+.stat-label { font-size: 22rpx; color: #8B86B8; }
+.stat-num {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #534AB7;
+  font-family: monospace;
+  line-height: 1.2;
+}
+.title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #2C2C2A;
+  letter-spacing: 2rpx;
+}
+
+/* 棋盘卡片 */
+.board-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 14rpx;
+  box-shadow: 0 8rpx 24rpx rgba(83, 74, 183, 0.14);
+  display: flex;
+  justify-content: center;
+}
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cell {
+  box-sizing: border-box;
+  background: #ECEAF4;
+  border: 1rpx solid #E0DCF2;
+}
+.cell.alive {
+  background: #534AB7;
+  border-color: #534AB7;
+}
+.cell:active { filter: brightness(0.9); }
+
+.hint {
+  margin-top: 16rpx;
+  font-size: 23rpx;
+  color: #8B86B8;
+  text-align: center;
+}
+
+/* 按钮行 */
+.ctrl-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 26rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.btn {
+  flex: 1;
+  min-width: 0;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 999rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 26rpx;
+  color: #5F5E5A;
+  white-space: nowrap;
+  box-shadow: 0 4rpx 10rpx rgba(83, 74, 183, 0.08);
+}
+.btn:active { opacity: 0.8; }
+.btn.primary {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 600;
+}
+.btn.ghost {
+  background: #FFFFFF;
+  color: #534AB7;
+  border: 2rpx solid #534AB7;
+  box-shadow: none;
+}
+.btn.wide { flex: 1; }
+
+/* 调速 */
+.speed-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  margin-top: 28rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.speed-label { font-size: 24rpx; color: #5F5E5A; white-space: nowrap; }
+.slider { flex: 1; min-width: 0; }
+.speed-val {
+  font-size: 24rpx;
+  color: #534AB7;
+  font-family: monospace;
+  white-space: nowrap;
+  min-width: 96rpx;
+  text-align: right;
+}
+
+/* 预设 */
+.preset-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 22rpx;
+  width: 100%;
+  box-sizing: border-box;
+}

@@ -1,0 +1,58 @@
+<view class="page">
+  <!-- 顶栏：难度 + 计时 + 错误 -->
+  <view class="topbar">
+    <view class="level-chip" bindtap="openLevels">{{levels[levelIdx]}} ▾</view>
+    <view class="stat">⏱ {{timeText}}</view>
+    <view class="stat err" wx:if="{{mistakes}}">✗ {{mistakes}}</view>
+  </view>
+
+  <!-- 棋盘 -->
+  <view class="board-wrap">
+    <view class="board">
+      <view
+        class="cell {{item.given ? 'given' : ''}} {{item.error ? 'error' : ''}} {{item.conflict ? 'conflict' : ''}} {{selected === index ? 'sel' : ''}} {{item.highlight ? 'peer' : ''}} {{item.col === 2 || item.col === 5 ? 'brd-r' : ''}} {{item.row === 2 || item.row === 5 ? 'brd-b' : ''}}"
+        wx:for="{{cells}}"
+        wx:key="index"
+        data-idx="{{index}}"
+        bindtap="tapCell"
+      >
+        <text wx:if="{{item.v}}" class="v">{{item.v}}</text>
+        <view wx:else class="notes">
+          <text wx:for="{{item.notes}}" wx:for-item="n" wx:key="*this" class="n">{{n}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 完成遮罩 -->
+    <view class="mask" wx:if="{{finished}}">
+      <view class="mask-title">🎉 完成！</view>
+      <view class="mask-sub">用时 {{timeText}} · 错误 {{mistakes}} 次</view>
+      <view class="mask-sub record" wx:if="{{isRecord}}">🏆 新纪录！</view>
+      <view class="mask-row">
+        <button class="mask-btn" bindtap="newGame">再来一局</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数字键盘 -->
+  <view class="numpad">
+    <view class="num {{noteMode ? 'note-on' : ''}}" wx:for="{{[1,2,3,4,5,6,7,8,9]}}" wx:key="*this" data-n="{{item}}" bindtap="tapNum">{{item}}</view>
+  </view>
+  <view class="tool-row">
+    <view class="tool {{noteMode ? 'on' : ''}}" bindtap="toggleNotes">{{noteMode ? '📝 笔记中' : '📝 笔记'}}</view>
+    <view class="tool" bindtap="erase">⌫ 擦除</view>
+    <view class="tool" bindtap="hint">💡 提示</view>
+    <view class="tool" bindtap="newGame">↻ 换题</view>
+  </view>
+
+  <!-- 难度选择 -->
+  <view class="level-mask" wx:if="{{showLevels}}" bindtap="closeLevels">
+    <view class="level-panel" catchtap="stopProp">
+      <view class="lp-title">选择难度</view>
+      <view class="lp-opt {{levelIdx === index ? 'on' : ''}}" wx:for="{{levels}}" wx:key="index" data-idx="{{index}}" bindtap="pickLevel">
+        {{item}}{{levelIdx === index && bestText ? ' · 最佳 ' + bestText : ''}}
+      </view>
+      <view class="lp-cancel" bindtap="closeLevels">取消</view>
+    </view>
+  </view>
+</view>

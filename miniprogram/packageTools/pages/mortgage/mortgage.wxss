@@ -1,0 +1,60 @@
+.label { font-size: 26rpx; color: #5F5E5A; margin: 10rpx 0; }
+.input {
+  background: #F6F5F2;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
+}
+.picker-line { color: #2C2C2A; }
+
+.mode-switch {
+  display: flex;
+  background: #F6F5F2;
+  border-radius: 12rpx;
+  padding: 6rpx;
+  margin-bottom: 24rpx;
+}
+.mode {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #888780;
+  padding: 12rpx 0;
+  border-radius: 10rpx;
+}
+.mode.on {
+  background: #FFFFFF;
+  color: #534AB7;
+  font-weight: 600;
+  box-shadow: 0 2rpx 6rpx rgba(44,44,42,0.08);
+}
+
+.main-num { text-align: center; padding: 10rpx 0 20rpx; }
+.num { font-size: 56rpx; font-weight: 700; color: #534AB7; font-family: monospace; }
+.unit { font-size: 24rpx; color: #888780; margin-left: 8rpx; }
+
+.stat-row { display: flex; border-top: 1rpx solid #F0EFEB; padding-top: 20rpx; }
+.stat { flex: 1; text-align: center; }
+.stat-val { font-size: 28rpx; font-weight: 600; font-family: monospace; word-break: break-all; }
+.stat-name { font-size: 22rpx; color: #888780; margin-top: 6rpx; }
+
+.sched-toggle {
+  text-align: center;
+  color: #534AB7;
+  font-size: 26rpx;
+  padding: 20rpx 0 8rpx;
+}
+.sched-head, .sched-row {
+  display: flex;
+  font-size: 22rpx;
+  padding: 10rpx 0;
+  font-family: monospace;
+}
+.sched-head { color: #888780; border-bottom: 1rpx solid #F0EFEB; }
+.sched-row { border-bottom: 1rpx solid #FAF9F6; }
+.c-m { width: 70rpx; }
+.c-p { flex: 1.1; text-align: right; }
+.c-i { flex: 1; text-align: right; }
+.c-b { flex: 1.2; text-align: right; }
+.foot { margin-top: 10rpx; }

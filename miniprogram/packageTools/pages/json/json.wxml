@@ -1,0 +1,16 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">JSON 格式化 / 压缩 / 校验</view>
+    <textarea class="tarea" value="{{input}}" bindinput="onInput" placeholder="在此粘贴 JSON…" auto-height maxlength="-1" />
+    <view class="btn-row">
+      <view class="btn" bindtap="doFormat">格式化</view>
+      <view class="btn" bindtap="doMinify">压缩</view>
+      <view class="btn" bindtap="doValidate">校验</view>
+      <view class="btn ghost" bindtap="clear">清空</view>
+    </view>
+    <view class="msg {{msgType}}" wx:if="{{msg}}">{{msg}}</view>
+    <textarea class="tarea out" value="{{output}}" disabled auto-height maxlength="-1" wx:if="{{output}}" />
+    <view class="btn ghost" bindtap="copy" wx:if="{{output}}">复制结果</view>
+  </view>
+  <view class="foot">— JSON 工具 —</view>
+</view>

@@ -1,0 +1,82 @@
+/* ===== 渐变用户卡 ===== */
+.user-hero {
+  position: relative;
+  margin: 24rpx;
+  padding: 44rpx 36rpx 32rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #5C50D6 0%, #534AB7 50%, #3F3596 100%);
+  color: #FFFFFF;
+  overflow: hidden;
+  box-shadow: 0 10rpx 28rpx rgba(83, 74, 183, 0.30);
+}
+.user-deco { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.08); }
+.user-deco.d1 { width: 260rpx; height: 260rpx; right: -70rpx; top: -100rpx; }
+.user-deco.d2 { width: 160rpx; height: 160rpx; left: -60rpx; bottom: -70rpx; }
+
+.user-row { position: relative; display: flex; align-items: center; }
+.avatar {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 3rpx solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52rpx;
+  margin-right: 26rpx;
+}
+.user-name { font-size: 36rpx; font-weight: 700; }
+.user-hint { margin-top: 10rpx; font-size: 22rpx; color: rgba(255,255,255,0.75); word-break: break-all; }
+
+.stat-row {
+  position: relative;
+  display: flex;
+  margin-top: 36rpx;
+  padding-top: 28rpx;
+  border-top: 1rpx solid rgba(255,255,255,0.18);
+}
+.stat { flex: 1; text-align: center; }
+.stat-num { font-size: 36rpx; font-weight: 700; font-family: monospace; }
+.stat-name { margin-top: 4rpx; font-size: 22rpx; color: rgba(255,255,255,0.7); }
+
+/* ===== 入口列表 ===== */
+.entry-card { padding: 8rpx 28rpx; }
+.entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #F1EFE8;
+}
+.entry:last-child { border-bottom: none; }
+.entry-active { opacity: 0.6; }
+.entry-left { display: flex; align-items: center; }
+.entry-icon {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-right: 22rpx;
+}
+.entry-text { display: flex; flex-direction: column; }
+.entry-name { font-size: 29rpx; font-weight: 500; }
+.entry-desc { margin-top: 4rpx; font-size: 22rpx; color: #B4B2A9; }
+.badge {
+  margin-left: 14rpx;
+  min-width: 34rpx;
+  height: 34rpx;
+  line-height: 34rpx;
+  padding: 0 10rpx;
+  border-radius: 18rpx;
+  background: #D84343;
+  color: #FFFFFF;
+  font-size: 20rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 6rpx rgba(216, 67, 67, 0.35);
+}
+.arrow { color: #C9C7BE; font-size: 36rpx; font-weight: 300; }
+.foot-hint { text-align: center; margin: 40rpx 0 30rpx; }

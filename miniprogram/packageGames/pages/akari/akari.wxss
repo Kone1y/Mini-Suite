@@ -1,0 +1,84 @@
+.page {
+  min-height: 100vh; background: #23222B;
+  padding: 24rpx; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+.topbar {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 14rpx;
+}
+.pick {
+  background: #3A3846; color: #E8E4F5;
+  border-radius: 12rpx; padding: 10rpx 24rpx;
+  font-size: 26rpx; font-weight: 600;
+}
+.timer, .lamp-count {
+  font-size: 26rpx; color: #B9B3D4; font-family: monospace;
+}
+
+.status {
+  font-size: 23rpx; color: #9C93C4; margin-bottom: 18rpx; text-align: center;
+}
+
+.board {
+  display: flex; flex-wrap: wrap;
+  background: #1A1922;
+  border-radius: 14rpx; overflow: hidden;
+  box-shadow: 0 10rpx 30rpx rgba(0,0,0,.4);
+}
+.cell {
+  position: relative; box-sizing: border-box;
+  border: 1rpx solid rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+}
+.cell.dark { background: #2C2B38; }
+.cell.lit { background: #4B4566; }
+.cell.wall { background: #14131C; }
+.cell.nwall { background: #14131C; }
+.cell .num {
+  color: #FFFFFF; font-size: 30rpx; font-weight: 800;
+  font-family: monospace;
+}
+.cell.bulb { background: #6B5E30; }
+.bulb-icon { font-size: 30rpx; }
+.cell.bad { background: #6B3040; }
+.cell.wallbad .num { color: #FF8A8A; }
+.cell.hinting { animation: hintBlink .5s ease-in-out infinite; }
+@keyframes hintBlink {
+  0%, 100% { box-shadow: inset 0 0 0 6rpx #FFD66B; }
+  50% { box-shadow: inset 0 0 0 6rpx rgba(255,214,107,.1); }
+}
+
+.empty {
+  padding: 120rpx 0; color: #776F9E; font-size: 26rpx;
+}
+
+.ctrl-row {
+  display: flex; gap: 14rpx; width: 100%;
+  margin-top: 24rpx; padding: 0 4rpx; box-sizing: border-box;
+}
+.btn {
+  flex: 1; min-width: 0;
+  background: #3A3846; color: #E8E4F5;
+  border: 1rpx solid rgba(255,255,255,.08);
+  border-radius: 999rpx; padding: 18rpx 0;
+  text-align: center; font-size: 26rpx; white-space: nowrap;
+}
+.btn.primary { background: #534AB7; font-weight: 700; }
+.btn.ghost { background: transparent; border: 2rpx solid #534AB7; color: #9C8FF5; }
+.btn.wide { flex: 2; }
+.btn:active { opacity: .8; }
+
+.intro-card {
+  width: 100%; background: #2C2B38;
+  border-radius: 20rpx; margin-top: 24rpx; overflow: hidden;
+}
+.intro-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20rpx 26rpx;
+}
+.intro-title { font-size: 26rpx; font-weight: 700; color: #C9C0FF; }
+.intro-arrow { font-size: 22rpx; color: #776F9E; }
+.intro-body { padding: 0 26rpx 20rpx; border-top: 1rpx solid rgba(255,255,255,.06); }
+.intro-li { font-size: 23rpx; color: #B9B3D4; line-height: 1.8; }

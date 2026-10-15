@@ -1,0 +1,53 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="title">迷宫寻路</view>
+    <view class="status">{{status}}</view>
+  </view>
+
+  <!-- 控制面板 -->
+  <view class="panel">
+    <view class="row">
+      <text class="lbl">尺寸</text>
+      <picker mode="selector" range="{{sizeOptions}}" value="{{sizeIndex}}" bindchange="onSizeChange">
+        <view class="picker">{{sizeLabel}} ▾</view>
+      </picker>
+    </view>
+
+    <view class="btns">
+      <view class="btn primary" bindtap="generate">生成</view>
+      <view class="btn" bindtap="solveBFS">求解 BFS</view>
+      <view class="btn" bindtap="solveAStar">求解 A*</view>
+      <view class="btn ghost" bindtap="toggleManual">{{manual ? '退出手动' : '手动模式'}}</view>
+    </view>
+
+    <view class="row" wx:if="{{!manual}}">
+      <text class="lbl">速度</text>
+      <slider class="slider" min="10" max="200" value="{{intervalMs}}" show-value bindchanging="onSpeedChange" bindchange="onSpeedChange"/>
+    </view>
+
+    <view class="row stat">
+      <text>步数 {{steps}}</text>
+    </view>
+  </view>
+
+  <!-- 迷宫棋盘（view 网格，不依赖 canvas） -->
+  <view class="board-wrap">
+    <view class="board" style="{{boardStyle}}">
+      <view
+        wx:for="{{cells}}"
+        wx:key="index"
+        class="{{item.cls}}"
+        style="{{item.style}}"
+        data-idx="{{index}}"
+        catchtap="movePlayer"
+      ></view>
+    </view>
+  </view>
+
+  <view class="hint">绿=起点 · 红=终点 · 浅紫=搜索范围 · 深紫=路径 · 黄=可走</view>
+
+  <view class="ctrl-row">
+    <view class="btn ghost full" bindtap="goHome">返回小屋</view>
+  </view>
+</view>

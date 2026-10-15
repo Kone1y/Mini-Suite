@@ -1,0 +1,35 @@
+<view class="page">
+  <view class="card center-card">
+    <view class="scan-icon">📷</view>
+    <view class="scan-tip">点击下方按钮开始扫码</view>
+    <view class="scan-tip sub">支持二维码 / 条形码，结果可复制、可生成</view>
+    <button class="btn-primary scan-btn" bindtap="scan">开始扫码</button>
+  </view>
+
+  <view class="card" wx:if="{{result}}">
+    <view class="res-head">
+      <view class="res-title">扫描结果</view>
+      <view class="res-close" bindtap="clearResult">✕</view>
+    </view>
+    <view class="res-raw {{result.isUrl ? 'url' : ''}}" user-select>{{result.raw}}</view>
+    <view class="res-meta">{{result.scanType ? '类型：' + result.scanType + ' · ' : ''}}{{result.time}}</view>
+    <view class="res-actions">
+      <button class="act-btn" bindtap="copy">{{copied ? '已复制 ✓' : '复制内容'}}</button>
+      <button class="act-btn" bindtap="useHistory" data-raw="{{result.raw}}">生成二维码</button>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{history.length}}">
+    <view class="his-head">
+      <view class="his-title">扫描历史</view>
+      <view class="his-clear" bindtap="clearHistory">清空</view>
+    </view>
+    <view class="his-item" wx:for="{{history}}" wx:key="raw">
+      <view class="his-left" data-raw="{{item.raw}}" bindtap="copyHistory">
+        <view class="his-raw" user-select>{{item.raw}}</view>
+        <view class="his-time">{{item.isUrl ? '🔗 ' : ''}}{{item.time}}</view>
+      </view>
+      <view class="his-gen" data-raw="{{item.raw}}" bindtap="useHistory">生成</view>
+    </view>
+  </view>
+</view>

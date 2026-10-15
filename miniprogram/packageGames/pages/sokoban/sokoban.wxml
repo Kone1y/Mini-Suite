@@ -1,0 +1,51 @@
+<view class="page">
+  <view class="top-bar">
+    <view class="info-box">
+      <view class="info-label">📦 进度</view>
+      <view class="info-num">{{done}}/{{total}}</view>
+    </view>
+    <view class="title-box">
+      <view class="game-title">推箱子</view>
+      <view class="game-sub">{{levelName}}</view>
+    </view>
+    <view class="info-box">
+      <view class="info-label">👣 步数</view>
+      <view class="info-num">{{steps}}</view>
+    </view>
+  </view>
+
+  <view class="board-wrap">
+    <view class="board" style="grid-template-columns: repeat({{w}}, minmax(0, 1fr));" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+      <view class="tile t{{item.t}}" wx:for="{{tiles}}" wx:key="index"></view>
+    </view>
+
+    <view class="mask" wx:if="{{won}}">
+      <view class="mask-title">🎉 通关！</view>
+      <view class="mask-sub">{{steps}} 步 · 推箱 {{pushes}} 次</view>
+      <view class="mask-row">
+        <button class="mask-btn ghost" bindtap="restartLevel">重玩本关</button>
+        <button class="mask-btn" bindtap="nextLevel" wx:if="{{levelIdx < 9}}">下一关 →</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="dpad">
+    <view class="dpad-row">
+      <view class="dbtn" data-dir="up" bindtap="onDir">▲</view>
+    </view>
+    <view class="dpad-row">
+      <view class="dbtn" data-dir="left" bindtap="onDir">◀</view>
+      <view class="dbtn" data-dir="down" bindtap="onDir">▼</view>
+      <view class="dbtn" data-dir="right" bindtap="onDir">▶</view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <button class="ctrl-btn" bindtap="undo" hover-class="btn-hover">↩ 撤销</button>
+    <button class="ctrl-btn ghost" bindtap="restartLevel" hover-class="btn-hover">重开本关</button>
+    <button class="ctrl-btn ghost" bindtap="prevLevel" disabled="{{levelIdx === 0}}" hover-class="btn-hover">上一关</button>
+    <button class="ctrl-btn ghost" bindtap="nextLevel" disabled="{{levelIdx >= 9 || levelIdx + 1 >= unlocked}}" hover-class="btn-hover">下一关</button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="goHome">小屋</button>
+  </view>
+  <view class="hint center">滑动画布或用方向键 · 箱子只能推不能拉</view>
+</view>

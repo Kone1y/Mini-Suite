@@ -1,0 +1,36 @@
+<view class="page">
+  <view class="card center-card">
+    <view class="big-icon">📶</view>
+    <view class="tip">测试本机到自建后端的下载速度</view>
+    <view class="tip sub">共 4 轮，每轮下载 2MB 随机数据</view>
+    <button class="btn-primary" hover-class="btn-hover" bindtap="start" disabled="{{testing}}">
+      {{testing ? '测速中 ' + progress + '/' + totalRounds + ' …' : '开始测速'}}
+    </button>
+  </view>
+
+  <view class="card" wx:if="{{rounds.length}}">
+    <view class="rounds">
+      <view class="round" wx:for="{{rounds}}" wx:key="index">
+        <view class="round-name">第 {{index + 1}} 轮</view>
+        <view class="round-bar-wrap">
+          <view class="round-bar" style="width: {{item.pct}}%"></view>
+        </view>
+        <view class="round-val">{{item.mbps}} Mbps</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card result-card" wx:if="{{avg !== null}}">
+    <view class="res-main">
+      <text class="res-num">{{avg}}</text>
+      <text class="res-unit">Mbps 平均</text>
+    </view>
+    <view class="res-sub">最快 {{best}} Mbps · {{levelText}}</view>
+  </view>
+
+  <view class="card" wx:if="{{error}}">
+    <view class="err">{{error}}</view>
+  </view>
+
+  <view class="hint center">测的是到自建后端的链路速度，模拟器走本机回环会偏快，真机更接近真实网速</view>
+</view>

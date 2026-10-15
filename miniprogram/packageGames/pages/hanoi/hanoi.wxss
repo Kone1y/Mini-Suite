@@ -1,0 +1,143 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #F3F1FB 0%, #EDEAF9 100%);
+  padding: 24rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18rpx;
+}
+.title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #26215C;
+  letter-spacing: 2rpx;
+}
+.steps {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #534AB7;
+  font-family: monospace;
+}
+
+/* 滑杆面板：卡片圆角 + 轻阴影 */
+.panel {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 18rpx 24rpx 8rpx;
+  box-shadow: 0 6rpx 18rpx rgba(83, 74, 183, 0.10);
+  margin-bottom: 22rpx;
+  box-sizing: border-box;
+}
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rpx;
+}
+.label { font-size: 26rpx; color: #2C2C2A; font-weight: 600; }
+.label-val { font-size: 26rpx; color: #534AB7; font-weight: 700; }
+
+/* 棋盘 */
+.board {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 8rpx 0 14rpx;
+}
+.peg {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 8rpx solid #B9B2E8;
+  border-radius: 6rpx;
+  box-sizing: border-box;
+}
+.peg.sel {
+  box-shadow: 0 0 0 4rpx rgba(83, 74, 183, 0.35);
+  border-radius: 14rpx;
+}
+.discs {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.disc {
+  border-radius: 10rpx;
+  margin-top: 3rpx;
+  box-shadow: 0 3rpx 6rpx rgba(44, 44, 42, 0.18);
+  border: 2rpx solid rgba(255, 255, 255, 0.55);
+  box-sizing: border-box;
+}
+.disc.hl {
+  border: 3rpx solid #FFD66B;
+}
+.disc.held {
+  border: 3rpx solid #26215C;
+  box-shadow: 0 0 12rpx rgba(83, 74, 183, 0.6);
+}
+.disc.moving {
+  border: 3rpx solid #FFFFFF;
+  box-shadow: 0 0 16rpx rgba(83, 74, 183, 0.85);
+}
+
+.mode {
+  font-size: 22rpx;
+  color: #6E6B85;
+  margin-bottom: 16rpx;
+}
+
+/* 控制按钮：主按钮 flex:1，绝不超出屏幕 */
+.ctrl-row {
+  display: flex;
+  gap: 14rpx;
+  width: 100%;
+  margin-top: 10rpx;
+  padding: 0 4rpx;
+  box-sizing: border-box;
+}
+.btn {
+  flex: 1;
+  min-width: 0;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 999rpx;
+  padding: 18rpx 0;
+  text-align: center;
+  font-size: 25rpx;
+  color: #5F5E5A;
+  white-space: nowrap;
+}
+.btn.primary {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 600;
+}
+.btn.ghost {
+  background: #FFFFFF;
+  color: #534AB7;
+  border: 2rpx solid #534AB7;
+  box-shadow: none;
+}
+.btn:active { opacity: 0.8; }
+
+.hint {
+  margin-top: 20rpx;
+  font-size: 20rpx;
+  color: #9B98AE;
+  text-align: center;
+}

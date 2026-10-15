@@ -1,0 +1,70 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="sizes">
+      <view class="sz {{n === 4 ? 'on' : ''}}" data-n="4" bindtap="onSize">4×4</view>
+      <view class="sz {{n === 5 ? 'on' : ''}}" data-n="5" bindtap="onSize">5×5</view>
+    </view>
+    <view class="timer">⏱ {{elapsed}}s</view>
+    <view class="btn-mini" bindtap="onHint">💡</view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="help-card">
+    <view class="help-head" bindtap="toggleHelp">
+      <text>❓ 规则</text>
+      <text class="help-arrow {{helpOpen ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="help-body" wx:if="{{helpOpen}}">
+      <view class="hp">顶部是每列的正则，左侧是每行的正则。填入字母使每行从左到右、每列从上到下都完整匹配对应正则。</view>
+      <view class="hp">示例：行正则 <text class="mono">A*C</text> 可匹配 AC、AAC、AAAC…；<text class="mono">[AB]+</text> 匹配任意长度的 A/B 串。</view>
+      <view class="hp">点格子选中，点字母填入（再点同字母清除），填对的行/列正则会亮绿。</view>
+    </view>
+  </view>
+
+  <!-- 棋盘 -->
+  <view class="board-area" wx:if="{{!generating}}">
+    <!-- 列正则 -->
+    <view class="col-regex-row">
+      <view class="corner"></view>
+      <view class="col-regex {{colOk[index] ? 'ok' : ''}}" wx:for="{{cols}}" wx:key="index" style="width:{{cellPx}}px">
+        <text>{{item}}</text>
+      </view>
+    </view>
+    <!-- 行 -->
+    <view class="grid-row" wx:for="{{grid}}" wx:key="index" wx:for-item="row" wx:for-index="ri">
+      <view class="row-regex {{rowOk[ri] ? 'ok' : ''}}"><text>{{rows[ri]}}</text></view>
+      <view
+        wx:for="{{row}}"
+        wx:key="index"
+        wx:for-item="cell"
+        wx:for-index="ci"
+        class="cell {{cell !== ' ' ? 'filled' : ''}} {{sel && sel.r === ri && sel.c === ci ? 'sel' : ''}} {{rowOk[ri] && colOk[ci] && cell !== ' ' ? 'both-ok' : ''}}"
+        style="width:{{cellPx}}px;height:{{cellPx}}px"
+        data-r="{{ri}}" data-c="{{ci}}"
+        bindtap="onCell"
+      >{{cell === ' ' ? '' : cell}}</view>
+    </view>
+  </view>
+  <view class="loading" wx:if="{{generating}}">生成谜题中…</view>
+
+  <!-- 过关 -->
+  <view class="won-banner" wx:if="{{won}}">
+    <text class="wb-t">🎉 全部匹配！用时 {{elapsed}}s</text>
+    <view class="wb-btns">
+      <view class="wb-btn" bindtap="newPuzzle">再来一题</view>
+    </view>
+  </view>
+
+  <!-- 字母键盘 -->
+  <view class="keypad" wx:if="{{!won && !generating}}">
+    <view class="alpha-row" wx:for="{{alphaRows}}" wx:key="index" wx:for-item="arow">
+      <view class="akey" wx:for="{{arow}}" wx:key="*this" wx:for-item="ch" data-ch="{{ch}}" bindtap="onAlpha">{{ch}}</view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <view class="btn" bindtap="newPuzzle">🎲 换题</view>
+    <view class="btn ghost" bindtap="goHome">🏠 返回小屋</view>
+  </view>
+</view>

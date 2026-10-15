@@ -1,0 +1,76 @@
+<view class="page">
+  <!-- 课程列表 -->
+  <block wx:if="{{screen === 'list'}}">
+    <view class="hero">
+      <view class="hero-t">🗄 SQL 练习场</view>
+      <view class="hero-s">在沙箱里写查询 · {{lessons.length}} 课</view>
+    </view>
+    <view class="ls-list">
+      <view class="ls-item {{item.done ? 'done' : ''}}" wx:for="{{lessons}}" wx:key="id" data-id="{{item.id}}" bindtap="onLessonTap">
+        <view class="ls-no {{item.done ? 'ok' : ''}}">{{item.done ? '✓' : item.id}}</view>
+        <view class="ls-main">
+          <view class="ls-name">{{item.name}} <text class="ls-cat">{{item.cat}}</text></view>
+          <view class="ls-task">{{item.task}}</view>
+        </view>
+        <text class="ls-arrow">›</text>
+      </view>
+    </view>
+    <view class="foot" bindtap="goHome">← 返回小屋</view>
+  </block>
+
+  <!-- 上课 -->
+  <block wx:else>
+    <view class="play-head">
+      <view class="back-btn" bindtap="backToList">‹</view>
+      <view class="ph-main">
+        <view class="ph-name">第 {{cur.id}} 课 · {{cur.name}}</view>
+      </view>
+    </view>
+
+    <!-- 讲解 -->
+    <view class="lesson-card">
+      <view class="lc-t">📖 {{cur.desc}}</view>
+      <view class="lc-task">🎯 任务：{{cur.task}}</view>
+      <view class="lc-schema" wx:if="{{schemaText}}">表结构：{{schemaText}}</view>
+    </view>
+
+    <!-- SQL 输入 -->
+    <view class="sql-area">
+      <textarea class="sql-inp" value="{{sql}}" placeholder="SELECT ... FROM ..." placeholder-class="ph"
+        bindinput="onSqlInput" maxlength="500" auto-height></textarea>
+      <view class="sql-btns">
+        <view class="sbtn primary" bindtap="onRun">{{running ? '执行中…' : '▶ 执行'}}</view>
+        <view class="sbtn" bindtap="onFillAnswer">看答案</view>
+      </view>
+    </view>
+
+    <!-- 错误 -->
+    <view class="err-box" wx:if="{{error}}">⚠ {{error}}</view>
+
+    <!-- 结果表 -->
+    <view class="result-box" wx:if="{{result}}">
+      <view class="rb-meta">{{result.rowCount}} 行 · {{result.ms}}ms</view>
+      <scroll-view scroll-x class="rb-scroll">
+        <view class="rb-table">
+          <view class="rb-row rb-head">
+            <view class="rb-cell h" wx:for="{{result.columns}}" wx:key="*this">{{item}}</view>
+          </view>
+          <view class="rb-row" wx:for="{{result.rows}}" wx:key="index" wx:for-item="row">
+            <view class="rb-cell" wx:for="{{row}}" wx:key="index">{{item === null ? 'NULL' : item}}</view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 过关 -->
+    <view class="won-banner" wx:if="{{passed}}">
+      <text class="wb-t">🎉 回答正确！</text>
+      <view class="wb-btns">
+        <view class="wb-btn" bindtap="onNextLesson">下一课 ›</view>
+        <view class="wb-btn ghost" bindtap="backToList">课程列表</view>
+      </view>
+    </view>
+
+    <view class="foot" bindtap="backToList">← 返回课程列表</view>
+  </block>
+</view>

@@ -1,0 +1,148 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F4F3FB 0%, #F6F5F2 70%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 40rpx;
+  box-sizing: border-box;
+}
+
+/* 环形计时器 */
+.ring-wrap { margin-top: 30rpx; }
+.ring-svg {
+  position: relative;
+  width: 480rpx;
+  height: 480rpx;
+  border-radius: 50%;
+}
+.ring-bg, .ring-fill {
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+}
+.ring-bg { background: #E8E6DF; }
+.ring-fill {
+  /* conic-gradient 填充进度，JS 注入 dashArray */
+  transition: background 0.3s;
+}
+.ring-mask {
+  position: absolute;
+  left: 44rpx; top: 44rpx; right: 44rpx; bottom: 44rpx;
+  background: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2rpx 12rpx rgba(44,44,42,0.05);
+}
+.time-text {
+  font-size: 96rpx;
+  font-weight: 200;
+  font-family: monospace;
+  color: #2C2C2A;
+  letter-spacing: 4rpx;
+}
+.phase-text {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #9B98A8;
+}
+
+/* 控制按钮 */
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 30rpx;
+  margin-top: 70rpx;
+}
+.ctrl-btn.main {
+  min-width: 300rpx;
+  text-align: center;
+  padding: 26rpx 60rpx;
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 20rpx rgba(83, 74, 183, 0.35);
+}
+.ctrl-btn.ghost {
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #5F5E5A;
+}
+
+/* 统计卡 */
+.stats-card {
+  margin-top: 80rpx;
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  border: 1rpx solid #EFEEE9;
+  display: flex;
+  align-items: center;
+  padding: 36rpx 0;
+  box-sizing: border-box;
+  box-shadow: 0 4rpx 14rpx rgba(44,44,42,0.04);
+}
+.stat-item { flex: 1; text-align: center; }
+.stat-num {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #534AB7;
+  font-family: monospace;
+}
+.stat-label { font-size: 22rpx; color: #9B98A8; margin-top: 8rpx; }
+.divider { width: 1rpx; height: 60rpx; background: #EFEEE9; }
+
+/* 设置面板 */
+.setting-mask {
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+.setting-panel {
+  width: 580rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 36rpx 32rpx;
+  box-sizing: border-box;
+}
+.sp-title { text-align: center; font-size: 30rpx; font-weight: 600; margin-bottom: 30rpx; }
+.sp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+.sp-label { font-size: 26rpx; color: #5F5E5A; }
+.sp-input {
+  width: 160rpx;
+  background: #F6F5F2;
+  border-radius: 12rpx;
+  padding: 14rpx 20rpx;
+  font-size: 28rpx;
+  text-align: center;
+}
+.sp-tip { font-size: 21rpx; color: #B4B2A9; margin: 10rpx 0 26rpx; line-height: 1.6; }
+.sp-btn {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  text-align: center;
+  border-radius: 999rpx;
+  padding: 20rpx 0;
+  font-size: 27rpx;
+}

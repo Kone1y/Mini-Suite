@@ -1,0 +1,80 @@
+<view class="page">
+  <!-- 玩法说明（可折叠） -->
+  <view class="intro-card">
+    <view class="intro-head" bindtap="toggleIntro">
+      <text class="intro-title">❓ 这是什么？怎么玩</text>
+      <text class="intro-arrow">{{introOpen ? '▲' : '▼'}}</text>
+    </view>
+    <view class="intro-body" wx:if="{{introOpen}}">
+      <view class="intro-p">这是数学家康威 1970 年发明的<text class="em">「生命游戏」</text>——一个细胞自动机模拟：每个格子是一个细胞，按三条简单规则自动演化，无需玩家实时操作。</view>
+      <view class="intro-p"><text class="em">演化规则（每代同时结算）：</text></view>
+      <view class="intro-li">· 活细胞邻居<text class="em">少于 2</text>个 → 死亡（孤独）</view>
+      <view class="intro-li">· 活细胞邻居<text class="em">2 或 3</text>个 → 存活</view>
+      <view class="intro-li">· 活细胞邻居<text class="em">超过 3</text>个 → 死亡（拥挤）</view>
+      <view class="intro-li">· 死细胞恰好<text class="em">3</text>个活邻居 → 复活（生育）</view>
+      <view class="intro-p"><text class="em">玩法：</text>暂停时点击格子摆放初始细胞（或用 🎲 随机 / 预设图案），点「▶ 播放」看它们一代代演化——有的稳定成形、有的来回振荡、有的像滑翔机一样移动。试试预设里的「滑翔机」，看它如何斜向爬行！</view>
+    </view>
+  </view>
+
+  <!-- 顶栏：代数 + 存活数（均预计算于 data） -->
+  <view class="topbar">
+    <view class="stat">
+      <view class="stat-label">代数</view>
+      <view class="stat-num">{{generation}}</view>
+    </view>
+    <view class="title">生命游戏</view>
+    <view class="stat right">
+      <view class="stat-label">存活</view>
+      <view class="stat-num">{{liveCount}}</view>
+    </view>
+  </view>
+
+  <!-- 棋盘卡片 -->
+  <view class="board-card">
+    <view class="board" style="width:{{boardW}}px">
+      <view
+        wx:for="{{cells}}"
+        wx:key="index"
+        class="cell {{item ? 'alive' : ''}}"
+        style="width:{{s}}px;height:{{s}}px"
+        data-idx="{{index}}"
+        bindtap="tapCell"
+        catchtap="stopProp"
+      ></view>
+    </view>
+  </view>
+  <view class="hint">{{running ? '演化中…（暂停后可点格切换）' : '点击格子切换细胞状态'}}</view>
+
+  <!-- 主控：播放/暂停 · 随机 · 清空 -->
+  <view class="ctrl-row">
+    <view class="btn primary" bindtap="playPause">{{running ? '⏸ 暂停' : '▶ 播放'}}</view>
+    <view class="btn" bindtap="randomize">🎲 随机</view>
+    <view class="btn" bindtap="clearGrid">🗑 清空</view>
+  </view>
+
+  <!-- 调速滑杆 -->
+  <view class="speed-row">
+    <text class="speed-label">速度</text>
+    <slider
+      class="slider"
+      min="60" max="800" step="20"
+      value="{{speed}}"
+      bindchange="onSpeed"
+      activeColor="#534AB7"
+      backgroundColor="#E3E0F4"
+      block-size="22"
+    />
+    <text class="speed-val">{{speedText}}</text>
+  </view>
+
+  <!-- 预设 -->
+  <view class="preset-row">
+    <view class="btn ghost" data-name="glider" bindtap="applyPreset">滑翔机</view>
+    <view class="btn ghost" data-name="blinker" bindtap="applyPreset">闪烁</view>
+    <view class="btn ghost" data-name="pulsar" bindtap="applyPreset">脉冲星</view>
+  </view>
+
+  <view class="ctrl-row">
+    <view class="btn ghost wide" bindtap="goHome">🏠 返回小屋</view>
+  </view>
+</view>

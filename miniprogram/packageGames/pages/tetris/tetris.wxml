@@ -1,0 +1,69 @@
+<view class="page">
+  <!-- 顶部：数据 + NEXT 预览 -->
+  <view class="top-bar">
+    <view class="stats-col">
+      <view class="stat-row">
+        <view class="stat"><view class="stat-label">SCORE</view><view class="stat-num neon-cyan">{{score}}</view></view>
+        <view class="stat"><view class="stat-label">BEST</view><view class="stat-num neon-pink">{{best}}</view></view>
+      </view>
+      <view class="stat-row">
+        <view class="stat"><view class="stat-label">LINES</view><view class="stat-num neon-green">{{lines}}</view></view>
+        <view class="stat"><view class="stat-label">LEVEL</view><view class="stat-num neon-orange">{{level}}</view></view>
+        <view class="stat combo" wx:if="{{combo > 1}}"><view class="stat-label">COMBO</view><view class="stat-num neon-pink">×{{combo}}</view></view>
+      </view>
+    </view>
+    <view class="next-box">
+      <view class="next-label">NEXT</view>
+      <canvas canvas-id="next" class="next-canvas" style="width: {{nextSize}}px; height: {{nextSize}}px;" />
+    </view>
+  </view>
+
+  <!-- 棋盘 -->
+  <view class="board-frame">
+    <canvas
+      canvas-id="tetris"
+      class="board"
+      style="width: {{bw}}px; height: {{bh}}px;"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+      disable-scroll
+    />
+    <!-- 连消闪现 -->
+    <view class="flash-text" wx:if="{{flashText}}">{{flashText}}</view>
+    <!-- 开始/暂停/结束 遮罩 -->
+    <view class="overlay" wx:if="{{!running || paused || over}}">
+      <block wx:if="{{over}}">
+        <view class="ov-title glitch-r">GAME OVER</view>
+        <view class="ov-sub">得分 {{score}} · 消行 {{lines}}</view>
+        <view class="ov-btn main" bindtap="reset">RESTART</view>
+      </block>
+      <block wx:elif="{{paused}}">
+        <view class="ov-title">PAUSED</view>
+        <view class="ov-btn main" bindtap="pause">RESUME</view>
+      </block>
+      <block wx:else>
+        <view class="ov-title glitch">NEON BLOCKS</view>
+        <view class="ov-sub">霓虹方块 · 俄罗斯方块</view>
+        <view class="ov-tips">轻点旋转 · 左右滑移动 · 下滑软降 · 快速下滑硬降</view>
+        <view class="ov-btn main" bindtap="start">START ▶</view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 五键操作排：旋转 左 下 右 硬降 -->
+  <view class="pad">
+    <view class="pbtn rot" hover-class="pbtn-a" bindtap="rotate">⟳</view>
+    <view class="pbtn" hover-class="pbtn-a" bindtap="moveLeft">◀</view>
+    <view class="pbtn down" hover-class="pbtn-a" bindtap="softDrop">▼</view>
+    <view class="pbtn" hover-class="pbtn-a" bindtap="moveRight">▶</view>
+    <view class="pbtn drop" hover-class="pbtn-a" bindtap="hardDrop">⤓</view>
+  </view>
+
+  <view class="ctrl-row">
+    <button class="ctrl-btn" bindtap="{{paused ? 'pause' : (running ? 'pause' : 'start')}}" hover-class="btn-hover">
+      {{over ? '重 开' : paused ? '继 续' : running ? '暂 停' : '开 始'}}
+    </button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="goHome">返回小屋</button>
+  </view>
+</view>

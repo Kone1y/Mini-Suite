@@ -1,0 +1,59 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="title">排序可视化</view>
+    <view class="home" catchtap="goHome">🏠 首页</view>
+  </view>
+
+  <!-- 柱子舞台 -->
+  <view class="stage">
+    <view
+      class="bars"
+      catchtap="stopProp"
+      style="height:{{stageH}}px;gap:{{gap}}px;"
+    >
+      <view
+        wx:for="{{bars}}"
+        wx:key="index"
+        class="bar"
+        style="width:{{item.w}}px;height:{{item.h}}px;background:{{item.color}};"
+      ></view>
+    </view>
+  </view>
+
+  <!-- 状态 -->
+  <view class="status">{{status}}</view>
+
+  <!-- 算法选择 -->
+  <view class="row">
+    <view class="label">算法</view>
+    <picker class="picker" range="{{algos}}" range-key="name" value="{{algoIndex}}" bindchange="onAlgoChange">
+      <view class="picker-view">{{algoName}} ▾</view>
+    </picker>
+  </view>
+
+  <!-- 进度 -->
+  <view class="progress">步数 {{stepIndex}} / {{totalSteps}}</view>
+
+  <!-- 主控 -->
+  <view class="ctrl-row">
+    <view class="btn ghost" catchtap="generateTap">🎲 随机</view>
+    <view class="btn primary" catchtap="playPause">{{playing ? '⏸ 暂停' : (done ? '↻ 重放' : '▶ 播放')}}</view>
+    <view class="btn" catchtap="stepOnce">⏭ 单步</view>
+    <view class="btn ghost" catchtap="reset">↺ 重置</view>
+  </view>
+
+  <!-- 调速 -->
+  <view class="row speed">
+    <view class="label">速度</view>
+    <slider class="slider" min="1" max="100" value="{{speed}}" show-value bindchanging="onSpeedChange" bindchange="onSpeedChange" />
+  </view>
+
+  <!-- 图例 -->
+  <view class="legend">
+    <view class="leg"><view class="dot" style="background:#534AB7"></view>默认</view>
+    <view class="leg"><view class="dot" style="background:#E8923A"></view>比较</view>
+    <view class="leg"><view class="dot" style="background:#E0524B"></view>交换</view>
+    <view class="leg"><view class="dot" style="background:#2FA86A"></view>已就位</view>
+  </view>
+</view>

@@ -1,0 +1,66 @@
+<view class="page">
+  <!-- 进制转换 -->
+  <view class="card">
+    <view class="card-title">进制转换</view>
+    <view class="row">
+      <input class="tinput" value="{{inputVal}}" bindinput="onInputVal" placeholder="输入数字" />
+      <picker class="picker" range="{{baseOptions}}" value="{{baseIdx}}" bindchange="onPickBase">
+        <view class="picker-text">{{baseOptions[baseIdx]}} 进制 ▾</view>
+      </picker>
+    </view>
+    <view class="err" wx:if="{{convError}}">{{convError}}</view>
+    <view class="conv-list" wx:else>
+      <view class="conv-row" wx:for="{{conversions}}" wx:key="base">
+        <text class="conv-base">{{item.base}} 进制</text>
+        <text class="conv-val mono">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 位运算 -->
+  <view class="card">
+    <view class="card-title">位运算演算</view>
+    <view class="row">
+      <input class="tinput" value="{{aVal}}" bindinput="onA" placeholder="A" />
+      <picker class="picker" range="{{bitOps}}" value="{{bitOpIdx}}" bindchange="onPickBitOp">
+        <view class="picker-text">{{bitOpText}} ▾</view>
+      </picker>
+      <input class="tinput" value="{{bVal}}" bindinput="onB" placeholder="B" />
+    </view>
+    <view class="err" wx:if="{{bitError}}">{{bitError}}</view>
+    <view class="bit-out" wx:if="{{bitResults}}">
+      <view class="bit-line"><text class="bit-label">结果(十进制)</text><text class="mono">{{bitResults.dec}}</text></view>
+      <view class="bit-line"><text class="bit-label">十六进制</text><text class="mono">{{bitResults.hex}}</text></view>
+      <view class="bit-line"><text class="bit-label">二进制</text><text class="mono break">{{bitResults.bin}}</text></view>
+      <view class="bit-line sub"><text class="bit-label">A 二进制</text><text class="mono break">{{bitResults.aBin}}</text></view>
+      <view class="bit-line sub"><text class="bit-label">B 二进制</text><text class="mono break">{{bitResults.bBin}}</text></view>
+    </view>
+  </view>
+
+  <!-- 字符编码 -->
+  <view class="card">
+    <view class="card-title">字符编码</view>
+    <view class="row">
+      <input class="tinput" value="{{charInput}}" bindinput="onChar" placeholder="输入字符" />
+    </view>
+    <view class="code-out" wx:if="{{charInfo}}">
+      <view class="bit-line"><text class="bit-label">取码字符</text><text class="mono">{{charInfo.first}}</text></view>
+      <view class="bit-line" wx:if="{{charInfo.rest}}"><text class="bit-label">忽略后续</text><text class="mono">{{charInfo.rest}}</text></view>
+      <view class="bit-line"><text class="bit-label">十进制</text><text class="mono">{{charInfo.dec}}</text></view>
+      <view class="bit-line"><text class="bit-label">Unicode</text><text class="mono">{{charInfo.hex}}</text></view>
+      <view class="bit-line"><text class="bit-label">二进制</text><text class="mono break">{{charInfo.bin}}</text></view>
+    </view>
+    <view class="row" style="margin-top:16rpx;">
+      <input class="tinput" value="{{codeInput}}" bindinput="onCode" placeholder="输入码点(十进制)" />
+    </view>
+    <view class="code-out" wx:if="{{codeInfo}}">
+      <view class="bit-line"><text class="bit-label">码点</text><text class="mono">{{codeInfo.code}}</text></view>
+      <view class="bit-line"><text class="bit-label">字符</text><text class="mono big">{{codeInfo.char}}</text></view>
+    </view>
+    <view class="code-out" wx:else>
+      <view class="bit-line"><text class="bit-label err">码点超出范围(0~1114111)</text></view>
+    </view>
+  </view>
+
+  <view class="foot">— 进制 · 位运算 · 编码 —</view>
+</view>

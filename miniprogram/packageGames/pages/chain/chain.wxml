@@ -1,0 +1,55 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="score">🔗 已接 {{score}} 环</view>
+    <view class="best">最长 {{best}}</view>
+  </view>
+
+  <!-- 链条 -->
+  <scroll-view class="chain-view" scroll-x scroll-with-animation scroll-left="{{9999}}">
+    <view class="chain">
+      <view class="ch-word {{index === chain.length - 1 ? 'last' : ''}}" wx:for="{{chain}}" wx:key="word">
+        <text class="cw">{{item.word}}</text>
+        <text class="cp">{{item.pinyin}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="reset-tip" wx:if="{{resetTip}}">{{resetTip}}</view>
+
+  <!-- 首发词 -->
+  <view class="start-card" wx:if="{{start && !loading}}">
+    <view class="sc-label">🎲 起点成语</view>
+    <view class="sc-word">{{start.word}}</view>
+    <view class="sc-py">{{start.pinyin}}</view>
+    <view class="sc-ex" wx:if="{{start.explanation}}">{{start.explanation}}</view>
+    <view class="sc-btn" bindtap="startChain">从它开始接 →</view>
+  </view>
+
+  <!-- 接龙题 -->
+  <view class="q-area" wx:if="{{q && !loading}}">
+    <view class="q-label">哪个能接上「{{q.prev}}」？（接 {{q.tailSound}} 音）</view>
+    <view class="opts">
+      <view
+        wx:for="{{q.options}}"
+        wx:key="*this"
+        class="opt {{picked && item === q.answer ? 'right' : ''}} {{picked && item === picked && item !== q.answer ? 'wrong' : ''}} {{picked && item !== picked && item !== q.answer ? 'dim' : ''}}"
+        data-word="{{item}}"
+        bindtap="onPick"
+      >{{item}}</view>
+    </view>
+    <view class="after" wx:if="{{correct !== null}}">
+      <view class="verdict {{correct ? 'ok' : 'no'}}">
+        {{correct ? '✓ 接上了！' : '✗ 应该是「' + q.answer + '」'}}
+      </view>
+      <view class="ex-line" wx:if="{{q.explanation}}">释义：{{q.explanation}}</view>
+      <view class="next-btn" bindtap="onNext">继续接 →</view>
+    </view>
+  </view>
+  <view class="loading" wx:if="{{loading}}">出题中…</view>
+
+  <view class="ctrl-row">
+    <view class="btn" bindtap="newChain">🔀 换一条链</view>
+    <view class="btn ghost" bindtap="goBack">← 返回玩法</view>
+  </view>
+</view>

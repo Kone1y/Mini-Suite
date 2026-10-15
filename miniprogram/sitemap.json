@@ -1,0 +1,4 @@
+{
+  "desc": "百宝小屋sitemap",
+  "rules": [{ "action": "allow", "page": "*" }]
+}

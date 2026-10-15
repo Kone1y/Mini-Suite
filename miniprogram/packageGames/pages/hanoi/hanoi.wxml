@@ -1,0 +1,68 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="title">汉诺塔</view>
+    <view class="steps">{{stepsText}}</view>
+  </view>
+
+  <!-- 盘数滑杆 -->
+  <view class="panel">
+    <view class="row-between">
+      <text class="label">盘数</text>
+      <text class="label-val">{{nText}}</text>
+    </view>
+    <slider
+      min="1"
+      max="8"
+      step="1"
+      value="{{n}}"
+      disabled="{{autoPlaying}}"
+      bindchanging="onDiscChange"
+      bindchange="onDiscChange"
+      activeColor="#534AB7"
+      block-color="#534AB7"
+      block-size="20"
+    />
+  </view>
+
+  <!-- 棋盘：三柱 -->
+  <view class="board" style="width:{{boardW}}px;height:{{boardH}}px">
+    <view
+      class="peg {{selectedPeg === pi ? 'sel' : ''}}"
+      wx:for="{{pegsView}}"
+      wx:for-item="peg"
+      wx:for-index="pi"
+      wx:key="id"
+      style="width:{{pegW}}px;height:{{pegH}}px"
+      data-peg="{{pi}}"
+      bindtap="onPegTap"
+    >
+      <view class="discs" style="width:{{pegW}}px;height:{{pegH}}px">
+        <view
+          class="disc {{disc.grabbable ? 'hl' : ''}} {{disc.held ? 'held' : ''}} {{disc.moving ? 'moving' : ''}}"
+          wx:for="{{peg.discs}}"
+          wx:for-item="disc"
+          wx:key="size"
+          style="width:{{disc.w}}px;height:{{disc.h}}px;background:{{disc.bg}}"
+        ></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 状态提示 -->
+  <view class="mode">{{modeText}}</view>
+
+  <!-- 控制：自动 / 暂停 / 重置 -->
+  <view class="ctrl-row">
+    <view class="btn primary" bindtap="startAuto">▶ 自动</view>
+    <view class="btn ghost" bindtap="pause">⏸ 暂停</view>
+    <view class="btn" bindtap="reset">↺ 重置</view>
+  </view>
+
+  <!-- 返回 -->
+  <view class="ctrl-row">
+    <view class="btn ghost" bindtap="goHome">🏠 返回小屋</view>
+  </view>
+
+  <view class="hint">点源柱抓顶盘，再点目标柱放下 · 大盘不可压小盘</view>
+</view>

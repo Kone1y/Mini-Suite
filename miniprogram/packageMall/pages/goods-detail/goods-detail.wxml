@@ -1,0 +1,29 @@
+<view class="page" wx:if="{{goods}}">
+  <swiper class="swiper" indicator-dots autoplay circular bindchange="onSwiper">
+    <swiper-item wx:for="{{goods.images}}" wx:key="*this">
+      <image class="swp-img" src="{{item}}" mode="aspectFill" />
+    </swiper-item>
+  </swiper>
+  <view class="dots" wx:if="{{goods.images.length > 1}}">{{current + 1}} / {{goods.images.length}}</view>
+
+  <view class="info card">
+    <view class="price">{{goods.price}}</view>
+    <view class="name">{{goods.name}}</view>
+    <view class="stock">已售 {{goods.sold}} · 库存 {{goods.stock}} · 演示商品不发货</view>
+  </view>
+
+  <view class="card">
+    <view class="sec-title">商品详情</view>
+    <view class="detail-text">{{goods.detail}}</view>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="qty-ctl">
+      <view class="qty-btn" bindtap="subQty">−</view>
+      <view class="qty-num">{{qty}}</view>
+      <view class="qty-btn" bindtap="addQty">+</view>
+    </view>
+    <view class="bar-btn cart" bindtap="addCart">加入购物车</view>
+    <view class="bar-btn buy" bindtap="buyNow">立即购买</view>
+  </view>
+</view>

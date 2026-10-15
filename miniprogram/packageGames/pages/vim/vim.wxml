@@ -1,0 +1,100 @@
+<view class="page">
+  <!-- 选关 -->
+  <block wx:if="{{screen === 'select'}}">
+    <view class="hero">
+      <view class="hero-t">⌨️ Vim 键位修炼场</view>
+      <view class="hero-s">像玩游戏一样练 Vim · {{levels.length}} 关</view>
+    </view>
+    <view class="lv-list">
+      <view class="lv-item {{item.done ? 'passed' : ''}}" wx:for="{{levels}}" wx:key="id" data-id="{{item.id}}" bindtap="onLevelTap">
+        <view class="lv-dot {{item.done ? 'ok' : ''}}">{{item.done ? '✓' : item.id}}</view>
+        <view class="lv-main">
+          <view class="lv-name">{{item.name}} <text class="lv-cat">{{item.cat}}</text></view>
+          <view class="lv-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="foot" bindtap="goHome">← 返回小屋</view>
+  </block>
+
+  <!-- 游玩 -->
+  <block wx:else>
+    <view class="play-head">
+      <view class="back-btn" bindtap="backToSelect">‹</view>
+      <view class="ph-main">
+        <view class="ph-name">第 {{cur.id}} 关 · {{cur.name}}</view>
+      </view>
+      <view class="ph-count">👟 {{steps}}</view>
+    </view>
+
+    <view class="lesson-card">
+      <view class="lc-t">📖 {{cur.desc}}</view>
+    </view>
+
+    <!-- 文本缓冲区（单层渲染：光标行拆三段） -->
+    <view class="buffer">
+      <view class="buf-line {{item.cur >= 0 ? 'active' : ''}}" wx:for="{{view}}" wx:key="index">
+        <text class="buf-num">{{index + 1}}</text>
+        <view class="buf-text" wx:if="{{item.cur < 0}}">{{item.text}}</view>
+        <view class="buf-text" wx:else>
+          <text>{{item.before}}</text>
+          <text class="caret">{{item.at}}</text>
+          <text>{{item.after}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 按键序列 -->
+    <view class="key-display">
+      <text class="kd-label">按键：</text>
+      <text class="kd-keys">{{keys || '（点下方按键）'}}</text>
+    </view>
+    <view class="kd-err" wx:if="{{err}}">⚠ {{err}}</view>
+
+    <!-- 过关 -->
+    <view class="won-banner" wx:if="{{won}}">
+      <text class="wb-t">{{status}}</text>
+      <view class="wb-btns">
+        <view class="wb-btn" bindtap="onNextLevel">下一关 ›</view>
+        <view class="wb-btn ghost" bindtap="backToSelect">选关</view>
+      </view>
+    </view>
+
+    <!-- 虚拟按键 -->
+    <view class="keypad" wx:if="{{!won}}">
+      <view class="k-row">
+        <view class="k" data-k="h" bindtap="onKey">h</view>
+        <view class="k" data-k="j" bindtap="onKey">j</view>
+        <view class="k" data-k="k" bindtap="onKey">k</view>
+        <view class="k" data-k="l" bindtap="onKey">l</view>
+        <view class="k" data-k="w" bindtap="onKey">w</view>
+        <view class="k" data-k="b" bindtap="onKey">b</view>
+        <view class="k" data-k="e" bindtap="onKey">e</view>
+      </view>
+      <view class="k-row">
+        <view class="k" data-k="0" bindtap="onKey">0</view>
+        <view class="k" data-k="$" bindtap="onKey">$</view>
+        <view class="k wide" data-k="gg" bindtap="onKey">gg</view>
+        <view class="k" data-k="G" bindtap="onKey">G</view>
+        <view class="k" data-k="x" bindtap="onKey">x</view>
+        <view class="k" data-k="u" bindtap="onKey">u</view>
+        <view class="k" data-k="p" bindtap="onKey">p</view>
+      </view>
+      <view class="k-row">
+        <view class="k" data-k="d" bindtap="onKey">d</view>
+        <view class="k" data-k="y" bindtap="onKey">y</view>
+        <view class="k" data-k="r" bindtap="onKey">r</view>
+        <view class="k" data-k="f" bindtap="onKey">f</view>
+        <view class="k num" data-k="2" bindtap="onKey">2</view>
+        <view class="k num" data-k="3" bindtap="onKey">3</view>
+        <view class="k num" data-k="4" bindtap="onKey">4</view>
+      </view>
+      <view class="k-row action">
+        <view class="k back" data-k="⌫" bindtap="onKey">⌫</view>
+        <view class="k enter" data-k="↵" bindtap="onKey">↵ 执行</view>
+      </view>
+    </view>
+
+    <view class="foot" bindtap="onResetLevel" wx:if="{{!won}}">↻ 重玩本关</view>
+  </block>
+</view>

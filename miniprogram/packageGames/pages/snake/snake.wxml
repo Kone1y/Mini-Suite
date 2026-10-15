@@ -1,0 +1,56 @@
+<view class="page">
+  <view class="top-bar">
+    <view class="info-box">
+      <view class="info-label">🍎 得分</view>
+      <view class="info-num">{{score}}</view>
+    </view>
+    <view class="title-box">
+      <view class="game-title">贪吃蛇</view>
+      <view class="game-sub">{{over ? '💥 撞到了！' : running ? '速度：' + speedLabel : score > 0 ? '已暂停' : '准备开始'}}</view>
+    </view>
+    <view class="info-box">
+      <view class="info-label">🏆 最佳</view>
+      <view class="info-num">{{best}}</view>
+    </view>
+  </view>
+
+  <view class="board-wrap">
+    <!-- grid 布局自适应 + 连接感知圆角的连贯蛇身 -->
+    <view class="board" style="grid-template-columns: repeat({{size}}, minmax(0, 1fr));" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd" bindtap="boardTap">
+      <view class="cell c{{item.t}} {{item.t === 4 && over ? 'dead' : ''}}" style="border-radius: {{item.r}};" wx:for="{{grid}}" wx:key="index"></view>
+    </view>
+
+    <!-- 开始/暂停引导遮罩（轻量，非全屏遮盖棋盘） -->
+    <view class="start-tip" wx:if="{{!running && !over}}" bindtap="boardTap">
+      <view class="start-tip-icon">{{score > 0 ? '⏸️' : '▶️'}}</view>
+      <view class="start-tip-text">{{score > 0 ? '已暂停 · 点击继续' : '点击开始 · 滑动或方向键控制'}}</view>
+    </view>
+
+    <view class="mask" wx:if="{{over}}">
+      <view class="mask-title">💥 游戏结束</view>
+      <view class="mask-sub">本局 {{score}} 分{{score >= best && score > 0 ? ' · 新纪录！' : ''}}</view>
+      <view class="mask-row">
+        <button class="mask-btn" bindtap="reset">再来一局</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="dpad">
+    <view class="dpad-row">
+      <view class="dbtn" data-dir="up" bindtap="onDir">▲</view>
+    </view>
+    <view class="dpad-row">
+      <view class="dbtn" data-dir="left" bindtap="onDir">◀</view>
+      <view class="dbtn" data-dir="down" bindtap="onDir">▼</view>
+      <view class="dbtn" data-dir="right" bindtap="onDir">▶</view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <button class="ctrl-btn" bindtap="{{running ? 'pause' : 'start'}}" hover-class="btn-hover">
+      {{running ? '暂停' : (over ? '重开' : '开始')}}
+    </button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="goHome">返回小屋</button>
+  </view>
+  <view class="hint center">滑动画布或用方向键控制 · 吃 🍎 加速</view>
+</view>

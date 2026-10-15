@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="tabs">
+    <view
+      class="tab {{current === item.key ? 'on' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="key"
+      data-key="{{item.key}}"
+      bindtap="switchTab"
+    >{{item.name}}</view>
+  </view>
+
+  <view class="fav-list">
+    <view class="fav-item" wx:for="{{items}}" wx:key="index" data-item="{{item}}" bindtap="open">
+      <image wx:if="{{item.path}}" class="thumb" src="{{item.path}}" mode="aspectFill" />
+      <view wx:else class="thumb placeholder-thumb">诗</view>
+      <view class="info">
+        <view class="t">{{item.title}}</view>
+        <view class="s">{{item.subtitle}}</view>
+      </view>
+      <view class="del" data-item="{{item}}" catchtap="remove">移除</view>
+    </view>
+  </view>
+
+  <view class="load-line" wx:if="{{loading}}">加载中…</view>
+  <view class="load-line" wx:elif="{{!items.length}}">还没有收藏</view>
+</view>

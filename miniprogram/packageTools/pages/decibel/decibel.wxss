@@ -1,0 +1,50 @@
+.gauge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 30rpx 30rpx;
+}
+.db-value {
+  font-size: 110rpx;
+  font-weight: 600;
+  color: #2C2C2A;
+  font-family: monospace;
+  line-height: 1.1;
+}
+.db-unit {
+  font-size: 34rpx;
+  color: #888780;
+  margin-left: 10rpx;
+  font-weight: 400;
+}
+.meter {
+  width: 100%;
+  height: 28rpx;
+  background: #F1EFE8;
+  border-radius: 14rpx;
+  overflow: hidden;
+  margin-top: 40rpx;
+}
+.meter-fill {
+  height: 100%;
+  border-radius: 14rpx;
+  transition: width 0.15s linear;
+}
+.scale {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: #B4B2A9;
+  font-size: 20rpx;
+  margin-top: 10rpx;
+}
+.peak-line {
+  margin-top: 30rpx;
+  color: #5F5E5A;
+  font-size: 26rpx;
+}
+.db-unit.big {
+  font-size: 44rpx;
+  color: #2C2C2A;
+  font-weight: 600;
+}

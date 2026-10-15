@@ -1,0 +1,74 @@
+<view class="page">
+  <!-- 选关 -->
+  <block wx:if="{{screen === 'select'}}">
+    <view class="hero">
+      <view class="hero-t">🌳 Git 修炼场</view>
+      <view class="hero-s">像玩游戏一样学 Git · {{levels.length}} 关</view>
+    </view>
+    <view class="lv-list">
+      <view class="lv-item {{item.passed ? 'passed' : ''}}" wx:for="{{levels}}" wx:key="id" data-id="{{item.id}}" bindtap="onLevelTap">
+        <view class="lv-dot {{item.passed ? 'done' : ''}}">{{item.passed ? '✓' : item.id}}</view>
+        <view class="lv-main">
+          <view class="lv-name">{{item.name}} <text class="lv-cat">{{item.cat}}</text></view>
+          <view class="lv-goal">{{item.goal}}</view>
+        </view>
+        <view class="lv-best" wx:if="{{item.best}}">⛳{{item.best}}</view>
+      </view>
+    </view>
+    <view class="foot" bindtap="goHome">← 返回小屋</view>
+  </block>
+
+  <!-- 游玩 -->
+  <block wx:else>
+    <!-- 关卡头 -->
+    <view class="play-head">
+      <view class="back-btn" bindtap="backToSelect">‹</view>
+      <view class="ph-main">
+        <view class="ph-name">第 {{cur.id}} 关 · {{cur.name}}</view>
+        <view class="ph-goal" bindtap="toggleGoal">{{cur.goal}} ▾</view>
+      </view>
+      <view class="ph-count">⛳ {{cmdCount}}</view>
+    </view>
+    <!-- 详细目标+提示 -->
+    <view class="goal-detail" wx:if="{{goalOpen}}">
+      <view class="gd-row">🎯 目标：{{cur.goal}}</view>
+      <view class="gd-row gd-hint">💡 {{cur.hint}}</view>
+    </view>
+
+    <!-- 提交树 -->
+    <view class="canvas-wrap">
+      <canvas id="gitCanvas" type="2d" class="git-canvas"></canvas>
+    </view>
+
+    <!-- 输出终端 -->
+    <view class="terminal">
+      <view class="t-line {{item.ok ? '' : 'err'}}" wx:for="{{outputs}}" wx:key="index">
+        <text class="t-cmd">$ {{item.cmd}}</text>
+        <text class="t-out">{{item.out}}</text>
+      </view>
+      <view class="t-line t-empty" wx:if="{{!outputs.length}}"><text class="t-out dim">执行命令后输出显示在这里</text></view>
+    </view>
+
+    <!-- 过关横幅 -->
+    <view class="won-banner" wx:if="{{won}}">
+      <text class="wb-t">{{status}}</text>
+      <view class="wb-btns">
+        <view class="wb-btn" bindtap="onNextLevel">下一关 ›</view>
+        <view class="wb-btn ghost" bindtap="backToSelect">选关</view>
+      </view>
+    </view>
+
+    <!-- 命令输入 -->
+    <view class="cmd-area" wx:if="{{!won}}">
+      <view class="quick-row">
+        <view class="q-chip" wx:for="{{quickCmds}}" wx:key="*this" data-cmd="{{item}}" bindtap="onQuickCmd">{{item}}</view>
+      </view>
+      <view class="cmd-row">
+        <input class="cmd-inp" value="{{cmdInput}}" placeholder="输入 git 命令，如 commit" placeholder-class="ph" bindinput="onCmdInput" bindconfirm="onRun" confirm-type="done" />
+        <view class="run-btn" bindtap="onRun">执行</view>
+      </view>
+      <view class="status-line">{{status}}</view>
+    </view>
+    <view class="foot" bindtap="onResetLevel" wx:if="{{!won}}">↻ 重玩本关</view>
+  </block>
+</view>

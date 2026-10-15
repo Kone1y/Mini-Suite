@@ -1,0 +1,208 @@
+/* ===== 赛博朋克霓虹风 ===== */
+page {
+  background: #0A0A14;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14rpx;
+  min-height: 100vh;
+}
+
+/* ===== 顶栏：左数据 右NEXT ===== */
+.top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 0 4rpx 12rpx;
+}
+.stats-col { flex: 1; min-width: 0; }
+.stat-row { display: flex; }
+.stat { flex: 1; min-width: 0; }
+.stat-label {
+  font-size: 18rpx;
+  letter-spacing: 2rpx;
+  color: #5A5A7A;
+  font-weight: 700;
+}
+.stat-num {
+  font-size: 30rpx;
+  font-family: monospace;
+  font-weight: 700;
+  margin-top: 2rpx;
+}
+.neon-cyan { color: #00F0FF; text-shadow: 0 0 10rpx rgba(0, 240, 255, 0.7); }
+.neon-green { color: #00FF66; text-shadow: 0 0 10rpx rgba(0, 255, 102, 0.7); }
+.neon-orange { color: #FF7A00; text-shadow: 0 0 10rpx rgba(255, 122, 0, 0.7); }
+.neon-pink { color: #FF2D95; text-shadow: 0 0 10rpx rgba(255, 45, 149, 0.7); }
+
+.next-box {
+  margin-left: 16rpx;
+  border: 2rpx solid rgba(0, 240, 255, 0.35);
+  border-radius: 8rpx;
+  padding: 6rpx 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 240, 255, 0.04);
+  flex-shrink: 0;
+}
+.next-label {
+  font-size: 16rpx;
+  letter-spacing: 3rpx;
+  color: #5A5A7A;
+  font-weight: 700;
+  margin-bottom: 2rpx;
+}
+.next-canvas { background: transparent; display: block; }
+
+/* ===== 棋盘 ===== */
+.board-frame {
+  position: relative;
+  border: 3rpx solid rgba(0, 240, 255, 0.55);
+  border-radius: 8rpx;
+  padding: 5rpx;
+  box-shadow: 0 0 24rpx rgba(0, 240, 255, 0.25), inset 0 0 30rpx rgba(0, 240, 255, 0.06);
+  background: #0A0A14;
+}
+.board { display: block; }
+
+/* 连消闪现 */
+.flash-text {
+  position: absolute;
+  left: 50%; top: 38%;
+  transform: translate(-50%, -50%);
+  color: #00F0FF;
+  font-size: 44rpx;
+  font-weight: 800;
+  letter-spacing: 6rpx;
+  text-shadow: 0 0 20rpx rgba(0, 240, 255, 0.9);
+  animation: flashIn 0.8s ease-out;
+  pointer-events: none;
+  z-index: 5;
+}
+@keyframes flashIn {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  25% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* 遮罩 */
+.overlay {
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(10, 10, 20, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 4rpx;
+}
+.ov-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  letter-spacing: 6rpx;
+  color: #00F0FF;
+  text-shadow: 0 0 18rpx rgba(0, 240, 255, 0.8);
+}
+/* 故障文字效果 */
+.glitch, .glitch-r { position: relative; }
+.glitch::before, .glitch-r::before {
+  position: absolute;
+  left: 3rpx; top: 0;
+  color: #FF2D95;
+  clip-path: inset(0 0 55% 0);
+  animation: glitchShift 1.6s infinite steps(2);
+}
+.glitch::after, .glitch-r::after {
+  position: absolute;
+  left: -3rpx; top: 0;
+  color: #00FF66;
+  clip-path: inset(55% 0 0 0);
+  animation: glitchShift 1.2s infinite steps(3) reverse;
+}
+.glitch::before, .glitch::after { content: 'NEON BLOCKS'; }
+.glitch-r::before, .glitch-r::after { content: 'GAME OVER'; }
+@keyframes glitchShift {
+  0%, 88% { transform: translate(0); }
+  90% { transform: translate(-4rpx, 2rpx); }
+  94% { transform: translate(4rpx, -2rpx); }
+  100% { transform: translate(0); }
+}
+.ov-sub { margin-top: 12rpx; color: #8A8AAA; font-size: 24rpx; letter-spacing: 2rpx; }
+.ov-tips { margin: 16rpx 24rpx 0; color: #5A5A7A; font-size: 20rpx; text-align: center; line-height: 1.7; }
+.ov-btn {
+  margin-top: 30rpx;
+  border: 2rpx solid #00F0FF;
+  color: #00F0FF;
+  font-size: 28rpx;
+  letter-spacing: 4rpx;
+  padding: 14rpx 52rpx;
+  border-radius: 8rpx;
+  box-shadow: 0 0 16rpx rgba(0, 240, 255, 0.35), inset 0 0 12rpx rgba(0, 240, 255, 0.12);
+}
+.ov-btn.main { background: rgba(0, 240, 255, 0.14); }
+.ov-btn:active { background: rgba(0, 240, 255, 0.3); }
+
+/* ===== 五键操作排 ===== */
+.pad {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 14rpx;
+  width: 100%;
+  justify-content: center;
+}
+.pbtn {
+  width: 120rpx;
+  height: 88rpx;
+  border: 2rpx solid rgba(0, 240, 255, 0.4);
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  color: #00F0FF;
+  background: rgba(0, 240, 255, 0.06);
+  box-shadow: 0 0 12rpx rgba(0, 240, 255, 0.15);
+}
+/* 旋转键（青紫） */
+.pbtn.rot { color: #BF00FF; border-color: rgba(191, 0, 255, 0.5); background: rgba(191, 0, 255, 0.07); }
+/* 软降键（橙） */
+.pbtn.down { color: #FF7A00; border-color: rgba(255, 122, 0, 0.45); background: rgba(255, 122, 0, 0.07); }
+/* 硬降键（红） */
+.pbtn.drop { color: #FF003C; border-color: rgba(255, 0, 60, 0.5); background: rgba(255, 0, 60, 0.07); }
+.pbtn-a { background: rgba(0, 240, 255, 0.25); }
+
+/* ===== 底部按钮行 ===== */
+.ctrl-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 14rpx;
+  width: 100%;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+}
+.ctrl-btn {
+  background: rgba(0, 240, 255, 0.12);
+  color: #00F0FF;
+  border: 2rpx solid rgba(0, 240, 255, 0.5);
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  letter-spacing: 4rpx;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  padding: 0 10rpx;
+  white-space: nowrap;
+}
+.ctrl-btn.ghost {
+  background: transparent;
+  color: #8A8AAA;
+  border-color: rgba(138, 138, 170, 0.4);
+}
+.ctrl-btn::after { border: none; }

@@ -1,0 +1,58 @@
+<view class="page">
+  <view class="top-bar">
+    <view class="info-box">
+      <view class="info-label">🚩 剩余</view>
+      <view class="info-num">{{flagsLeft}}</view>
+    </view>
+    <view class="title-box" bindtap="togglePicker">
+      <view class="game-title">扫雷 <text class="lv-tag">{{level.label}}</text></view>
+      <view class="game-sub">{{over ? (won ? '🎉 通关！' : '💥 踩雷了') : (started ? '长按插旗 · 换难度点这里' : '点击任意格子开始')}}</view>
+    </view>
+    <view class="info-box">
+      <view class="info-label">⏱️ 用时</view>
+      <view class="info-num">{{time}}s</view>
+    </view>
+  </view>
+  <view class="best-line" wx:if="{{best !== null}}">🏆 本难度最快 {{best}}s</view>
+
+  <!-- 难度选择 -->
+  <view class="level-panel" wx:if="{{showLevelPicker}}">
+    <view class="level-opt {{level.key === 'easy' ? 'on' : ''}}" data-lv="easy" bindtap="switchLevel">初级 9×9 · 10雷</view>
+    <view class="level-opt {{level.key === 'medium' ? 'on' : ''}}" data-lv="medium" bindtap="switchLevel">中级 12×12 · 24雷</view>
+    <view class="level-opt {{level.key === 'hard' ? 'on' : ''}}" data-lv="hard" bindtap="switchLevel">高级 16×16 · 50雷</view>
+  </view>
+
+  <view class="board-wrap">
+    <view class="board" style="grid-template-columns: repeat({{size}}, minmax(0, 1fr)); font-size: {{cellFont}};">
+      <view
+        class="cell {{item.revealed ? 'rev' : ''}} {{item.revealed && item.mine ? 'boom' : ''}}"
+        wx:for="{{cells}}"
+        wx:key="index"
+        data-idx="{{index}}"
+        bindtap="tapCell"
+        bindlongpress="longPressCell"
+      >
+        <block wx:if="{{item.revealed}}">
+          <text wx:if="{{item.mine}}">💥</text>
+          <text wx:elif="{{item.num > 0}}" style="color: {{numColors[item.num]}};">{{item.num}}</text>
+        </block>
+        <text wx:elif="{{item.flagged}}">🚩</text>
+      </view>
+    </view>
+
+    <view class="mask" wx:if="{{over}}">
+      <view class="mask-title">{{won ? '🎉 排雷成功' : '💥 游戏结束'}}</view>
+      <view class="mask-sub">{{won ? '用时 ' + time + ' 秒' : '再试一次吧'}}</view>
+      <view class="mask-row">
+        <button class="mask-btn" bindtap="restart">再来一局</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <button class="ctrl-btn" bindtap="restart" hover-class="btn-hover">重新开始</button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="togglePicker">换难度</button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="goHome">返回小屋</button>
+  </view>
+  <view class="hint center">点击翻开 · 长按插旗 · 数字是周围雷数</view>
+</view>

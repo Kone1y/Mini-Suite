@@ -1,0 +1,83 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="title">数织 Nonogram</view>
+    <view class="status">{{status}}</view>
+  </view>
+
+  <!-- 控制面板 -->
+  <view class="panel">
+    <view class="row">
+      <text class="lbl">尺寸</text>
+      <picker mode="selector" range="{{['5×5','10×10','15×15']}}" value="{{sizeIdx}}" bindchange="onSize">
+        <view class="pick">{{sizeLabel}} ▾</view>
+      </picker>
+      <view class="btn primary" bindtap="newPuzzle">{{generating ? '生成中…' : '🎲 新谜题'}}</view>
+    </view>
+    <view class="row btns">
+      <view class="btn" bindtap="verify">✓ 校验</view>
+      <view class="btn" bindtap="giveHint">💡 提示</view>
+      <view class="btn ghost" bindtap="clearGrid">🗑 清空</view>
+    </view>
+  </view>
+
+  <!-- 棋盘：列线索 + 行线索 + 格子 -->
+  <view class="board-area" wx:if="{{grid.length}}">
+    <view class="board-flex">
+      <!-- 左上角占位 -->
+      <view class="corner"></view>
+      <!-- 列线索 -->
+      <view class="col-clues">
+        <view class="col-clue" wx:for="{{colCluesView}}" wx:key="index" style="width:{{cellPx}}px">
+          <text>{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="board-flex">
+      <!-- 行线索 -->
+      <view class="row-clues">
+        <view class="row-clue" wx:for="{{rowCluesView}}" wx:key="index" style="height:{{cellPx}}px">
+          <text>{{item.text}}</text>
+        </view>
+      </view>
+      <!-- 格子区 -->
+      <view class="grid" style="grid-template-columns:repeat({{gridCols}}, {{cellPx}}px)">
+        <view
+          wx:for="{{grid}}"
+          wx:key="index"
+          class="cell {{item === 1 ? 'filled' : ''}} {{item === 2 ? 'blank' : ''}} {{hintCell && hintCell.x === index % gridCols && hintCell.y === (index - index % gridCols) / gridCols ? 'hinting' : ''}}"
+          style="width:{{cellPx}}px;height:{{cellPx}}px"
+          data-idx="{{index}}"
+          bindtap="onCell"
+        >
+          <text wx:if="{{item === 2}}" class="cross">×</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空态 -->
+  <view class="empty" wx:else>
+    <text class="empty-icon">🧩</text>
+    <text>选尺寸 → 点「新谜题」开始</text>
+  </view>
+
+  <!-- 说明 -->
+  <view class="intro-card">
+    <view class="intro-head" bindtap="toggleIntro">
+      <text class="intro-title">❓ 玩法说明</text>
+      <text class="intro-arrow">{{introOpen ? '▲' : '▼'}}</text>
+    </view>
+    <view class="intro-body" wx:if="{{introOpen}}">
+      <view class="intro-li">· 每行/列旁的数字 = 该线上连续黑格段的长度（顺序一致，段间至少 1 空格）</view>
+      <view class="intro-li">· 点格子循环三态：未知 → 黑 → 叉(确定空) → 未知</view>
+      <view class="intro-li">· 全盘黑格满足所有行列线索即通关，会浮现一幅像素图案</view>
+      <view class="intro-li">· 先找"满行"（数字和+间隔=行宽）与重叠必填，再交叉排除</view>
+      <view class="intro-li">· 每局保证唯一解且纯逻辑可推（无需猜测）；卡住点「💡 提示」</view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <view class="btn ghost wide" bindtap="goHome">🏠 返回小屋</view>
+  </view>
+</view>

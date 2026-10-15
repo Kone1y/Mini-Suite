@@ -1,0 +1,47 @@
+<view class="page" bindtap="onType">
+  <!-- 顶栏（点击不冒泡处理：语言切换等用 catchtap） -->
+  <view class="topbar">
+    <view class="langs">
+      <view class="lang {{langIdx === index ? 'on' : ''}}" wx:for="{{langs}}" wx:key="key"
+        data-idx="{{index}}" catchtap="onLang">{{item.name}}</view>
+    </view>
+    <view class="speed" catchtap="onSpeed">⚡ {{speedLabel}}</view>
+  </view>
+
+  <!-- 终端 -->
+  <view class="terminal">
+    <view class="t-head">
+      <text class="dot r"></text><text class="dot y"></text><text class="dot g"></text>
+      <text class="t-title">root@mainframe:~#</text>
+    </view>
+    <view class="t-body">
+      <text class="t-text">{{text}}</text>
+      <text class="t-caret">▮</text>
+    </view>
+  </view>
+
+  <!-- 进度 -->
+  <view class="prog-row" catchtap="stopProp">
+    <view class="prog-bar">
+      <view class="prog-fill" style="width:{{progress}}%"></view>
+    </view>
+    <text class="prog-num mono">{{progress}}%</text>
+  </view>
+
+  <!-- 提示 -->
+  <view class="tip">👆 疯狂点击屏幕任意位置 = 飞速敲代码</view>
+
+  <!-- ACCESS GRANTED -->
+  <view class="granted-mask" wx:if="{{granted}}">
+    <view class="g-box">
+      <view class="g-t">ACCESS GRANTED</view>
+      <view class="g-s">系统已完全掌控（并没有）</view>
+      <view class="g-btn" catchtap="onReset">↻ 再装一次</view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <view class="btn" catchtap="onReset">↻ 重置</view>
+    <view class="btn ghost" catchtap="goHome">🏠 返回</view>
+  </view>
+</view>

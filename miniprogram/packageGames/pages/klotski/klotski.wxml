@@ -1,0 +1,51 @@
+<view class="page">
+  <view class="top-bar">
+    <view class="info-box">
+      <view class="info-label">👣 步数</view>
+      <view class="info-num">{{steps}}</view>
+    </view>
+    <view class="title-box" bindtap="togglePicker">
+      <view class="game-title">华容道 <text class="lv-tag">{{level.label}}</text></view>
+      <view class="game-sub">滑动复原 1 → {{n * n - 1}} · 点这换难度</view>
+    </view>
+    <view class="info-box">
+      <view class="info-label">🏆 最佳</view>
+      <view class="info-num">{{best === null ? '—' : best}}</view>
+    </view>
+  </view>
+
+  <view class="level-panel" wx:if="{{showLevelPicker}}">
+    <view class="level-opt {{level.key === 'easy' ? 'on' : ''}}" data-lv="easy" bindtap="switchLevel">4×4</view>
+    <view class="level-opt {{level.key === 'medium' ? 'on' : ''}}" data-lv="medium" bindtap="switchLevel">5×5</view>
+    <view class="level-opt {{level.key === 'hard' ? 'on' : ''}}" data-lv="hard" bindtap="switchLevel">6×6</view>
+  </view>
+
+  <view class="board-wrap">
+    <view class="board" style="grid-template-columns: repeat({{n}}, minmax(0, 1fr)); font-size: {{tileFont}};">
+      <view
+        class="cell"
+        wx:for="{{cells}}"
+        wx:key="index"
+        data-idx="{{index}}"
+        bindtap="tapCell"
+      >
+        <view class="tile" wx:if="{{item.v > 0}}">{{item.v}}</view>
+      </view>
+    </view>
+
+    <view class="mask" wx:if="{{won}}">
+      <view class="mask-title">🎉 复原成功！</view>
+      <view class="mask-sub">共 {{steps}} 步{{best === steps ? ' · 新纪录！' : ''}}</view>
+      <view class="mask-row">
+        <button class="mask-btn" bindtap="restart">再来一局</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <button class="ctrl-btn" bindtap="restart" hover-class="btn-hover">重新开始</button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="togglePicker">换难度</button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="goHome">返回小屋</button>
+  </view>
+  <view class="hint center">点击与空格相邻的数字块使其滑动</view>
+</view>

@@ -1,0 +1,46 @@
+<view class="page">
+  <!-- 顶栏：连对 / 最佳 / 生命 -->
+  <view class="topbar">
+    <view class="lives">❤️{{3 - wrongs}}</view>
+    <view class="mid">
+      <text class="streak">连对 {{streak}}</text>
+      <text class="best">最佳 {{best}}</text>
+    </view>
+    <view class="cnt">{{total}} 题</view>
+  </view>
+
+  <!-- 题面 -->
+  <view class="q-area" wx:if="{{q && !loading && !over}}">
+    <view class="q-label">📜 这个释义说的是哪个成语？</view>
+    <view class="q-text">{{q.explanation}}</view>
+    <view class="opts">
+      <view
+        wx:for="{{q.options}}"
+        wx:key="*this"
+        class="opt {{picked && item === q.answer ? 'right' : ''}} {{picked && item === picked && item !== q.answer ? 'wrong' : ''}} {{picked && item !== picked && item !== q.answer ? 'dim' : ''}}"
+        data-word="{{item}}"
+        bindtap="onPick"
+      >{{item}}</view>
+    </view>
+    <!-- 答后 -->
+    <view class="after" wx:if="{{correct !== null}}">
+      <view class="verdict {{correct ? 'ok' : 'no'}}">{{correct ? '✓ 答对了！' : '✗ 正确答案：' + q.answer}}</view>
+      <view class="next-btn" bindtap="onNext">下一题 →</view>
+    </view>
+  </view>
+  <view class="loading" wx:if="{{loading && !over}}">出题中…</view>
+
+  <!-- 结束结算 -->
+  <view class="over-card" wx:if="{{over}}">
+    <view class="ov-emoji">🎯</view>
+    <view class="ov-t">本局结束</view>
+    <view class="ov-line">答题 {{total}} · 连对峰值 {{best}}</view>
+    <view class="ov-sub">错满 3 次收官，再来一把？</view>
+    <view class="ov-btns">
+      <view class="btn primary" bindtap="restart">↻ 再来一局</view>
+      <view class="btn" bindtap="goBack">← 返回玩法</view>
+    </view>
+  </view>
+
+  <view class="foot" bindtap="goBack" wx:if="{{!over}}">← 返回玩法列表</view>
+</view>

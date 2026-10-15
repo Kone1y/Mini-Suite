@@ -1,0 +1,27 @@
+<view class="page">
+  <view class="card">
+    <view class="label">新增倒计时</view>
+    <input class="input" placeholder="名称，如：考研、生日、发工资" value="{{title}}" bindinput="onTitle" />
+    <picker mode="date" value="{{date}}" start="{{minDate}}" bindchange="onDate">
+      <view class="input picker-line">{{date || '选择目标日期'}}</view>
+    </picker>
+    <button class="btn-primary" hover-class="btn-hover" bindtap="add">添加</button>
+  </view>
+
+  <view class="card item" wx:for="{{items}}" wx:key="id">
+    <view class="item-head">
+      <text class="item-title">{{item.title}}</text>
+      <text class="item-date">{{item.date}}</text>
+    </view>
+    <view class="remain" wx:if="{{!item.expired}}">
+      <view class="unit"><text class="num">{{item.remain.d}}</text><text class="u">天</text></view>
+      <view class="unit"><text class="num">{{item.remain.h}}</text><text class="u">时</text></view>
+      <view class="unit"><text class="num">{{item.remain.m}}</text><text class="u">分</text></view>
+      <view class="unit"><text class="num">{{item.remain.s}}</text><text class="u">秒</text></view>
+    </view>
+    <view class="expired" wx:else>已到期</view>
+    <view class="del" data-id="{{item.id}}" bindtap="remove">删除</view>
+  </view>
+
+  <view class="hint center" wx:if="{{!items.length}}">还没有倒计时，添加一个吧</view>
+</view>

@@ -1,0 +1,67 @@
+<view class="page">
+  <!-- 模式切换 -->
+  <view class="mode-bar">
+    <view
+      class="mode-item {{mode === item.key ? 'on' : ''}}"
+      wx:for="{{modes}}"
+      wx:key="key"
+      data-key="{{item.key}}"
+      bindtap="switchMode"
+    >
+      <text class="mode-icon">{{item.icon}}</text>
+      <text>{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 骰子 -->
+  <view class="card center-card" wx:if="{{mode === 'dice'}}">
+    <view class="dice {{rolling ? 'rolling' : ''}}">{{diceFace}}</view>
+    <button class="btn-primary" hover-class="btn-hover" bindtap="rollDice">{{rolling ? '摇动中…' : '掷骰子'}}</button>
+    <view class="his-line" wx:if="{{diceHistory.length}}">历史：{{diceHistory}}</view>
+  </view>
+
+  <!-- Yes/No -->
+  <view class="card center-card" wx:if="{{mode === 'yesno'}}">
+    <view class="yn-answer {{answer ? 'show' : ''}}" style="color: {{ansColor}};">{{answer || '？'}}</view>
+    <button class="btn-primary" hover-class="btn-hover" bindtap="rollYesNo">问天问地</button>
+    <view class="hint center">心里默念问题，再点击</view>
+  </view>
+
+  <!-- 抽签 -->
+  <view class="card" wx:if="{{mode === 'draw'}}">
+    <view class="label">候选项（每行一个）</view>
+    <textarea class="ta" value="{{drawItems}}" bindinput="onDrawInput" maxlength="500" auto-height disabled="{{false}}" />
+    <button class="btn-primary" hover-class="btn-hover" bindtap="rollDraw">抽一个</button>
+    <view class="draw-result" wx:if="{{drawResult}}">🎯 {{drawResult}}</view>
+  </view>
+
+  <!-- 转盘 -->
+  <view class="card center-card" wx:if="{{mode === 'wheel'}}">
+    <view class="wheel-wrap">
+      <view class="wheel-pointer">▼</view>
+      <view class="wheel" style="transform: rotate({{wheelDeg}}deg);">
+        <!-- conic-gradient 饼图：角度由 JS 拼接 -->
+        <view class="wheel-pie" style="background: conic-gradient({{pieGradient}});"></view>
+        <!-- 扇区标签：绝对定位随盘旋转 -->
+        <view
+          class="wheel-label"
+          wx:for="{{wheelSegs}}"
+          wx:key="label"
+          style="left: {{item.labelLeft}}%; top: {{item.labelTop}}%; transform: translate(-50%, -50%) rotate({{item.labelRot}}deg);"
+        >{{item.label}}</view>
+      </view>
+      <!-- 中心盖 -->
+      <view class="wheel-hub"></view>
+    </view>
+    <view class="label left">转盘选项（每行一个，2~6 个 · 均分概率）</view>
+    <textarea class="ta" value="{{wheelItems}}" bindinput="onWheelInput" maxlength="200" auto-height disabled="{{false}}" />
+    <view class="wheel-ops">
+      <button class="act apply" hover-class="btn-hover" bindtap="applyWheel">更新转盘</button>
+      <button class="act go" hover-class="btn-hover" bindtap="spinWheel" disabled="{{wheelRotating || wheelCount < 2}}">
+        {{wheelRotating ? '旋转中…' : '开转！'}}
+      </button>
+    </view>
+    <view class="draw-result" wx:if="{{wheelResult}}">🎯 天意是：{{wheelResult}}</view>
+    <view class="hint center" wx:if="{{wheelCount >= 2}}">{{wheelCount}} 个选项 · 每个概率 {{wheelProbability}}%</view>
+  </view>
+</view>

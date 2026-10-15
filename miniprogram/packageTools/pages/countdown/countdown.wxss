@@ -1,0 +1,40 @@
+.label { font-size: 26rpx; color: #5F5E5A; margin: 10rpx 0; }
+.input {
+  background: #F6F5F2;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
+}
+.picker-line { color: #2C2C2A; }
+.item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.item-title { font-size: 30rpx; font-weight: 600; }
+.item-date { font-size: 24rpx; color: #888780; }
+.remain {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+.unit { text-align: center; flex: 1; }
+.num {
+  font-size: 44rpx;
+  font-weight: 600;
+  color: #534AB7;
+  font-family: monospace;
+}
+.u { font-size: 22rpx; color: #888780; margin-left: 4rpx; }
+.expired {
+  margin-top: 20rpx;
+  color: #993C1D;
+  font-size: 28rpx;
+}
+.del {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: #A32D2D;
+  text-align: right;
+}

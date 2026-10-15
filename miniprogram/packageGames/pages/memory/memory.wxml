@@ -1,0 +1,69 @@
+<view class="page">
+  <view class="top-bar">
+    <view class="info-box">
+      <view class="info-label">👣 步数</view>
+      <view class="info-num">{{steps}}</view>
+    </view>
+    <view class="title-box" bindtap="togglePicker">
+      <view class="game-title">记忆翻牌</view>
+      <view class="game-sub">{{level.label}} · 换关卡点这里</view>
+    </view>
+    <view class="info-box">
+      <view class="info-label">✅ 配对</view>
+      <view class="info-num">{{matchedCount}}/{{level.pairs}}</view>
+    </view>
+  </view>
+  <view class="best-line" wx:if="{{best !== null}}">🏆 本关最少步数 {{best}}</view>
+
+  <!-- 关卡选择 -->
+  <view class="level-panel" wx:if="{{showLevelPicker}}">
+    <view
+      class="level-opt {{levelIdx === index ? 'on' : ''}} {{index >= unlocked ? 'lock' : ''}}"
+      wx:for="{{['第1关·8对','第2关·10对','第3关·12对','第4关·瞬间记忆']}}"
+      wx:key="index"
+      data-idx="{{index}}"
+      bindtap="switchLevel"
+    >{{item}}{{index >= unlocked ? ' 🔒' : ''}}</view>
+  </view>
+
+  <!-- 瞬间记忆预览提示 -->
+  <view class="flash-tip" wx:if="{{flashing}}">⚡ 记住它们的位置！</view>
+
+  <view class="board-wrap">
+    <!-- JS 按真实屏宽计算 px 尺寸，flex-wrap 精确排布，杜绝右侧裁切 -->
+    <view class="board" style="gap: {{gapPx}}px;">
+      <view
+        class="card {{item.flipped || item.matched ? 'open' : ''}} {{item.matched ? 'ok' : ''}}"
+        wx:for="{{cards}}"
+        wx:key="index"
+        data-idx="{{index}}"
+        bindtap="tapCard"
+        style="width: {{cardW}}px; height: {{cardH}}px;"
+      >
+        <view class="card-inner">
+          <view class="face back" style="font-size: {{backFontPx}}px;">🌸</view>
+          <view class="face front" style="font-size: {{frontFontPx}}px;">{{item.emoji}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="mask" wx:if="{{won}}">
+      <view class="mask-title">🎉 本关完成！</view>
+      <view class="mask-sub">共 {{steps}} 步{{best === steps ? ' · 新纪录！' : ''}}</view>
+      <view class="mask-row" wx:if="{{!isLastLevel}}">
+        <button class="mask-btn ghost" bindtap="restart">再玩本关</button>
+        <button class="mask-btn" bindtap="nextLevel">下一关 →</button>
+      </view>
+      <view class="mask-row" wx:else>
+        <button class="mask-btn" bindtap="restart">全部通关，再来一轮</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <button class="ctrl-btn" bindtap="restart" hover-class="btn-hover">重新开始</button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="togglePicker">选关卡</button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="goHome">返回小屋</button>
+  </view>
+  <view class="hint center">点两张牌，图案相同即配对成功</view>
+</view>

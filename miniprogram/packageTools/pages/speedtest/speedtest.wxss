@@ -1,0 +1,26 @@
+.center-card { text-align: center; padding: 50rpx 24rpx; }
+.big-icon { font-size: 88rpx; }
+.tip { font-size: 28rpx; margin-top: 14rpx; }
+.tip.sub { font-size: 24rpx; color: #888780; margin-top: 6rpx; }
+.center-card .btn-primary { margin-top: 36rpx; }
+
+.round { display: flex; align-items: center; padding: 12rpx 0; }
+.round-name { width: 120rpx; font-size: 24rpx; color: #888780; }
+.round-bar-wrap {
+  flex: 1;
+  height: 20rpx;
+  background: #F0EFEB;
+  border-radius: 10rpx;
+  overflow: hidden;
+  margin: 0 16rpx;
+}
+.round-bar { height: 100%; background: #534AB7; border-radius: 10rpx; }
+.round-val { width: 190rpx; font-size: 24rpx; text-align: right; font-family: monospace; }
+
+.result-card { text-align: center; }
+.res-main { display: flex; align-items: baseline; justify-content: center; }
+.res-num { font-size: 72rpx; font-weight: 700; color: #534AB7; font-family: monospace; }
+.res-unit { font-size: 26rpx; color: #888780; margin-left: 10rpx; }
+.res-sub { font-size: 26rpx; color: #5F5E5A; margin-top: 8rpx; }
+.err { color: #A32D2D; font-size: 26rpx; text-align: center; }
+.hint { margin-top: 6rpx; }

@@ -1,0 +1,57 @@
+.status-card {
+  text-align: center;
+  padding: 44rpx 30rpx;
+}
+.big-status {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #534AB7;
+}
+.no, .time {
+  margin-top: 12rpx;
+  color: #888780;
+  font-size: 24rpx;
+}
+.sec {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 10rpx;
+}
+.line {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+  font-size: 26rpx;
+}
+.price { color: #5F5E5A; }
+.sum-line {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F1EFE8;
+  font-size: 26rpx;
+}
+.sum { color: #993C1D; font-size: 34rpx; font-weight: 600; }
+.addr {
+  color: #5F5E5A;
+  font-size: 26rpx;
+  line-height: 1.7;
+}
+.ops {
+  display: flex;
+  justify-content: flex-end;
+}
+.op {
+  padding: 20rpx 40rpx;
+  border-radius: 44rpx;
+  font-size: 27rpx;
+  margin-left: 18rpx;
+}
+.op.plain {
+  border: 2rpx solid #B4B2A9;
+  color: #5F5E5A;
+}
+.op.solid {
+  background: #534AB7;
+  color: #FFFFFF;
+}

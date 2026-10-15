@@ -1,0 +1,102 @@
+.page {
+  min-height: 100vh;
+  background: #F6F5F2;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+/* 大色卡预览 */
+.preview {
+  height: 380rpx;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 26rpx rgba(44, 44, 42, 0.12);
+  transition: background 0.2s;
+}
+.pv-hex { font-size: 56rpx; font-weight: 700; font-family: monospace; letter-spacing: 2rpx; }
+.pv-sub { font-size: 24rpx; margin-top: 8rpx; opacity: 0.85; font-family: monospace; }
+.pv-hex.light, .pv-sub.light { color: #FFFFFF; }
+.pv-hex.dark, .pv-sub.dark { color: #1A1A18; }
+.pv-actions { display: flex; gap: 18rpx; margin-top: 30rpx; }
+.pv-btn {
+  font-size: 22rpx;
+  padding: 12rpx 26rpx;
+  border-radius: 999rpx;
+  border: 2rpx solid currentColor;
+  background: transparent;
+}
+.pv-btn.light-btn { color: #FFFFFF; }
+.pv-btn.dark-btn { color: #1A1A18; }
+
+/* 格式输入 */
+.fields { margin-top: 26rpx; }
+.field {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 16rpx;
+  padding: 18rpx 24rpx;
+  margin-bottom: 16rpx;
+}
+.f-label {
+  width: 100rpx;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #534AB7;
+}
+.f-input {
+  flex: 1;
+  font-size: 30rpx;
+  color: #2C2C2A;
+}
+.mono { font-family: monospace; }
+
+/* RGB 滑杆 */
+.sliders {
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 16rpx;
+  padding: 10rpx 24rpx;
+  margin-top: 10rpx;
+}
+.sl-row { display: flex; align-items: center; }
+.sl-tag { font-size: 26rpx; font-weight: 700; width: 44rpx; }
+.sl { flex: 1; margin: 0 16rpx; }
+.sl-num { width: 72rpx; text-align: right; font-size: 26rpx; color: #5F5E5A; }
+
+/* 操作 */
+.tool-row { display: flex; gap: 14rpx; margin-top: 24rpx; }
+.tool {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 999rpx;
+  padding: 18rpx 0;
+  font-size: 25rpx;
+  color: #5F5E5A;
+}
+.tool.primary {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 600;
+}
+
+/* 历史色卡 */
+.history { margin-top: 34rpx; }
+.h-title { font-size: 24rpx; color: #9B98A8; margin-bottom: 16rpx; }
+.h-swatches { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.h-swatch {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 16rpx;
+  border: 3rpx solid #FFFFFF;
+  box-shadow: 0 2rpx 8rpx rgba(44,44,42,0.15);
+}
+.h-swatch.cur { border-color: #534AB7; }

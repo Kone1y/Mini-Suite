@@ -1,0 +1,16 @@
+<view class="stage-wrap">
+  <canvas
+    id="stage"
+    type="2d"
+    class="stage"
+    disable-scroll="{{true}}"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+  ></canvas>
+
+  <!-- 炸弹按钮（游戏内唯一原生按钮；两指触摸为兜底释放方式） -->
+  <view class="bomb-btn" wx:if="{{screen === 'playing'}}" bindtap="onBombTap" catchtouchstart="bombBtnTouch">
+    <text class="bomb-num">{{bombs}}</text>
+  </view>
+</view>

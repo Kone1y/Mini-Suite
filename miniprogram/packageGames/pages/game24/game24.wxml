@@ -1,0 +1,48 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="round">第 {{round}} 题</view>
+    <view class="solved-count">已解 {{solvedCount}}</view>
+  </view>
+
+  <!-- 牌区 -->
+  <view class="cards">
+    <view
+      class="card-d {{item.used ? 'used' : ''}}"
+      wx:for="{{cards}}"
+      wx:key="index"
+      data-idx="{{index}}"
+      bindtap="tapCard"
+    >{{item.n}}</view>
+  </view>
+
+  <!-- 当前算式 -->
+  <view class="expr-bar">
+    <view class="expr" wx:if="{{expr.length}}">{{expr}}</view>
+    <view class="expr placeholder" wx:else>点一张牌开始</view>
+  </view>
+  <view class="cur-val" wx:if="{{curValText}}">
+    = {{curValText}} <text class="op-hint" wx:if="{{pendingOp}}">，运算符已选，点下一张牌</text>
+  </view>
+
+  <!-- 运算符 -->
+  <view class="ops">
+    <view class="op {{pendingOp === '+' ? 'on' : ''}}" data-op="+" bindtap="tapOp">＋</view>
+    <view class="op {{pendingOp === '-' ? 'on' : ''}}" data-op="-" bindtap="tapOp">－</view>
+    <view class="op {{pendingOp === '*' ? 'on' : ''}}" data-op="*" bindtap="tapOp">×</view>
+    <view class="op {{pendingOp === '/' ? 'on' : ''}}" data-op="/" bindtap="tapOp">÷</view>
+  </view>
+
+  <!-- 操作 -->
+  <view class="tool-row">
+    <view class="tool" bindtap="undo">↺ 重来</view>
+    <view class="tool" bindtap="reveal">{{showSolution ? '🙈 收起' : '💡 看解'}}</view>
+    <view class="tool primary" bindtap="next">下一题 →</view>
+  </view>
+
+  <!-- 解答 -->
+  <view class="solution" wx:if="{{showSolution && solution}}">{{solution}} = 24</view>
+
+  <!-- 成功提示 -->
+  <view class="win-banner" wx:if="{{solved}}">🎉 正确！ +1</view>
+</view>

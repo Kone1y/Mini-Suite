@@ -1,0 +1,43 @@
+.falls {
+  display: flex;
+  padding: 12rpx;
+}
+.col {
+  flex: 1;
+  min-width: 0;
+  padding: 0 12rpx;
+}
+.wp-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(44, 44, 42, 0.04);
+}
+.wp-img {
+  width: 100%;
+  display: block;
+}
+.wp-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14rpx 18rpx;
+}
+.wp-title {
+  font-size: 24rpx;
+  color: #5F5E5A;
+}
+.wp-ops { display: flex; }
+.op {
+  font-size: 24rpx;
+  color: #534AB7;
+  margin-left: 22rpx;
+}
+.op.strong { font-weight: 600; }
+.load-line {
+  text-align: center;
+  color: #B4B2A9;
+  font-size: 24rpx;
+  padding: 20rpx 0 50rpx;
+}

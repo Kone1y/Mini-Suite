@@ -1,0 +1,194 @@
+.page {
+  min-height: 100vh;
+  background: #F6F5F2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 24rpx 40rpx;
+  box-sizing: border-box;
+}
+
+/* 顶栏 */
+.topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+.level-chip {
+  background: #FFFFFF;
+  border: 2rpx solid #534AB7;
+  color: #534AB7;
+  font-size: 24rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 999rpx;
+}
+.stat {
+  margin-left: auto;
+  color: #5F5E5A;
+  font-size: 26rpx;
+  font-family: monospace;
+}
+.stat.err { color: #D84343; margin-left: 16rpx; }
+
+/* 棋盘：grid 自适应 + aspect-ratio 保证正方形格子 */
+.board-wrap { position: relative; width: 100%; }
+.board {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  background: #FFFFFF;
+  border: 4rpx solid #534AB7;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+.cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1rpx solid #E8E6DF;
+  border-bottom: 1rpx solid #E8E6DF;
+  position: relative;
+  background: #FFFFFF;
+}
+.cell:nth-child(9n) { border-right: none; }
+.cell.brd-r { border-right: 3rpx solid #534AB7; }
+.cell.brd-b { border-bottom: 3rpx solid #534AB7; }
+.cell.given .v { color: #2C2C2A; font-weight: 700; }
+.cell .v { font-size: 34rpx; color: #534AB7; font-weight: 500; }
+.cell.peer { background: #F4F3FB; }
+.cell.sel { background: #E4E1F8; }
+.cell.error .v { color: #D84343; }
+.cell.conflict { background: #FDEBEB; }
+/* 同值高亮：选中格有值时同值格微标——简化：选中态加内圈 */
+.cell.sel::after {
+  content: '';
+  position: absolute;
+  left: 8%; right: 8%; top: 8%; bottom: 8%;
+  border: 2rpx solid #534AB7;
+  border-radius: 6rpx;
+  pointer-events: none;
+}
+/* 笔记 3x3 */
+.notes {
+  width: 100%; height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  padding: 2rpx;
+  box-sizing: border-box;
+}
+.notes .n {
+  font-size: 18rpx;
+  color: #9B98A8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* 数字键盘 */
+.numpad {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 10rpx;
+  margin-top: 24rpx;
+}
+.num {
+  aspect-ratio: 0.85;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #534AB7;
+  box-shadow: 0 2rpx 8rpx rgba(44,44,42,0.04);
+}
+.num.note-on { background: #FFF7E0; border-color: #E5C96B; color: #9A7B1F; }
+
+/* 工具行 */
+.tool-row {
+  width: 100%;
+  display: flex;
+  gap: 14rpx;
+  margin-top: 20rpx;
+}
+.tool {
+  flex: 1;
+  min-width: 0;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 999rpx;
+  padding: 16rpx 0;
+  text-align: center;
+  font-size: 24rpx;
+  color: #5F5E5A;
+  white-space: nowrap;
+}
+.tool.on {
+  background: #FFF7E0;
+  border-color: #E5C96B;
+  color: #9A7B1F;
+}
+
+/* 完成遮罩 */
+.mask {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(246, 245, 242, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8rpx;
+}
+.mask-title { font-size: 44rpx; font-weight: 700; color: #534AB7; }
+.mask-sub { margin-top: 14rpx; color: #5F5E5A; font-size: 26rpx; }
+.mask-sub.record { color: #D84343; font-weight: 600; }
+.mask-row { display: flex; gap: 16rpx; margin-top: 30rpx; }
+.mask-btn {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  margin: 0;
+  padding: 0 44rpx;
+  line-height: 2.4;
+}
+.mask-btn::after { border: none; }
+
+/* 难度面板 */
+.level-mask {
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+.level-panel {
+  width: 540rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+.lp-title { text-align: center; font-size: 30rpx; font-weight: 600; margin-bottom: 24rpx; }
+.lp-opt {
+  padding: 24rpx;
+  border-radius: 14rpx;
+  text-align: center;
+  font-size: 27rpx;
+  color: #2C2C2A;
+  margin-bottom: 14rpx;
+  background: #F6F5F2;
+}
+.lp-opt.on { background: #E4E1F8; color: #534AB7; font-weight: 600; }
+.lp-cancel { text-align: center; padding: 20rpx; color: #9B98A8; font-size: 25rpx; }

@@ -1,0 +1,55 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <picker mode="selector" range="{{['7×7','10×10']}}" value="{{sizeIdx}}" bindchange="onSize">
+      <view class="pick">{{sizeLabel}} ▾</view>
+    </picker>
+    <view class="timer">⏱ {{elapsed}}s</view>
+    <view class="lamp-count">💡 {{placedCount}}</view>
+  </view>
+
+  <view class="status">{{status}}</view>
+
+  <!-- 棋盘（显式宽度注入：flex-wrap 按精确 N 格换行，杜绝一行挤 N+1 格） -->
+  <view class="board" wx:if="{{cells.length}}" style="width:{{boardPx}}px">
+    <view
+      wx:for="{{cells}}"
+      wx:key="index"
+      class="cell {{item.type === -2 ? 'wall' : item.type >= 0 ? 'nwall' : ''}} {{item.type === -1 ? (item.lit ? 'lit' : 'dark') : ''}} {{item.hasBulb ? 'bulb' : ''}} {{item.bad ? 'bad' : ''}} {{item.wallBad ? 'wallbad' : ''}} {{hintCell && hintCell.r === item.r && hintCell.c === item.c ? 'hinting' : ''}}"
+      style="width:{{cellPx}}px;height:{{cellPx}}px"
+      data-idx="{{index}}"
+      bindtap="onCell"
+    >
+      <text wx:if="{{item.type >= 0}}" class="num">{{item.type}}</text>
+      <text wx:if="{{item.hasBulb}}" class="bulb-icon">💡</text>
+    </view>
+  </view>
+  <view class="empty" wx:else>
+    <text>{{generating ? '正在生成谜题…' : '点「新谜题」开始'}}</text>
+  </view>
+
+  <!-- 按钮 -->
+  <view class="ctrl-row">
+    <view class="btn" bindtap="giveHint">💡 提示</view>
+    <view class="btn primary" bindtap="newPuzzle">{{generating ? '生成中…' : '🎲 新谜题'}}</view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="intro-card">
+    <view class="intro-head" bindtap="toggleHelp">
+      <text class="intro-title">❓ 玩法说明</text>
+      <text class="intro-arrow">{{helpOpen ? '▲' : '▼'}}</text>
+    </view>
+    <view class="intro-body" wx:if="{{helpOpen}}">
+      <view class="intro-li">· 点白格放灯泡（再点撤掉），灯照亮同行同列直到墙</view>
+      <view class="intro-li">· 两盏灯不能互相照射（同一直线无墙阻隔）</view>
+      <view class="intro-li">· 数字墙 = 上下左右相邻白格中的灯数必须恰好等于它</view>
+      <view class="intro-li">· 所有白格被照亮即通关；每局唯一解、纯逻辑可推</view>
+      <view class="intro-li">· 策略：先满足 0 墙（四周禁灯）和满数墙，再从黑暗角落反推</view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <view class="btn ghost wide" bindtap="goHome">🏠 返回小屋</view>
+  </view>
+</view>

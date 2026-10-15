@@ -1,0 +1,89 @@
+.page {
+  min-height: 100vh; background: #14131C;
+  padding: 24rpx 28rpx 40rpx; box-sizing: border-box;
+  display: flex; flex-direction: column;
+}
+
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14rpx; }
+.sizes { display: flex; gap: 10rpx; }
+.sz {
+  background: #3A3846; color: #B9B3D4;
+  border-radius: 10rpx; padding: 8rpx 22rpx; font-size: 24rpx; font-weight: 700;
+}
+.sz.on { background: #534AB7; color: #fff; }
+.timer { font-size: 25rpx; color: #FFD66B; font-family: monospace; }
+.btn-mini {
+  background: #3A3846; color: #FFD66B;
+  border-radius: 10rpx; padding: 8rpx 20rpx; font-size: 24rpx;
+}
+
+.help-card { background: #232233; border-radius: 14rpx; padding: 16rpx 22rpx; margin-bottom: 14rpx; }
+.help-head { display: flex; justify-content: space-between; align-items: center; font-size: 24rpx; font-weight: 700; color: #C9C0FF; }
+.help-arrow { font-size: 20rpx; color: #776F9E; display: inline-block; transition: transform .2s; }
+.help-arrow.open { transform: rotate(180deg); }
+.help-body { margin-top: 12rpx; border-top: 1rpx solid rgba(255,255,255,.06); padding-top: 12rpx; }
+.hp { font-size: 21rpx; color: #B9B3D4; line-height: 1.7; margin-bottom: 6rpx; }
+.mono { font-family: monospace; color: #6FC486; background: rgba(111,196,134,.1); padding: 0 6rpx; border-radius: 4rpx; }
+
+/* 棋盘 */
+.board-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 16rpx; }
+.col-regex-row { display: flex; align-items: flex-end; margin-bottom: 8rpx; }
+.corner { width: 130rpx; flex-shrink: 0; }
+.col-regex {
+  box-sizing: border-box; padding: 4rpx 2rpx; text-align: center;
+  font-family: monospace; font-size: 19rpx; color: #9C93C4;
+  word-break: break-all;
+}
+.col-regex.ok { color: #6FC486; font-weight: 700; }
+.grid-row { display: flex; align-items: center; }
+.row-regex {
+  width: 130rpx; flex-shrink: 0; text-align: right; padding-right: 12rpx;
+  font-family: monospace; font-size: 19rpx; color: #9C93C4;
+  word-break: break-all; box-sizing: border-box;
+}
+.row-regex.ok { color: #6FC486; font-weight: 700; }
+.cell {
+  box-sizing: border-box;
+  background: #232233;
+  border: 2rpx solid rgba(139,155,212,.14);
+  border-radius: 10rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36rpx; font-weight: 800; color: #E8E4F5;
+  font-family: monospace;
+  margin: 2rpx;
+}
+.cell.filled { background: #2C2B3C; }
+.cell.sel { border-color: #FFD66B; border-width: 3rpx; background: rgba(255,214,107,.08); }
+.cell.both-ok { color: #6FC486; }
+
+.loading { text-align: center; color: #776F9E; font-size: 25rpx; padding: 100rpx 0; }
+
+.won-banner {
+  background: rgba(76,158,100,.15); border: 2rpx solid rgba(76,158,100,.5);
+  border-radius: 16rpx; padding: 20rpx; text-align: center; margin-bottom: 14rpx;
+}
+.wb-t { font-size: 26rpx; font-weight: 700; color: #6FC486; }
+.wb-btns { display: flex; gap: 14rpx; margin-top: 14rpx; }
+.wb-btn { flex: 1; background: #4C9E64; color: #fff; border-radius: 999rpx; padding: 16rpx 0; font-size: 25rpx; font-weight: 700; }
+
+/* 字母键盘 */
+.keypad { display: flex; flex-direction: column; gap: 8rpx; margin-bottom: 14rpx; }
+.alpha-row { display: flex; gap: 8rpx; }
+.akey {
+  flex: 1; min-width: 0;
+  background: #2C2B3C; color: #C9C0FF;
+  border: 1rpx solid rgba(156,143,245,.22);
+  border-radius: 10rpx;
+  height: 68rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26rpx; font-family: monospace; font-weight: 700;
+}
+.akey:active { opacity: .6; }
+
+.ctrl-row { display: flex; gap: 14rpx; margin-top: auto; }
+.btn {
+  flex: 1; border-radius: 999rpx; padding: 18rpx 0; text-align: center;
+  font-size: 26rpx; background: #3A3846; color: #E8E4F5;
+}
+.btn.ghost { background: transparent; border: 2rpx solid #534AB7; color: #9C8FF5; }
+.btn:active { opacity: .8; }

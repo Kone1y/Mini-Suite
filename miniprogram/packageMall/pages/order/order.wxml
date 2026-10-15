@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="order card" wx:for="{{orders}}" wx:for-item="order" wx:key="order_no" data-no="{{order.order_no}}" bindtap="goDetail" hover-class="press-active">
+    <view class="head">
+      <text class="no">{{order.order_no}}</text>
+      <text class="status pill" style="color: {{order.statusColor}}; background: {{order.statusBg}};">{{order.statusText}}</text>
+    </view>
+    <view class="line" wx:for="{{order.items}}" wx:for-item="it" wx:key="index">
+      <text class="it-name">{{it.name}} × {{it.qty}}</text>
+      <text class="it-price">¥{{it.price}}</text>
+    </view>
+    <view class="foot">
+      <text class="time">{{order.created_at}}</text>
+      <view class="ops" wx:if="{{order.status === 'pending'}}">
+        <view class="op-btn plain" data-no="{{order.order_no}}" catchtap="cancel">取消</view>
+        <view class="op-btn solid" data-no="{{order.order_no}}" catchtap="pay">模拟支付</view>
+      </view>
+      <text class="total" wx:else>合计 <text class="total-num">¥{{order.total}}</text></text>
+    </view>
+  </view>
+
+  <view class="load-line" wx:if="{{loading}}">加载中…</view>
+  <view class="load-line empty" wx:elif="{{!orders.length}}">
+    <view class="empty-icon">📦</view>
+    <view>还没有订单，去商城逛逛吧</view>
+  </view>
+</view>

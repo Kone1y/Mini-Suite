@@ -1,0 +1,57 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-t">🔬 十六进制查看器</view>
+    <view class="hero-s">读取文件字节 · 魔数识别 · 字符串提取</view>
+  </view>
+
+  <!-- 选文件 -->
+  <view class="pick-btn" bindtap="onPick">{{loading ? '读取中…' : '📁 选择文件查看'}}</view>
+
+  <block wx:if="{{fileName}}">
+    <!-- 文件信息 -->
+    <view class="info-card">
+      <view class="if-row"><text class="if-k">文件</text><text class="if-v">{{fileName}}</text></view>
+      <view class="if-row"><text class="if-k">大小</text><text class="if-v mono">{{fileSize}} 字节</text></view>
+      <view class="if-row"><text class="if-k">类型</text><text class="if-v type">{{fileType}}</text></view>
+      <view class="if-row"><text class="if-k">头部</text><text class="if-v mono">{{magicHex}}</text></view>
+    </view>
+
+    <!-- hex 区 -->
+    <view class="hex-box">
+      <view class="hex-line head">
+        <text class="h-off">偏移</text>
+        <text class="h-hex">00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F</text>
+        <text class="h-asc">ASCII</text>
+      </view>
+      <view class="hex-line" wx:for="{{pages}}" wx:key="offset">
+        <text class="h-off mono">{{item.offset}}</text>
+        <text class="h-hex mono">{{item.h1}}  {{item.h2}}</text>
+        <text class="h-asc mono">{{item.ascii}}</text>
+      </view>
+    </view>
+
+    <!-- 分页 -->
+    <view class="pager">
+      <view class="pg-btn {{pageIdx === 0 ? 'dis' : ''}}" bindtap="onPrev">‹ 上一页</view>
+      <view class="pg-info">{{pageIdx + 1}} / {{pageCount}}</view>
+      <view class="pg-btn {{pageIdx >= pageCount - 1 ? 'dis' : ''}}" bindtap="onNext">下一页 ›</view>
+    </view>
+
+    <!-- 字符串 -->
+    <view class="strings-card" wx:if="{{strings.length}}">
+      <view class="sc-t">🔍 内嵌字符串（前 8KB 扫描）</view>
+      <view class="sc-line" wx:for="{{strings}}" wx:key="off">
+        <text class="sc-off mono">{{item.off}}</text>
+        <text class="sc-s">{{item.s}}</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="empty" wx:else>
+    <text class="e-icon">📂</text>
+    <text class="e-t">选择一个文件开始</text>
+    <text class="e-s">支持查看任意文件的原始字节、识别真实格式（改后缀也骗不过魔数）、提取藏在二进制里的文本</text>
+  </view>
+
+  <view class="foot" bindtap="goHome">← 返回小屋</view>
+</view>

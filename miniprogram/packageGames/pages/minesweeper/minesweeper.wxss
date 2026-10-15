@@ -1,0 +1,137 @@
+.page { display: flex; flex-direction: column; align-items: center; padding: 24rpx; }
+
+.top-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8rpx 16rpx;
+}
+.info-box {
+  background: #FFFFFF;
+  border-radius: 14rpx;
+  padding: 12rpx 26rpx;
+  text-align: center;
+  min-width: 130rpx;
+  border: 1rpx solid #EFEEE9;
+}
+.info-label { font-size: 20rpx; color: #888780; }
+.info-num { font-size: 32rpx; font-weight: 700; color: #26215C; font-family: monospace; }
+.title-box { text-align: center; }
+.game-title { font-size: 40rpx; font-weight: 800; color: #26215C; letter-spacing: 2rpx; }
+.lv-tag {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: #534AB7;
+  background: #EEEDFE;
+  border-radius: 8rpx;
+  padding: 2rpx 10rpx;
+  margin-left: 6rpx;
+  vertical-align: middle;
+}
+.game-sub { font-size: 20rpx; color: #888780; margin-top: 4rpx; }
+.best-line { font-size: 22rpx; color: #B4B2A9; margin: 0 0 14rpx; }
+
+.level-panel {
+  display: flex;
+  gap: 14rpx;
+  margin-bottom: 16rpx;
+}
+.level-opt {
+  background: #FFFFFF;
+  border: 2rpx solid #EFEEE9;
+  border-radius: 999rpx;
+  padding: 12rpx 26rpx;
+  font-size: 24rpx;
+  color: #5F5E5A;
+}
+.level-opt.on {
+  border-color: #534AB7;
+  color: #534AB7;
+  background: #EEEDFE;
+  font-weight: 600;
+}
+
+.board-wrap { position: relative; width: 100%; }
+.board {
+  width: 100%;
+  display: grid;
+  gap: 4rpx;
+  background: #D9D7CE;
+  border-radius: 12rpx;
+  padding: 8rpx;
+  box-sizing: border-box;
+}
+.cell {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #FFFFFF;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: monospace;
+  box-shadow: inset 0 -3rpx 0 rgba(44,44,42,0.08);
+}
+.cell:active { opacity: 0.75; }
+.cell.rev {
+  background: #EFEEE9;
+  box-shadow: none;
+}
+.cell.boom { background: #FAE0DC; }
+/* 字号随棋盘密度缩放：JS 侧按 size 设置 style，这里给默认 */
+.cell { font-size: 30rpx; }
+
+.mask {
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(246, 245, 242, 0.9);
+  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.mask-title { font-size: 44rpx; font-weight: 800; color: #26215C; }
+.mask-sub { font-size: 26rpx; color: #888780; margin: 14rpx 0 26rpx; }
+.mask-row { display: flex; gap: 20rpx; }
+.mask-btn {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  margin: 0;
+  box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.3);
+}
+.mask-btn::after { border: none; }
+
+/* 按钮行：主按钮 flex:1 铺满剩余宽度，绝不超出屏幕 */
+.ctrl-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 28rpx;
+  width: 100%;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+}
+.ctrl-btn {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  padding: 0 10rpx;
+  white-space: nowrap;
+}
+.ctrl-btn.ghost {
+  background: #FFFFFF;
+  color: #534AB7;
+  border: 2rpx solid #534AB7;
+  box-shadow: none;
+}
+.ctrl-btn::after { border: none; }
+.hint { margin-top: 18rpx; }

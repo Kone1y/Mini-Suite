@@ -1,0 +1,37 @@
+<view class="page">
+  <!-- PCM 正常模式：绝对 dB 表盘 -->
+  <view class="card gauge-card" wx:if="{{!degraded}}">
+    <view class="db-value">{{db}}<text class="db-unit">dB</text></view>
+    <view class="meter">
+      <view class="meter-fill" style="width: {{levelPct}}%; background: {{levelPct > 80 ? '#A32D2D' : (levelPct > 55 ? '#854F0B' : '#0F6E56')}};"></view>
+    </view>
+    <view class="scale">
+      <text>0</text><text>30</text><text>60</text><text>90</text><text>120</text>
+    </view>
+    <view class="peak-line" bindtap="resetPeak">峰值 {{peakDb}} dB（点击清零）</view>
+    <view class="hint center" wx:if="{{frameInfo}}">{{frameInfo}}</view>
+  </view>
+
+  <!-- 降级模式：相对音量动画（iOS 编码帧） -->
+  <view class="card gauge-card" wx:if="{{degraded}}">
+    <view class="db-value"><text class="db-unit big">相对音量</text></view>
+    <view class="meter">
+      <view class="meter-fill" style="width: {{relLevel}}%; background: {{relLevel > 80 ? '#A32D2D' : (relLevel > 55 ? '#854F0B' : '#0F6E56')}};"></view>
+    </view>
+    <view class="scale">
+      <text>安静</text><text>正常</text><text>很响</text>
+    </view>
+    <view class="peak-line">当前环境无法测出绝对分贝值（iOS 音频帧格式限制），以上为相对音量指示</view>
+    <view class="hint center" wx:if="{{frameInfo}}">{{frameInfo}}</view>
+  </view>
+
+  <view class="card">
+    <button class="btn-primary" hover-class="btn-hover" bindtap="toggle">
+      {{running ? '停止测量' : '开始测量'}}
+    </button>
+    <view class="hint center" wx:if="{{unsupported}}">
+      当前环境不支持分贝测量（需要麦克风权限与 RecorderManager 支持）
+    </view>
+    <view class="hint center">结果为估算值，仅供参考</view>
+  </view>
+</view>

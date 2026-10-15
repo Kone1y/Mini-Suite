@@ -1,0 +1,78 @@
+<view class="page">
+  <!-- 记分板 -->
+  <view class="scorebar">
+    <view class="score black">
+      <view class="chip black-chip"></view>
+      <text class="num">{{blackCnt}}</text>
+      <text class="who">你</text>
+    </view>
+    <view class="turnbox">
+      <text class="turn">{{turnText}}</text>
+    </view>
+    <view class="score white">
+      <text class="who">AI</text>
+      <text class="num">{{whiteCnt}}</text>
+      <view class="chip white-chip"></view>
+    </view>
+  </view>
+
+  <!-- 棋盘 -->
+  <view class="board" style="width:{{boardPx}}px;height:{{boardPx}}px">
+    <view
+      wx:for="{{boardView}}"
+      wx:key="idx"
+      class="cell {{item.isLast ? 'last' : ''}}"
+      style="width:{{item.cellSize}}px;height:{{item.cellSize}}px"
+      data-idx="{{item.idx}}"
+      bindtap="onCell"
+    >
+      <!-- 棋子：黑/白 -->
+      <view
+        wx:if="{{item.piece === 1}}"
+        class="disc black-disc"
+        style="width:{{item.dotSize}}px;height:{{item.dotSize}}px"
+      ></view>
+      <view
+        wx:if="{{item.piece === 2}}"
+        class="disc white-disc"
+        style="width:{{item.dotSize}}px;height:{{item.dotSize}}px"
+      ></view>
+      <!-- 可落点提示 -->
+      <view wx:if="{{item.canMove}}" class="hint-dot"></view>
+      <!-- 最后落点标记 -->
+      <view wx:if="{{item.isLast}}" class="last-mark"></view>
+    </view>
+  </view>
+
+  <!-- 结果横幅 -->
+  <view class="result {{gameOver ? 'show' : ''}}" wx:if="{{gameOver}}">{{resultText}}</view>
+
+  <!-- 控制 -->
+  <view class="ctrl-row">
+    <view class="btn ghost" bindtap="undo">↶ 悔棋</view>
+    <picker class="picker" range="{{diffNames}}" value="{{diffIdx}}" bindchange="onDiff">
+      <view class="btn">AI 棋力：{{diffNames[diffIdx]}} ▾</view>
+    </picker>
+    <view class="btn primary" bindtap="newGame">↺ 新对局</view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="intro-card">
+    <view class="intro-head" bindtap="toggleIntro">
+      <text class="intro-title">❓ 玩法说明</text>
+      <text class="intro-arrow">{{introOpen ? '▲' : '▼'}}</text>
+    </view>
+    <view class="intro-body" wx:if="{{introOpen}}">
+      <view class="intro-li">· 你执黑先行，点绿点处落子</view>
+      <view class="intro-li">· 落子必须夹住至少一枚白子并翻转它们</view>
+      <view class="intro-li">· 夹住多个方向的棋子会全部翻转</view>
+      <view class="intro-li">· 无处可落时自动跳过；双方都不能落子即终局</view>
+      <view class="intro-li">· 终局棋子多者胜。四角是黄金要点，别送角！</view>
+      <view class="intro-li">· AI 用 Minimax + α-β 剪枝搜索：轻松=2 层，标准=4 层，困难=6 层，残局 10 空位内直接算到底</view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <view class="btn ghost wide" bindtap="goHome">🏠 返回小屋</view>
+  </view>
+</view>

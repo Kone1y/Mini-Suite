@@ -1,0 +1,43 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="score-box">
+      <view class="score-num">{{score}}</view>
+      <view class="score-label">得分</view>
+    </view>
+    <view class="time-box">
+      <view class="time-num {{timeLeft <= 5 ? 'danger' : ''}}">{{timeLeft}}s</view>
+      <view class="time-bar"><view class="time-fill" style="width: {{timeBarPct}}%;"></view></view>
+    </view>
+    <view class="score-box right">
+      <view class="score-num combo">{{combo}}</view>
+      <view class="score-label">连击</view>
+    </view>
+  </view>
+
+  <!-- 地鼠场 -->
+  <view class="field">
+    <view class="hole-grid">
+      <view class="hole" wx:for="{{holes}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="whack">
+        <view class="dirt"></view>
+        <view class="mole {{item.mole ? 'up' : ''}} {{item.bonked ? 'bonked' : ''}}" wx:if="{{item.mole || item.bonked}}">
+          <view class="face">{{item.bonked ? '😵' : '🐹'}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 开始/结束遮罩 -->
+    <view class="mask" wx:if="{{!running && !over}}">
+      <view class="mask-emoji">🐹</view>
+      <view class="mask-title">打地鼠</view>
+      <view class="mask-sub">30 秒限时 · 点击冒头的地鼠<br/>连击越高得分越高</view>
+      <view class="mask-row"><button class="mask-btn" bindtap="start">开始！</button></view>
+    </view>
+    <view class="mask" wx:if="{{over}}">
+      <view class="mask-emoji">{{score >= best && score > 0 ? '🏆' : '⏰'}}</view>
+      <view class="mask-title">时间到！</view>
+      <view class="mask-sub">得分 {{score}} · 最高连击 {{bestCombo}}<br/>历史最佳 {{best}}</view>
+      <view class="mask-row"><button class="mask-btn" bindtap="start">再来一局</button></view>
+    </view>
+  </view>
+</view>

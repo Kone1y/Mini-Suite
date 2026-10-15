@@ -1,0 +1,42 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 12rpx;
+}
+.cell {
+  width: calc(33.33% - 16rpx);
+  margin: 8rpx;
+  background: #FFFFFF;
+  border-radius: 14rpx;
+  padding-bottom: 12rpx;
+  box-shadow: 0 2rpx 6rpx rgba(44, 44, 42, 0.04);
+}
+.emoji-img {
+  width: 100%;
+  height: 200rpx;
+  border-radius: 14rpx 14rpx 0 0;
+  background: #F6F5F2;
+}
+.cell-title {
+  text-align: center;
+  font-size: 22rpx;
+  color: #5F5E5A;
+  margin-top: 8rpx;
+}
+.cell-ops {
+  display: flex;
+  justify-content: center;
+  margin-top: 6rpx;
+}
+.op {
+  font-size: 22rpx;
+  color: #534AB7;
+  margin: 0 10rpx;
+}
+.op.strong { font-weight: 600; }
+.load-line {
+  text-align: center;
+  color: #B4B2A9;
+  font-size: 24rpx;
+  padding: 20rpx 0 50rpx;
+}

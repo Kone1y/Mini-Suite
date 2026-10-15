@@ -1,0 +1,17 @@
+.page { padding: 24rpx; background: #F6F5F2; min-height: 100vh; box-sizing: border-box; }
+.card { background: #fff; border-radius: 20rpx; padding: 28rpx; margin-bottom: 24rpx; box-shadow: 0 4rpx 16rpx rgba(83,74,183,0.08); }
+.card-title { font-size: 32rpx; font-weight: 700; color: #534AB7; margin-bottom: 20rpx; }
+.tinput { width: 100%; box-sizing: border-box; border: 2rpx solid #E4E1F5; border-radius: 12rpx; padding: 18rpx 20rpx; font-size: 28rpx; min-height: 88rpx; background: #FAF9FF; font-family: 'SF Mono', Menlo, Consolas, monospace; line-height: 1.4; }
+.flags { display: flex; gap: 14rpx; margin: 16rpx 0; flex-wrap: wrap; }
+.flag { padding: 10rpx 20rpx; border-radius: 999rpx; font-size: 25rpx; background: #F0EEF8; color: #888; border: 2rpx solid transparent; }
+.flag.on { background: #EEEDFE; color: #534AB7; border-color: #534AB7; font-weight: 600; }
+.tarea { width: 100%; box-sizing: border-box; border: 2rpx solid #E4E1F5; border-radius: 12rpx; padding: 16rpx; font-size: 26rpx; background: #FAF9FF; line-height: 1.6; min-height: 220rpx; margin-top: 16rpx; }
+.err { color: #C0392B; font-size: 26rpx; margin-top: 14rpx; }
+.cnt { color: #0F6E56; font-size: 26rpx; margin-top: 14rpx; font-weight: 600; }
+.hl { display: block; margin-top: 14rpx; padding: 16rpx; background: #FBFAFF; border-radius: 12rpx; font-size: 26rpx; line-height: 1.7; word-break: break-all; white-space: pre-wrap; }
+.groups { margin-top: 18rpx; background: #FAF9FF; border-radius: 14rpx; padding: 16rpx 20rpx; }
+.g-title { font-size: 26rpx; color: #534AB7; font-weight: 600; margin-bottom: 8rpx; }
+.g-row { display: flex; justify-content: space-between; padding: 6rpx 0; font-size: 26rpx; }
+.g-idx { color: #888; }
+.mono { font-family: 'SF Mono', Menlo, Consolas, monospace; color: #2b2b35; }
+.foot { text-align: center; color: #aaa; font-size: 24rpx; padding: 20rpx 0 40rpx; }

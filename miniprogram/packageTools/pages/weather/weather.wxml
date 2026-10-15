@@ -1,0 +1,230 @@
+<view class="page">
+  <!-- 顶栏：标题 + 工具按钮 -->
+  <view class="topbar">
+    <view class="brand">
+      <text class="brand-cn">天空卡片</text>
+      <text class="brand-en">AETHER · WEATHER</text>
+    </view>
+    <view class="tools">
+      <view class="tool-btn" bindtap="onSortTap">🌡</view>
+      <view class="tool-btn {{refreshing ? 'spin' : ''}}" bindtap="onRefreshTap">↻</view>
+      <view class="tool-btn" bindtap="onUnitTap">{{unit === 'c' ? '°F' : '°C'}}</view>
+    </view>
+  </view>
+
+  <!-- 搜索区 -->
+  <view class="searchbar">
+    <view class="search-box">
+      <text class="s-icon">🔍</text>
+      <input
+        class="s-input"
+        value="{{query}}"
+        placeholder="搜索城市：中文 / English / 拼音"
+        placeholder-class="s-ph"
+        bindinput="onQuery"
+        bindfocus="onSearchFocus"
+        bindblur="onSearchBlur"
+        confirm-type="search"
+      />
+    </view>
+    <!-- 联想下拉 -->
+    <view class="dropdown" wx:if="{{showSug}}">
+      <view class="dd-empty" wx:if="{{!suggestions.length}}">没有找到「{{query}}」相关城市，换座城试试？ ✧</view>
+      <view
+        class="dd-item"
+        wx:for="{{suggestions}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onSugTap"
+      >
+        <text class="dd-cn">{{item.hlName}}</text>
+        <text class="dd-en">{{item.en}}</text>
+        <text class="dd-w">{{item.icon}} {{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 卡片区 -->
+  <view class="grid">
+    <view wx:if="{{!cards.length}}" class="empty">
+      <text class="empty-icon">🫧</text>
+      <text class="empty-t">天空空空如也</text>
+      <text class="empty-s">搜索一座城市，或点下方快捷挂上 ✧</text>
+      <view class="quick-row">
+        <view
+          class="quick-chip"
+          wx:for="{{quickAdds}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="onQuickAdd"
+        >{{item.icon}} {{item.name}}</view>
+      </view>
+    </view>
+
+    <view
+      class="card {{item.open ? 'open' : ''}}"
+      wx:for="{{cards}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onCardTap"
+    >
+      <!-- 场景区 -->
+      <view class="scene scene-{{item.scene}}">
+        <!-- 数据源角标 -->
+        <view class="src-badge src-{{item.src}}">
+          <view class="dot"></view>
+          <text>{{item.srcText}}</text>
+        </view>
+
+        <!-- 场景动效：云 -->
+        <block wx:if="{{item.fx.clouds}}">
+          <view
+            class="cloud"
+            wx:for="{{item.fx.clouds}}"
+            wx:for-item="cl"
+            wx:key="index"
+            style="top:{{cl.y}}%;animation-duration:{{cl.dur}}s;animation-delay:{{cl.delay}}s"
+          ></view>
+        </block>
+        <!-- 雨滴 -->
+        <block wx:if="{{item.fx.drops}}">
+          <view
+            class="drop"
+            wx:for="{{item.fx.drops}}"
+            wx:for-item="dp"
+            wx:key="index"
+            style="left:{{dp.x}}%;animation-duration:{{dp.dur}}s;animation-delay:{{dp.delay}}s"
+          ></view>
+        </block>
+        <!-- 雪花 -->
+        <block wx:if="{{item.fx.flakes}}">
+          <view
+            class="flake"
+            wx:for="{{item.fx.flakes}}"
+            wx:for-item="fk"
+            wx:key="index"
+            style="left:{{fk.x}}%;width:{{fk.sz}}px;height:{{fk.sz}}px;animation-duration:{{fk.dur}}s;animation-delay:{{fk.delay}}s"
+          ></view>
+        </block>
+        <!-- 雾 -->
+        <block wx:if="{{item.fx.fogs}}">
+          <view
+            class="fog"
+            wx:for="{{item.fx.fogs}}"
+            wx:for-item="fg"
+            wx:key="index"
+            style="top:{{fg.y}}%;height:{{fg.h}}px;animation-duration:{{fg.dur}}s;animation-delay:{{fg.delay}}s"
+          ></view>
+        </block>
+        <!-- 星星 -->
+        <block wx:if="{{item.fx.stars}}">
+          <view
+            class="star {{st.cross ? 'cross' : ''}}"
+            wx:for="{{item.fx.stars}}"
+            wx:for-item="st"
+            wx:key="index"
+            style="left:{{st.x}}%;animation-duration:{{st.dur}}s;animation-delay:{{st.delay}}s"
+          ></view>
+        </block>
+        <!-- 太阳 / 月亮 / 闪电（静态位置 + 呼吸/闪烁动画） -->
+        <view class="sun" wx:if="{{item.scene === 'sunny'}}">
+          <view class="sun-core"></view>
+        </view>
+        <view class="moon" wx:if="{{item.scene === 'night'}}"></view>
+        <view class="bolt" wx:if="{{item.scene === 'storm'}}"></view>
+        <view class="flash" wx:if="{{item.scene === 'storm'}}"></view>
+        <view class="rainbow" wx:if="{{item.scene === 'rainy'}}"></view>
+
+        <!-- 城市名 -->
+        <view class="scene-city">
+          <text class="cn">{{item.name}}</text>
+          <text class="en">{{item.en}} · {{item.country}}</text>
+        </view>
+
+        <!-- 删除 -->
+        <view class="del" data-id="{{item.id}}" catchtap="removeCity">✕</view>
+      </view>
+
+      <!-- 数据区 -->
+      <view class="body">
+        <view class="row-main">
+          <view class="temp">{{item.temp}}<text class="deg">{{item.unitLabel}}</text></view>
+          <view class="cond">
+            <view class="cond-cn">{{item.condIcon}} {{item.condCn}}</view>
+            <view class="cond-en">{{item.condEn}}</view>
+            <view class="hi-lo">
+              <text class="hi">↑ {{item.hi}}°</text>
+              <text class="lo">↓ {{item.lo}}°</text>
+            </view>
+          </view>
+        </view>
+        <view class="pills">
+          <text class="pill">💧 湿度 {{item.hum}}%</text>
+          <text class="pill">🌬️ 风速 {{item.windKmh}} km/h</text>
+        </view>
+        <view class="expand-hint">{{item.open ? '▴ 收起' : '▾ 展开详情'}}</view>
+      </view>
+
+      <!-- 展开详情 -->
+      <view class="card-x" wx:if="{{item.open}}">
+        <view class="x-pad" wx:if="{{!item.det}}">
+          <view class="x-wait">🌐 等待实时数据同步…\n同步成功后展示体感、气压、能见度与日出日落</view>
+        </view>
+        <view class="x-pad" wx:else>
+          <view class="x-stats">
+            <view class="x-stat">
+              <view class="v">{{item.det.feels}}<text class="u">{{item.det.unitLabel}}</text></view>
+              <view class="k">体感温度</view>
+            </view>
+            <view class="x-stat">
+              <view class="v">{{item.det.pressure || '–'}}<text class="u">hPa</text></view>
+              <view class="k">气压</view>
+            </view>
+            <view class="x-stat">
+              <view class="v">{{item.det.visKm != null ? item.det.visKm : '–'}}<text class="u">km</text></view>
+              <view class="k">能见度</view>
+            </view>
+          </view>
+          <view class="x-row2">
+            <view class="x-box">
+              <view class="k">云量 {{item.det.clouds != null ? item.det.clouds + '%' : '–'}}</view>
+              <!-- 风向罗盘 -->
+              <view class="compass">
+                <view class="c-ring">
+                  <text class="c-n">N</text>
+                  <text class="c-e">E</text>
+                  <text class="c-s">S</text>
+                  <text class="c-w">W</text>
+                  <view class="needle" style="transform:rotate({{item.det.windDeg || 0}}deg)">
+                    <view class="n-red"></view>
+                    <view class="n-gray"></view>
+                  </view>
+                </view>
+              </view>
+              <view class="v">{{item.det.windDir || '–'}}</view>
+            </view>
+            <view class="x-box">
+              <view class="k">日出 · 日落（当地）</view>
+              <view class="suns">
+                <text class="t">🌅 {{item.det.sunrise || '–'}}</text>
+                <text class="t">🌇 {{item.det.sunset || '–'}}</text>
+              </view>
+              <!-- 日弧 -->
+              <view class="sunarc">
+                <view class="arc"></view>
+                <view class="horizon"></view>
+                <view class="sun-dot" style="left:{{item.det.sunPos != null ? (6 + item.det.sunPos * 88) : 50}}%"></view>
+              </view>
+            </view>
+          </view>
+          <view class="x-foot">
+            <text class="x-note">{{item.src === 'demo' ? '演示数据 · 未联网同步' : '更新于 ' + item.srcText}}</text>
+            <view class="retry" data-id="{{item.id}}" catchtap="onRetryTap">↻ 刷新此卡</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="foot">— 数据源 OpenWeatherMap · 后端代理 + 10 分钟缓存 —</view>
+</view>

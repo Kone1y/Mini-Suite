@@ -1,0 +1,50 @@
+<view class="page">
+  <view class="card">
+    <view class="pick-area" bindtap="choose" wx:if="{{!files.length}}">
+      <view class="pick-icon">+</view>
+      <view class="hint">点击选择图片（支持多选，最多 9 张）</view>
+    </view>
+
+    <block wx:if="{{files.length}}">
+      <view class="list-head">
+        <view class="list-count">共 {{files.length}} 张</view>
+        <view class="list-add" bindtap="choose">+ 继续添加</view>
+        <view class="list-clear" bindtap="clearAll">清空</view>
+      </view>
+      <view class="file-item" wx:for="{{files}}" wx:key="path">
+        <image class="file-thumb" src="{{item.resultPath || item.path}}" mode="aspectFill" />
+        <view class="file-info">
+          <view class="file-size">
+            <text>{{item.originSizeText}}</text>
+            <text wx:if="{{item.resultSizeText}}" class="arrow">→</text>
+            <text wx:if="{{item.resultSizeText}}" class="ok">{{item.resultSizeText}}</text>
+          </view>
+          <view class="file-saved {{item.status === 'fail' ? 'fail' : ''}}">
+            {{item.status === 'pending' ? '待压缩' : item.status === 'fail' ? '失败' : item.savedText}}
+          </view>
+          <view class="file-save" wx:if="{{item.resultPath}}" data-index="{{index}}" catchtap="saveOne">保存</view>
+        </view>
+        <view class="file-del" data-index="{{index}}" catchtap="remove">✕</view>
+      </view>
+    </block>
+
+    <view class="label">质量：{{quality}}%</view>
+    <slider min="10" max="95" step="5" value="{{quality}}" bindchange="onQuality" activeColor="#534AB7" block-size="20" />
+
+    <view class="label">尺寸：{{scale}}%</view>
+    <slider min="20" max="100" step="10" value="{{scale}}" bindchange="onScale" activeColor="#534AB7" block-size="20" />
+
+    <button class="btn-primary" hover-class="btn-hover" bindtap="compress" loading="{{compressing}}" disabled="{{compressing}}">
+      {{compressing ? '压缩中 ' + doneCount + '/' + files.length + ' …' : '开始压缩'}}
+    </button>
+
+    <button class="btn-all-save" wx:if="{{!compressing && totalStat}}" bindtap="saveAll">全部保存到相册</button>
+  </view>
+
+  <view class="card stat-card" wx:if="{{totalStat}}">
+    <view class="stat-text">{{totalStat}}</view>
+  </view>
+
+  <!-- 压缩画布：保持在文档流内（屏幕外 absolute 在部分真机不渲染），透明盖在页面底部 -->
+  <canvas canvas-id="cpcanvas" class="cp-canvas" style="width: {{canvasW || 1}}px; height: {{canvasH || 1}}px;" />
+</view>

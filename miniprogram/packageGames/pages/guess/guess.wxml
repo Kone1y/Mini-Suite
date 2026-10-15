@@ -1,0 +1,131 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="mode-tabs">
+      <view class="tab {{mode === 'daily' ? 'on' : ''}}" data-m="daily" bindtap="switchMode">每日一题</view>
+      <view class="tab {{mode === 'endless' ? 'on' : ''}}" data-m="endless" bindtap="switchMode">无限模式</view>
+    </view>
+    <view class="streak" wx:if="{{mode === 'daily'}}">🔥{{streak.count}} · {{streak.wins}}/{{streak.played}}</view>
+  </view>
+
+  <!-- 猜测盘面 -->
+  <view class="board">
+    <view class="row" wx:for="{{rows}}" wx:key="index" wx:for-item="row">
+      <view class="cell-group">
+        <view class="cell {{c.state === 'hit' ? 'hit' : c.state === 'present' ? 'present' : ''}}" wx:for="{{row.chars}}" wx:for-item="c" wx:key="index">
+          {{c.ch}}
+        </view>
+      </view>
+      <!-- 拼音反馈行 -->
+      <view class="py-group">
+        <view class="py-cell" wx:for="{{row.pinyins}}" wx:for-item="p" wx:key="index">
+          <text class="py-i {{p.initial.state === 'hit' ? 'hit' : p.initial.state === 'present' ? 'present' : ''}}">{{p.initial.text}}</text>
+          <text class="py-f {{p.final.state === 'hit' ? 'hit' : p.final.state === 'present' ? 'present' : ''}}">{{p.final.text}}</text>
+          <text class="py-t {{p.tone.state === 'hit' ? 'hit' : p.tone.state === 'present' ? 'present' : ''}}">{{p.tone.text}}</text>
+        </view>
+      </view>
+    </view>
+    <!-- 空行占位 -->
+    <view class="row ghost" wx:for="{{6 - rows.length > 0 ? 6 - rows.length : 0}}" wx:key="index">
+      <view class="cell-group"><view class="cell dim" wx:for="{{[0,1,2,3]}}" wx:key="*this"></view></view>
+    </view>
+  </view>
+
+  <!-- 玩法说明（可折叠，首次进入自动展开） -->
+  <view class="help-card">
+    <view class="help-head" bindtap="toggleHelp">
+      <text>❓ 怎么玩</text>
+      <text class="help-arrow {{helpOpen ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="help-body" wx:if="{{helpOpen}}">
+      <view class="help-p">这是成语版 Wordle：<text class="em">6 次机会猜一个四字成语</text>。</view>
+      <view class="help-p"><text class="em">怎么输入：</text>在下方输入框输入任意一个汉字（或点右侧「字母」切拼音首字母），弹出候选成语后点击即可提交一猜。</view>
+      <view class="help-p"><text class="em">字的颜色：</text></view>
+      <view class="help-li"><text class="demo hit">绿</text> 位置正确 · <text class="demo present">黄</text> 答案里有但位置错 · <text class="demo miss">灰</text> 答案里没有</view>
+      <view class="help-p"><text class="em">拼音三重提示</text>（每字下声母/韵母/声调独立判定）：</view>
+      <view class="help-li">如谜底「画龙点睛」，你猜「叶公好龙」：好 hǎo 的「h」<text class="demo present">黄</text>（答案 huà 有 h）、韵母「ao」<text class="demo miss">灰</text>（答案无 ao）、声调「3」<text class="demo miss">灰</text></view>
+      <view class="help-p">每日一题全场同题（有连胜🔥），无限模式随时开新局。猜错 6 次揭晓答案与释义。</view>
+    </view>
+  </view>
+
+  <view class="status">{{status}}</view>
+
+  <!-- 输入区 -->
+  <view class="input-area" wx:if="{{!finished}}">
+    <view class="search-box">
+      <input
+        class="inp"
+        value="{{input}}"
+        placeholder="{{inputMethod === 'char' ? '输入汉字搜成语（如 龙）' : '输入拼音首字母（如 hl）'}}"
+        placeholder-class="ph"
+        bindinput="onInput"
+        confirm-type="search"
+        bindconfirm="submit"
+      />
+      <view class="method-btn" bindtap="onMethodToggle">{{inputMethod === 'char' ? '字母' : '汉字'}}</view>
+    </view>
+    <!-- 候选 -->
+    <view class="cands" wx:if="{{showSug && candidates.length}}">
+      <view class="cand" wx:for="{{candidates}}" wx:key="word" data-word="{{item.word}}" bindtap="onCandTap">
+        <text class="cand-w">{{item.word}}</text>
+        <text class="cand-p">{{item.pinyin}}</text>
+      </view>
+    </view>
+    <view class="cands empty-sug" wx:elif="{{showSug && !candidates.length}}">
+      <text class="cand-none">没有匹配的成语</text>
+    </view>
+    <view class="submit-btn" bindtap="submit">猜！</view>
+  </view>
+
+  <!-- 结算卡 -->
+  <view class="result-card" wx:if="{{finished && detail}}">
+    <view class="rc-head {{win ? 'win' : 'lose'}}">{{win ? '🎉 猜对了' : '😵 六次未中'}}</view>
+    <view class="rc-word">{{detail.word}}</view>
+    <view class="rc-py">{{detail.pinyin}}</view>
+    <view class="rc-explain">{{detail.explanation}}</view>
+    <view class="rc-derive" wx:if="{{detail.derivation}}">出处：{{detail.derivation}}</view>
+    <view class="rc-btns">
+      <view class="rc-btn" bindtap="onShare">复制战绩</view>
+      <view class="rc-btn primary" wx:if="{{mode === 'endless'}}" bindtap="nextRound">再来一局</view>
+      <view class="rc-btn" wx:elif="{{!win}}" bindtap="nextRound">今日重猜</view>
+    </view>
+  </view>
+
+  <!-- 词典入口 -->
+  <view class="dict-entry" bindtap="toggleDict">📖 成语词典</view>
+
+  <!-- 词典面板 -->
+  <view class="dict-mask" wx:if="{{dictOpen}}" bindtap="toggleDict">
+    <view class="dict-panel" catchtap="stopProp">
+      <view class="dict-head">
+        <text class="dict-title">📖 成语词典</text>
+        <text class="dict-close" bindtap="toggleDict">✕</text>
+      </view>
+      <view class="dict-search">
+        <input class="dict-inp" value="{{dictKeyword}}" placeholder="搜成语或释义关键词" placeholder-class="ph" bindinput="onDictKeyword" bindconfirm="dictSearch" confirm-type="search" />
+        <view class="dict-btn" bindtap="dictSearch">搜索</view>
+      </view>
+      <view class="dict-tip" wx:if="{{dictTotal}}">共 {{dictTotal}} 条</view>
+      <scroll-view class="dict-list" scroll-y>
+        <view class="dict-item" wx:for="{{dictItems}}" wx:key="word" data-word="{{item.word}}" bindtap="onDictItemTap">
+          <view class="di-w">{{item.word}}</view>
+          <view class="di-p">{{item.pinyin}}</view>
+          <view class="di-e">{{item.explanation}}</view>
+        </view>
+        <view class="dict-none" wx:if="{{!dictItems.length}}">输入关键词搜索 29000+ 成语</view>
+      </scroll-view>
+    </view>
+  </view>
+  <!-- 词条详情弹层 -->
+  <view class="dict-detail-mask" wx:if="{{dictDetail}}" bindtap="closeDictDetail">
+    <view class="dd-card" catchtap="stopProp">
+      <view class="dd-word">{{dictDetail.word}}</view>
+      <view class="dd-py">{{dictDetail.pinyin}}</view>
+      <view class="dd-explain">{{dictDetail.explanation}}</view>
+      <view class="dd-derive" wx:if="{{dictDetail.derivation}}">出处：{{dictDetail.derivation}}</view>
+      <view class="dd-example" wx:if="{{dictDetail.example}}">例句：{{dictDetail.example}}</view>
+    </view>
+  </view>
+
+  <view class="foot" bindtap="goBack">← 返回玩法列表</view>
+</view>

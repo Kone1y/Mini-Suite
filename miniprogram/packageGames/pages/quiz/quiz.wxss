@@ -1,0 +1,75 @@
+.page {
+  min-height: 100vh; background: #F6F4EE;
+  padding: 24rpx 28rpx 40rpx; box-sizing: border-box;
+  display: flex; flex-direction: column;
+}
+
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 26rpx;
+}
+.lives { font-size: 28rpx; font-weight: 700; color: #C0564B; letter-spacing: 2rpx; }
+.mid { display: flex; gap: 18rpx; align-items: baseline; }
+.streak { font-size: 30rpx; font-weight: 800; color: #534AB7; }
+.best { font-size: 22rpx; color: #A5A08F; }
+.cnt { font-size: 22rpx; color: #A5A08F; font-family: monospace; }
+
+.q-area {
+  background: #fff; border-radius: 24rpx;
+  padding: 30rpx 28rpx;
+  border: 2rpx solid rgba(83,74,183,.10);
+}
+.q-label { font-size: 23rpx; color: #8A8574; margin-bottom: 14rpx; }
+.q-text {
+  font-size: 30rpx; color: #33312B; line-height: 1.7;
+  min-height: 120rpx;
+}
+
+.opts { display: flex; flex-direction: column; gap: 14rpx; margin-top: 24rpx; }
+.opt {
+  background: #F6F4EE;
+  border: 2rpx solid rgba(83,74,183,.12);
+  border-radius: 16rpx;
+  padding: 22rpx 24rpx;
+  font-size: 30rpx; font-weight: 600; color: #33312B;
+  letter-spacing: 4rpx;
+  text-align: center;
+}
+.opt:active { opacity: .8; }
+.opt.right { background: #4C9E64; border-color: #4C9E64; color: #fff; }
+.opt.wrong { background: #C0564B; border-color: #C0564B; color: #fff; }
+.opt.dim { opacity: .45; }
+
+.after { margin-top: 26rpx; display: flex; flex-direction: column; gap: 18rpx; }
+.verdict { text-align: center; font-size: 26rpx; font-weight: 700; }
+.verdict.ok { color: #4C9E64; }
+.verdict.no { color: #C0564B; }
+.next-btn {
+  background: #534AB7; color: #fff;
+  border-radius: 999rpx; padding: 20rpx 0;
+  text-align: center; font-size: 28rpx; font-weight: 700;
+}
+
+.loading { text-align: center; color: #A5A08F; font-size: 26rpx; padding: 160rpx 0; }
+
+.over-card {
+  background: #fff; border-radius: 24rpx;
+  padding: 50rpx 36rpx; text-align: center;
+  border: 2rpx solid rgba(83,74,183,.10);
+  margin-top: 60rpx;
+}
+.ov-emoji { font-size: 70rpx; }
+.ov-t { font-size: 36rpx; font-weight: 800; color: #33312B; margin-top: 14rpx; }
+.ov-line { font-size: 28rpx; color: #534AB7; font-weight: 700; margin-top: 16rpx; }
+.ov-sub { font-size: 23rpx; color: #A5A08F; margin-top: 8rpx; }
+.ov-btns { display: flex; gap: 16rpx; margin-top: 34rpx; }
+.btn {
+  flex: 1; min-width: 0;
+  border-radius: 999rpx; padding: 20rpx 0;
+  text-align: center; font-size: 27rpx;
+  background: #F6F4EE; color: #33312B;
+  border: 2rpx solid rgba(83,74,183,.14);
+}
+.btn.primary { background: #534AB7; color: #fff; font-weight: 700; border: none; }
+
+.foot { text-align: center; font-size: 24rpx; color: #A5A08F; margin-top: 40rpx; padding: 16rpx; }

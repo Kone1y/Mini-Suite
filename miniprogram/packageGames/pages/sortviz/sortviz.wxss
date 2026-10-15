@@ -1,0 +1,148 @@
+.page {
+  min-height: 100vh;
+  background: #F0EFEA;
+  padding: 24rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶栏 */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22rpx;
+}
+.title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #26215C;
+  letter-spacing: 1rpx;
+}
+.home {
+  font-size: 24rpx;
+  color: #534AB7;
+  background: #EEEDFE;
+  border-radius: 999rpx;
+  padding: 8rpx 22rpx;
+  font-weight: 600;
+}
+
+/* 舞台 */
+.stage {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 18rpx;
+  border: 1rpx solid #EFEEE9;
+  box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.10);
+  padding: 16rpx 16rpx 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.bars {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+.bar {
+  flex: 0 0 auto;
+  border-radius: 6rpx 6rpx 0 0;
+  transition: background-color 0.05s linear;
+}
+
+/* 状态 */
+.status {
+  margin: 22rpx 0 8rpx;
+  font-size: 26rpx;
+  color: #5F5E5A;
+  text-align: center;
+  min-height: 36rpx;
+}
+
+/* 行 */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  margin-top: 16rpx;
+}
+.label {
+  font-size: 26rpx;
+  color: #5F5E5A;
+  min-width: 64rpx;
+}
+.picker { flex: 1; }
+.picker-view {
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 14rpx;
+  padding: 16rpx 22rpx;
+  font-size: 28rpx;
+  color: #26215C;
+  font-weight: 600;
+}
+.progress {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #9B98A8;
+  font-family: monospace;
+  text-align: center;
+}
+
+/* 主控按钮 */
+.ctrl-row {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 22rpx;
+}
+.btn {
+  flex: 1;
+  min-width: 0;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 999rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 25rpx;
+  color: #5F5E5A;
+  white-space: nowrap;
+}
+.btn.ghost {
+  color: #534AB7;
+  border-color: #D9D6EE;
+}
+.btn.primary {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.25);
+}
+
+/* 调速 */
+.row.speed { margin-top: 26rpx; }
+.slider { flex: 1; }
+
+/* 图例 */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 32rpx;
+  margin-top: 30rpx;
+  flex-wrap: wrap;
+}
+.leg {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 23rpx;
+  color: #5F5E5A;
+}
+.dot {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 6rpx;
+}

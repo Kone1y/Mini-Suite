@@ -1,0 +1,62 @@
+<view class="page">
+  <view class="card">
+    <view class="label">贷款总额（万元）</view>
+    <input class="input" type="digit" placeholder="如 100" value="{{amount}}" bindinput="onAmount" />
+    <view class="label">年利率（%）</view>
+    <input class="input" type="digit" placeholder="如 3.6" value="{{rate}}" bindinput="onRate" />
+    <view class="label">贷款年限</view>
+    <picker mode="selector" range="{{yearOptions}}" value="{{yearIndex}}" bindchange="onYears">
+      <view class="input picker-line">{{years}} 年</view>
+    </picker>
+
+    <view class="mode-switch">
+      <view class="mode {{mode === 'benxi' ? 'on' : ''}}" data-mode="benxi" bindtap="onMode">等额本息</view>
+      <view class="mode {{mode === 'benjin' ? 'on' : ''}}" data-mode="benjin" bindtap="onMode">等额本金</view>
+    </view>
+
+    <button class="btn-primary" hover-class="btn-hover" bindtap="calc">开始计算</button>
+  </view>
+
+  <view class="card" wx:if="{{result}}">
+    <view class="main-num" wx:if="{{mode === 'benxi'}}">
+      <text class="num">{{result.monthlyText}}</text>
+      <text class="unit">元 / 月（固定）</text>
+    </view>
+    <view class="main-num" wx:else>
+      <text class="num">{{result.firstMonthText}}</text>
+      <text class="unit">首月，逐月递减至 {{result.lastMonthText}}</text>
+    </view>
+
+    <view class="stat-row">
+      <view class="stat">
+        <view class="stat-val">{{result.totalInterestText}}</view>
+        <view class="stat-name">利息总额（元）</view>
+      </view>
+      <view class="stat">
+        <view class="stat-val">{{result.totalPayText}}</view>
+        <view class="stat-name">还款总额（元）</view>
+      </view>
+      <view class="stat">
+        <view class="stat-val">{{result.monthsText}}</view>
+        <view class="stat-name">期限</view>
+      </view>
+    </view>
+
+    <view class="sched-toggle" bindtap="toggleSchedule">{{showSchedule ? '收起明细 ▲' : '展开前 12 期还款明细 ▼'}}</view>
+
+    <view wx:if="{{showSchedule}}">
+      <view class="sched-head">
+        <text class="c-m">期数</text><text class="c-p">月供</text><text class="c-i">利息</text><text class="c-b">剩余本金</text>
+      </view>
+      <view class="sched-row" wx:for="{{schedule}}" wx:key="month">
+        <text class="c-m">{{item.month}}</text>
+        <text class="c-p">{{item.paymentText}}</text>
+        <text class="c-i">{{item.interestText}}</text>
+        <text class="c-b">{{item.balanceText}}</text>
+      </view>
+      <view class="hint center">仅展示前 12 期，仅供参考</view>
+    </view>
+  </view>
+
+  <view class="hint center foot">结果为理论计算值，实际以贷款银行为准</view>
+</view>

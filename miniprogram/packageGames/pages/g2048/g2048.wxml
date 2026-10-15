@@ -1,0 +1,49 @@
+<view class="page">
+  <view class="top-bar">
+    <view class="score-box">
+      <view class="score-label">得分</view>
+      <view class="score-num">{{score}}</view>
+    </view>
+    <view class="title-box">
+      <view class="game-title">2048</view>
+      <view class="game-sub">滑动合并，冲向 2048</view>
+    </view>
+    <view class="score-box">
+      <view class="score-label">最高</view>
+      <view class="score-num">{{best}}</view>
+    </view>
+  </view>
+
+  <view class="board-wrap">
+    <view class="board" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+      <view class="cell c{{item.v}} {{item.new ? 'pop-in' : ''}} {{item.merged ? 'pop-merge' : ''}}" wx:for="{{cells}}" wx:key="index">
+        <text wx:if="{{item.v}}">{{item.v}}</text>
+      </view>
+    </view>
+
+    <view class="mask" wx:if="{{over}}">
+      <view class="mask-title">游戏结束</view>
+      <view class="mask-sub">本局得分 {{score}}</view>
+      <view class="mask-row">
+        <button class="mask-btn ghost" bindtap="undo" wx:if="{{canUndo}}">↩ 撤销一步</button>
+        <button class="mask-btn" bindtap="restart">再来一局</button>
+      </view>
+    </view>
+    <view class="mask" wx:if="{{won && !over}}">
+      <view class="mask-title">🎉 达成 2048！</view>
+      <view class="mask-sub">当前得分 {{score}}</view>
+      <view class="mask-row">
+        <button class="mask-btn" bindtap="keepPlaying">继续挑战</button>
+        <button class="mask-btn ghost" bindtap="restart">重开一局</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <button class="ctrl-btn" bindtap="restart" hover-class="btn-hover">重新开始</button>
+    <button class="ctrl-btn ghost" bindtap="undo" disabled="{{!canUndo}}" hover-class="btn-hover">↩ 撤销</button>
+    <button class="ctrl-btn ghost" bindtap="goHome" hover-class="btn-hover">返回小屋</button>
+  </view>
+
+  <view class="hint center">上下左右滑动屏幕合并相同数字 · 撤销最多回退 10 步</view>
+</view>

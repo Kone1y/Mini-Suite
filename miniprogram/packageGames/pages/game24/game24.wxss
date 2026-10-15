@@ -1,0 +1,145 @@
+.page {
+  min-height: 100vh;
+  background: #F0EFEA;
+  padding: 24rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+.round { font-size: 28rpx; font-weight: 600; color: #2C2C2A; }
+.solved-count { font-size: 24rpx; color: #534AB7; }
+
+/* 牌区 */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18rpx;
+}
+.card-d {
+  aspect-ratio: 0.72;
+  background: linear-gradient(160deg, #FFFFFF 0%, #F4F3FB 100%);
+  border-radius: 16rpx;
+  border: 2rpx solid #D9D6EE;
+  box-shadow: 0 6rpx 14rpx rgba(83, 74, 183, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64rpx;
+  font-weight: 800;
+  color: #534AB7;
+  font-family: monospace;
+}
+.card-d.used {
+  opacity: 0.25;
+  box-shadow: none;
+  border-style: dashed;
+}
+
+/* 算式 */
+.expr-bar { margin-top: 40rpx; min-height: 90rpx; }
+.expr {
+  font-size: 38rpx;
+  font-family: monospace;
+  color: #2C2C2A;
+  background: #FFFFFF;
+  border-radius: 14rpx;
+  padding: 20rpx 24rpx;
+  display: inline-block;
+  line-height: 1.4;
+  word-break: break-all;
+}
+.expr.placeholder { color: #B4B2A9; font-size: 26rpx; }
+.cur-val {
+  margin-top: 14rpx;
+  font-size: 28rpx;
+  color: #5F5E5A;
+  font-family: monospace;
+}
+.op-hint { color: #9B7B1F; font-size: 23rpx; }
+
+/* 运算符 */
+.ops {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18rpx;
+  margin-top: 30rpx;
+}
+.op {
+  aspect-ratio: 1.6;
+  background: #FFFFFF;
+  border: 2rpx solid #EFEEE9;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #2C2C2A;
+}
+.op.on {
+  background: #534AB7;
+  border-color: #534AB7;
+  color: #FFFFFF;
+}
+
+/* 操作行 */
+.tool-row {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 34rpx;
+}
+.tool {
+  flex: 1;
+  min-width: 0;
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  border-radius: 999rpx;
+  padding: 18rpx 0;
+  text-align: center;
+  font-size: 25rpx;
+  color: #5F5E5A;
+  white-space: nowrap;
+}
+.tool.primary {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 600;
+}
+
+.solution {
+  margin-top: 26rpx;
+  background: #FFF7E0;
+  border: 1rpx solid #E5C96B;
+  color: #9A7B1F;
+  border-radius: 14rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  font-family: monospace;
+  text-align: center;
+}
+
+.win-banner {
+  position: fixed;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, 0);
+  background: rgba(83, 74, 183, 0.95);
+  color: #FFFFFF;
+  font-size: 32rpx;
+  padding: 26rpx 56rpx;
+  border-radius: 999rpx;
+  box-shadow: 0 10rpx 30rpx rgba(83, 74, 183, 0.4);
+  animation: pop 0.3s ease;
+  z-index: 10;
+}
+@keyframes pop {
+  0% { transform: translate(-50%, -20rpx) scale(0.8); opacity: 0; }
+  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+}

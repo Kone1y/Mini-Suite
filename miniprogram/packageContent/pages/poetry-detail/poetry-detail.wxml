@@ -1,0 +1,13 @@
+<view class="page" wx:if="{{poem}}">
+  <view class="poem-card">
+    <view class="title">{{poem.title}}</view>
+    <view class="meta">{{poem.dynasty}} · {{poem.author}} · {{poem.kind}}</view>
+    <view class="line" wx:for="{{lines}}" wx:key="index">{{item}}</view>
+  </view>
+
+  <view class="actions">
+    <view class="act" bindtap="toggleFav">{{faved ? '★ 已收藏' : '☆ 收藏'}}</view>
+    <view class="act" bindtap="copy">复制</view>
+    <button class="act share-btn" open-type="share">分享</button>
+  </view>
+</view>

@@ -1,0 +1,52 @@
+<view class="page">
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜标题 / 作者 / 诗句"
+        value="{{keyword}}"
+        bindinput="onKeyword"
+        bindconfirm="doSearch"
+        confirm-type="search"
+      />
+      <text class="search-clear" wx:if="{{keyword}}" bindtap="clearKeyword">✕</text>
+    </view>
+    <view class="search-btn" hover-class="press-active" bindtap="doSearch">搜索</view>
+  </view>
+
+  <view class="filter-bar">
+    <picker mode="selector" range="{{kinds}}" value="{{kindIndex}}" bindchange="onKind">
+      <view class="filter-item {{kindIndex > 0 ? 'on' : ''}}">体裁：{{kinds[kindIndex]}}</view>
+    </picker>
+    <picker mode="selector" range="{{dynasties}}" value="{{dynastyIndex}}" bindchange="onDynasty">
+      <view class="filter-item {{dynastyIndex > 0 ? 'on' : ''}}">朝代：{{dynasties[dynastyIndex]}}</view>
+    </picker>
+    <view class="count">共 {{total}} 首</view>
+  </view>
+
+  <view class="poem-list">
+    <view class="poem card" wx:for="{{items}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail" hover-class="press-active">
+      <view class="poem-accent"></view>
+      <view class="poem-title">{{item.title}}</view>
+      <view class="poem-meta">
+        <text class="poem-dynasty">{{item.dynasty}}</text>
+        <text class="poem-dot">·</text>
+        <text>{{item.author}}</text>
+      </view>
+      <view class="poem-arrow">›</view>
+    </view>
+  </view>
+
+  <view class="load-line" wx:if="{{loading}}">加载中…</view>
+  <view class="load-line" wx:elif="{{noMore && items.length}}">— 已经到底啦 —</view>
+  <view class="load-line empty" wx:elif="{{!items.length && !loading && searched}}">
+    <view class="empty-icon">🔍</view>
+    <view>没有找到与「{{keyword}}」相关的诗词</view>
+    <view class="empty-sub">换个关键词试试，如：李白、静夜思、明月</view>
+  </view>
+  <view class="load-line empty" wx:elif="{{!items.length && !loading}}">
+    <view class="empty-icon">📖</view>
+    <view>暂无诗词（检查后端是否启动）</view>
+  </view>
+</view>

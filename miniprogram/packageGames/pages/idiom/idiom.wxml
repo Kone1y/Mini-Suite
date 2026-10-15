@@ -1,0 +1,35 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="hero">
+    <view class="hero-title">🀄 成语挑战</view>
+    <view class="hero-sub">四种玩法 · 29000+ 成语词库</view>
+  </view>
+
+  <!-- 玩法列表 -->
+  <view class="games">
+    <view class="game-card {{item.diff === '硬核' ? 'hard' : 'easy'}}" wx:for="{{games}}" wx:key="key" data-url="{{item.url}}" bindtap="onGameTap">
+      <view class="gc-icon">{{item.icon}}</view>
+      <view class="gc-main">
+        <view class="gc-name-row">
+          <text class="gc-name">{{item.name}}</text>
+          <text class="gc-diff">{{item.diff}}</text>
+        </view>
+        <view class="gc-sub">{{item.sub}}</view>
+        <view class="gc-tag" wx:if="{{item.tag}}">{{item.tag}}</view>
+      </view>
+      <view class="gc-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 词典入口 -->
+  <view class="dict-banner" bindtap="openDict">
+    <text class="db-icon">📚</text>
+    <view class="db-main">
+      <view class="db-name">成语词典</view>
+      <view class="db-sub">29000+ 词条即搜即查 · 释义 / 出处 / 例句</view>
+    </view>
+    <view class="gc-arrow">›</view>
+  </view>
+
+  <view class="foot" bindtap="goHome">← 返回小屋</view>
+</view>

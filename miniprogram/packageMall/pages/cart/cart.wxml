@@ -1,0 +1,30 @@
+<view class="page">
+  <view class="head" wx:if="{{items.length}}">
+    <text>共 {{items.length}} 种商品</text>
+    <text class="clear" bindtap="clear">清空</text>
+  </view>
+
+  <view class="item card" wx:for="{{items}}" wx:key="goods_id">
+    <image class="thumb" src="{{item.cover}}" mode="aspectFill" />
+    <view class="mid">
+      <view class="name">{{item.name}}</view>
+      <view class="price">¥{{item.price}}</view>
+      <view class="qty-ctl">
+        <view class="qbtn" data-index="{{index}}" bindtap="sub">−</view>
+        <view class="qnum">{{item.qty}}</view>
+        <view class="qbtn" data-index="{{index}}" bindtap="add">+</view>
+      </view>
+    </view>
+    <view class="del" data-index="{{index}}" bindtap="remove">删除</view>
+  </view>
+
+  <view class="empty" wx:if="{{!items.length}}">
+    <view class="empty-icon">🛒</view>
+    <view class="empty-text">购物车空空如也</view>
+  </view>
+
+  <view class="bottom-bar" wx:if="{{items.length}}">
+    <view class="total">合计 <text class="total-num">¥{{total}}</text></view>
+    <view class="checkout-btn" bindtap="checkout">结算（{{items.length}}）</view>
+  </view>
+</view>

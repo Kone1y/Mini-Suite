@@ -1,0 +1,68 @@
+<view class="page">
+  <!-- 大色卡预览 -->
+  <view class="preview" style="background: {{previewBg}};">
+    <view class="pv-hex {{previewTextLight ? 'light' : 'dark'}}">{{hex}}</view>
+    <view class="pv-sub {{previewTextLight ? 'light' : 'dark'}}">RGB {{rgbText}}</view>
+    <view class="pv-sub {{previewTextLight ? 'light' : 'dark'}}">HSL {{hslText}}</view>
+    <view class="pv-actions">
+      <view class="pv-btn {{previewTextLight ? 'light-btn' : 'dark-btn'}}" bindtap="copyHex">复制 HEX</view>
+      <view class="pv-btn {{previewTextLight ? 'light-btn' : 'dark-btn'}}" bindtap="copyRgb">复制 RGB</view>
+      <view class="pv-btn {{previewTextLight ? 'light-btn' : 'dark-btn'}}" bindtap="copyHsl">复制 HSL</view>
+    </view>
+  </view>
+
+  <!-- 三种格式输入 -->
+  <view class="fields">
+    <view class="field">
+      <view class="f-label">HEX</view>
+      <input class="f-input mono" value="{{hex}}" bindinput="onHexInput" bindblur="onHexBlur" maxlength="7" />
+    </view>
+    <view class="field">
+      <view class="f-label">RGB</view>
+      <input class="f-input mono" value="{{rgbText}}" bindinput="onRgbInput" bindblur="onRgbBlur" maxlength="15" placeholder="r, g, b" />
+    </view>
+    <view class="field">
+      <view class="f-label">HSL</view>
+      <input class="f-input mono" value="{{hslText}}" bindinput="onHslInput" bindblur="onHslBlur" maxlength="18" placeholder="h, s%, l%" />
+    </view>
+  </view>
+
+  <!-- RGB 滑杆 -->
+  <view class="sliders">
+    <view class="sl-row">
+      <text class="sl-tag">R</text>
+      <slider class="sl" min="0" max="255" value="{{r}}" activeColor="#D84343" bindchanging="onRDrag" bindchange="onRSet" />
+      <text class="sl-num mono">{{r}}</text>
+    </view>
+    <view class="sl-row">
+      <text class="sl-tag">G</text>
+      <slider class="sl" min="0" max="255" value="{{g}}" activeColor="#0F8B6D" bindchanging="onGDrag" bindchange="onGSet" />
+      <text class="sl-num mono">{{g}}</text>
+    </view>
+    <view class="sl-row">
+      <text class="sl-tag">B</text>
+      <slider class="sl" min="0" max="255" value="{{b}}" activeColor="#1F5E9E" bindchanging="onBDrag" bindchange="onBSet" />
+      <text class="sl-num mono">{{b}}</text>
+    </view>
+  </view>
+
+  <!-- 操作 -->
+  <view class="tool-row">
+    <view class="tool primary" hover-class="btn-hover" bindtap="randomColor">🎲 随机色</view>
+  </view>
+
+  <!-- 历史色卡 -->
+  <view class="history" wx:if="{{history.length}}">
+    <view class="h-title">最近颜色（点击恢复）</view>
+    <view class="h-swatches">
+      <view
+        class="h-swatch {{hex === item ? 'cur' : ''}}"
+        wx:for="{{history}}"
+        wx:key="*this"
+        style="background: {{item}};"
+        data-hex="{{item}}"
+        bindtap="tapHistory"
+      ></view>
+    </view>
+  </view>
+</view>

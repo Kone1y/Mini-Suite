@@ -1,0 +1,43 @@
+.group-line {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #534AB7;
+  padding: 10rpx 0 24rpx;
+}
+.arrow { color: #B4B2A9; margin-left: 8rpx; }
+.row {
+  display: flex;
+  align-items: center;
+}
+.value-input {
+  flex: 1;
+  background: #F6F5F2;
+  border-radius: 12rpx;
+  padding: 22rpx 20rpx;
+  font-size: 34rpx;
+  font-family: monospace;
+}
+.value-show {
+  flex: 1;
+  padding: 22rpx 20rpx;
+  font-size: 34rpx;
+  font-family: monospace;
+  color: #0F6E56;
+  word-break: break-all;
+}
+.unit-picker { margin-left: 20rpx; }
+.unit-line {
+  background: #EEEDFE;
+  color: #534AB7;
+  border-radius: 12rpx;
+  padding: 18rpx 24rpx;
+  font-size: 26rpx;
+  min-width: 120rpx;
+  text-align: center;
+}
+.equal {
+  text-align: center;
+  color: #888780;
+  font-size: 34rpx;
+  margin: 16rpx 0;
+}

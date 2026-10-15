@@ -1,0 +1,51 @@
+<view class="page">
+  <view class="top-bar">
+    <view class="info-box">
+      <view class="info-label">手数</view>
+      <view class="info-num">{{moves}}</view>
+    </view>
+    <view class="title-box" bindtap="switchFirst">
+      <view class="game-title">五子棋</view>
+      <view class="game-sub">{{over ? (winner === 1 ? '🎉 你赢了！' : winner === 2 ? '🤖 AI 获胜' : '棋盘已满 · 平局') : (turn === 1 ? '轮到你（黑）· 点这里换先手' : 'AI 思考中…')}}</view>
+    </view>
+    <view class="info-box">
+      <view class="info-label">先手</view>
+      <view class="info-num">{{playerFirst ? '你' : 'AI'}}</view>
+    </view>
+  </view>
+
+  <view class="board-wrap">
+    <view class="board" style="width: {{bw}}px; height: {{bw}}px;">
+      <!-- 网格线 -->
+      <view class="grid-line h" wx:for="{{n}}" wx:key="*this" style="top: {{index * bw / n + bw / n / 2}}px;"></view>
+      <view class="grid-line v" wx:for="{{n}}" wx:key="*this" style="left: {{index * bw / n + bw / n / 2}}px;"></view>
+      <!-- 星位 -->
+      <view class="star" style="left: {{bw * 0.5 - 3}}px; top: {{bw * 0.5 - 3}}px;"></view>
+      <!-- 棋子 -->
+      <view
+        class="stone s{{item.v}} {{item.win ? 'win' : ''}} {{last && last.x == index % n && last.y == (index - index % n) / n ? 'last' : ''}}"
+        wx:for="{{cells}}"
+        wx:key="index"
+        data-idx="{{index}}"
+        bindtap="tapCell"
+        style="left: {{(index % n) * bw / n + bw / n / 2 - (bw / n / 2 - 2)}}px; top: {{((index - index % n) / n) * bw / n + bw / n / 2 - (bw / n / 2 - 2)}}px; width: {{bw / n - 4}}px; height: {{bw / n - 4}}px;"
+      ></view>
+    </view>
+
+    <view class="mask" wx:if="{{over}}">
+      <view class="mask-title">{{winner === 1 ? '🎉 你赢了' : winner === 2 ? '🤖 AI 获胜' : '🤝 平局'}}</view>
+      <view class="mask-sub">共 {{moves}} 手</view>
+      <view class="mask-row">
+        <button class="mask-btn ghost" bindtap="undo" wx:if="{{canUndo}}">悔 棋</button>
+        <button class="mask-btn" bindtap="newGame">再来一局</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="ctrl-row">
+    <button class="ctrl-btn" bindtap="newGame" hover-class="btn-hover">重新开局</button>
+    <button class="ctrl-btn ghost" bindtap="undo" disabled="{{!canUndo}}" hover-class="btn-hover">悔 棋</button>
+    <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="goHome">返回小屋</button>
+  </view>
+  <view class="hint center">黑子先行五连即胜 · AI 会攻防兼顾</view>
+</view>

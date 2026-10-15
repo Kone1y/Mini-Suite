@@ -1,0 +1,161 @@
+.page { display: flex; flex-direction: column; align-items: center; padding: 24rpx; }
+
+.top-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8rpx 16rpx;
+}
+.info-box {
+  background: #FFFFFF;
+  border-radius: 14rpx;
+  padding: 12rpx 26rpx;
+  text-align: center;
+  min-width: 130rpx;
+  border: 1rpx solid #EFEEE9;
+}
+.info-label { font-size: 20rpx; color: #888780; }
+.info-num { font-size: 32rpx; font-weight: 700; color: #26215C; font-family: monospace; }
+.title-box { text-align: center; }
+.game-title { font-size: 40rpx; font-weight: 800; color: #26215C; letter-spacing: 2rpx; }
+.game-sub { font-size: 20rpx; color: #888780; margin-top: 4rpx; }
+.best-line { font-size: 22rpx; color: #B4B2A9; margin: 0 0 14rpx; }
+
+.level-panel { display: flex; gap: 12rpx; margin-bottom: 16rpx; flex-wrap: wrap; justify-content: center; }
+.level-opt {
+  background: #FFFFFF;
+  border: 2rpx solid #EFEEE9;
+  border-radius: 999rpx;
+  padding: 12rpx 24rpx;
+  font-size: 23rpx;
+  color: #5F5E5A;
+}
+.level-opt.on {
+  border-color: #534AB7;
+  color: #534AB7;
+  background: #EEEDFE;
+  font-weight: 600;
+}
+.level-opt.lock { color: #C9C7BE; }
+
+/* 瞬间记忆预览提示 */
+.flash-tip {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: #FFFFFF;
+  font-size: 24rpx;
+  border-radius: 999rpx;
+  padding: 10rpx 30rpx;
+  margin-bottom: 14rpx;
+  box-shadow: 0 4rpx 12rpx rgba(217, 119, 6, 0.3);
+  animation: flashPulse 1s ease-in-out infinite;
+}
+@keyframes flashPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.board-wrap { position: relative; width: 100%; }
+.board {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* 尾行不足整行时居中 */
+  box-sizing: border-box;
+}
+/* 卡片尺寸由 JS 注入精确 px（width/height style），这里不写死 */
+.card {
+  perspective: 800rpx;
+  box-sizing: border-box;
+}
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+}
+.card.open .card-inner { transform: rotateY(180deg); }
+
+.face {
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.face.back {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  box-shadow: 0 4rpx 12rpx rgba(83, 74, 183, 0.25);
+}
+.face.front {
+  background: #FFFFFF;
+  border: 1rpx solid #EFEEE9;
+  transform: rotateY(180deg);
+}
+/* 正面 emoji 字号由 JS 按列数注入（frontFont），这里给默认 */
+.card.ok .face.front {
+  background: #E1F5EE;
+  border-color: #BFE5D8;
+}
+
+.mask {
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(246, 245, 242, 0.92);
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.mask-title { font-size: 44rpx; font-weight: 800; color: #26215C; }
+.mask-sub { font-size: 26rpx; color: #888780; margin: 14rpx 0 26rpx; }
+.mask-row { display: flex; gap: 20rpx; }
+.mask-btn {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  margin: 0;
+  box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.3);
+}
+.mask-btn.ghost {
+  background: #FFFFFF;
+  color: #534AB7;
+  border: 2rpx solid #534AB7;
+  box-shadow: none;
+}
+.mask-btn::after { border: none; }
+
+.ctrl-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 28rpx;
+  width: 100%;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+}
+.ctrl-btn {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  padding: 0 10rpx;
+  white-space: nowrap;
+}
+.ctrl-btn.ghost {
+  background: #FFFFFF;
+  color: #534AB7;
+  border: 2rpx solid #534AB7;
+  box-shadow: none;
+}
+.ctrl-btn::after { border: none; }
+.hint { margin-top: 18rpx; }

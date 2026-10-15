@@ -1,0 +1,23 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">正则测试器</view>
+    <input class="tinput" value="{{pattern}}" bindinput="onPattern" placeholder="正则表达式，如 (\d+)" />
+    <view class="flags">
+      <view class="flag {{gOn ? 'on' : ''}}" data-f="g" bindtap="toggleFlag">g 全局</view>
+      <view class="flag {{iOn ? 'on' : ''}}" data-f="i" bindtap="toggleFlag">i 忽略大小写</view>
+      <view class="flag {{mOn ? 'on' : ''}}" data-f="m" bindtap="toggleFlag">m 多行</view>
+    </view>
+    <textarea class="tarea" value="{{text}}" bindinput="onText" placeholder="在此粘贴待匹配文本…" auto-height maxlength="-1" />
+    <view class="err" wx:if="{{error}}">{{error}}</view>
+    <view class="cnt" wx:if="{{result}}">共 {{result.count}} 处匹配</view>
+    <rich-text class="hl" nodes="{{html}}" wx:if="{{html}}"></rich-text>
+    <view class="groups" wx:if="{{result && result.matches.length}}">
+      <view class="g-title">捕获组（第 1 处匹配）</view>
+      <view class="g-row" wx:for="{{result.matches[0].groups}}" wx:key="i">
+        <text class="g-idx">组 {{item.i}}</text>
+        <text class="mono">{{item.value === null ? '(未匹配)' : item.value}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="foot">— 正则测试 —</view>
+</view>

@@ -1,0 +1,64 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">Diff 对比</view>
+
+    <!-- 模式切换 -->
+    <view class="mode-row">
+      <view class="mode {{mode === 'text' ? 'on' : ''}}" data-m="text" bindtap="switchMode">文本对比</view>
+      <view class="mode {{mode === 'json' ? 'on' : ''}}" data-m="json" bindtap="switchMode">JSON 对比</view>
+    </view>
+
+    <!-- 双输入 -->
+    <view class="inputs">
+      <view class="input-col">
+        <view class="col-label">原始 (A)</view>
+        <textarea class="tarea" value="{{aText}}" bindinput="onA" placeholder="粘贴原始文本…" auto-height maxlength="-1" />
+      </view>
+      <view class="input-col">
+        <view class="col-label">修改 (B)</view>
+        <textarea class="tarea" value="{{bText}}" bindinput="onB" placeholder="粘贴修改后文本…" auto-height maxlength="-1" />
+      </view>
+    </view>
+
+    <view class="btn-row">
+      <view class="btn primary" bindtap="run">开始对比</view>
+      <view class="btn" bindtap="loadDemo">示例</view>
+      <view class="btn ghost" bindtap="clear">清空</view>
+    </view>
+
+    <view class="err" wx:if="{{error}}">{{error}}</view>
+  </view>
+
+  <!-- 文本模式结果 -->
+  <view class="card" wx:if="{{viewRows.length}}">
+    <view class="card-title">结果 <text class="stat-chip">{{statsView}}</text></view>
+    <view class="diff-view">
+      <view class="d-row {{item.type}}" wx:for="{{viewRows}}" wx:key="index">
+        <block wx:if="{{item.type === 'skip'}}">
+          <view class="d-skip">⋯ 已折叠 {{item.count}} 行相同 ⋯</view>
+        </block>
+        <block wx:else>
+          <text class="d-no">{{item.oldNo}}</text>
+          <text class="d-no">{{item.newNo}}</text>
+          <text class="d-sign">{{item.type === 'add' ? '+' : item.type === 'remove' ? '−' : ' '}}</text>
+          <text class="d-text">{{item.text}}</text>
+        </block>
+      </view>
+    </view>
+    <view class="btn ghost" bindtap="copyResult" style="margin-top:16rpx;">复制结果</view>
+  </view>
+
+  <!-- JSON 模式结果 -->
+  <view class="card" wx:if="{{jsonDiffs.length || statsView === null && jsonSummary}}">
+    <view class="card-title">差异路径 <text class="stat-chip">{{jsonSummary}}</text></view>
+    <view class="j-row {{item.type}}" wx:for="{{jsonDiffs}}" wx:key="index">
+      <view class="j-type">{{item.type === 'added' ? '＋' : item.type === 'removed' ? '－' : item.type === 'changed' ? '≠' : '⇄'}}</view>
+      <view class="j-path">{{item.path}}</view>
+      <view class="j-vals">{{item.oldVal}} → {{item.newVal}}</view>
+    </view>
+    <view class="j-none" wx:if="{{!jsonDiffs.length && jsonSummary}}">{{jsonSummary}}</view>
+    <view class="btn ghost" bindtap="copyResult" style="margin-top:16rpx;">复制结果</view>
+  </view>
+
+  <view class="foot">— Myers O(ND) · git 同款 diff 算法 —</view>
+</view>

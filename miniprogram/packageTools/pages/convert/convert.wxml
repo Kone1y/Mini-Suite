@@ -1,0 +1,25 @@
+<view class="page">
+  <view class="card">
+    <picker mode="selector" range="{{groups}}" value="{{current}}" bindchange="onGroup">
+      <view class="group-line">{{groups[current]}} <text class="arrow">›</text></view>
+    </picker>
+
+    <view class="row">
+      <input class="value-input" type="digit" placeholder="输入数值" value="{{value}}" bindinput="onValue" />
+      <picker class="unit-picker" mode="selector" range="{{units}}" value="{{unitIndexA}}" bindchange="onUnitA">
+        <view class="unit-line">{{units[unitIndexA]}}</view>
+      </picker>
+    </view>
+
+    <view class="equal">=</view>
+
+    <view class="row">
+      <view class="value-show">{{result || '—'}}</view>
+      <picker class="unit-picker" mode="selector" range="{{units}}" value="{{unitIndexB}}" bindchange="onUnitB">
+        <view class="unit-line">{{units[unitIndexB]}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="hint center">支持长度 · 重量 · 面积 · 温度</view>
+</view>

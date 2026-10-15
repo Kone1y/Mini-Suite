@@ -1,0 +1,36 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">时间戳 → 日期</view>
+    <view class="row">
+      <input class="tinput" value="{{tsInput}}" bindinput="onTsInput" placeholder="10/13 位时间戳" />
+      <view class="btn" bindtap="convertTs">转换</view>
+      <view class="btn ghost" bindtap="fillNow">现在</view>
+    </view>
+    <view class="err" wx:if="{{tsError}}">{{tsError}}</view>
+    <view class="ts-out" wx:if="{{tsParts}}">
+      <view class="bit-line"><text class="bit-label">类型</text><text class="mono">{{tsParts.rel}}</text></view>
+      <view class="bit-line"><text class="bit-label">本地时间</text><text class="mono">{{tsParts.local}}</text></view>
+      <view class="bit-line"><text class="bit-label">UTC</text><text class="mono">{{tsParts.utc}}</text></view>
+      <view class="bit-line"><text class="bit-label">ISO</text><text class="mono break">{{tsParts.iso}}</text></view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">日期 → 时间戳</view>
+    <view class="grid6">
+      <input class="tinput" data-f="y" bindinput="onField" placeholder="年" />
+      <input class="tinput" data-f="mo" bindinput="onField" placeholder="月" />
+      <input class="tinput" data-f="d" bindinput="onField" placeholder="日" />
+      <input class="tinput" data-f="h" bindinput="onField" placeholder="时" />
+      <input class="tinput" data-f="mi" bindinput="onField" placeholder="分" />
+      <input class="tinput" data-f="s" bindinput="onField" placeholder="秒" />
+    </view>
+    <view class="btn" bindtap="toTs" style="margin-top:16rpx;">计算时间戳</view>
+    <view class="err" wx:if="{{dateError}}">{{dateError}}</view>
+    <view class="ts-out" wx:if="{{tsResult}}">
+      <view class="bit-line"><text class="bit-label">秒级</text><text class="mono">{{tsResult.seconds}}</text></view>
+      <view class="bit-line"><text class="bit-label">毫秒级</text><text class="mono">{{tsResult.millis}}</text></view>
+    </view>
+  </view>
+  <view class="foot">— 时间戳 · 日期 —</view>
+</view>

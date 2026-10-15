@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "天空卡片 · 天气",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#EAF4FF",
+  "usingComponents": {}
+}

@@ -1,0 +1,57 @@
+<view class="page">
+  <!-- 环形计时器 -->
+  <view class="ring-wrap">
+    <view class="ring-svg">
+      <!-- 底环 -->
+      <view class="ring-bg"></view>
+      <!-- 进度环：conic-gradient 实现（SVG 在小程序里不如 conic 简单） -->
+      <view class="ring-fill" style="background: conic-gradient({{ringColor}} {{dashArray}}, #E8E6DF 0);"></view>
+      <view class="ring-mask">
+        <view class="time-text">{{timeText}}</view>
+        <view class="phase-text">{{mode === 'idle' ? '准备开始' : isFocus ? '🍅 专注中' : mode === 'paused' ? '⏸ 已暂停' : '☕ 休息中'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="ctrl-row">
+    <view class="ctrl-btn ghost" bindtap="reset">↺</view>
+    <view class="ctrl-btn main" hover-class="btn-hover" bindtap="mainBtn">{{btnText}}</view>
+    <view class="ctrl-btn ghost" bindtap="openSettings">⚙</view>
+  </view>
+
+  <!-- 今日统计 -->
+  <view class="stats-card">
+    <view class="stat-item">
+      <view class="stat-num">{{todayCount}}</view>
+      <view class="stat-label">今日番茄</view>
+    </view>
+    <view class="divider"></view>
+    <view class="stat-item">
+      <view class="stat-num">{{todayMinutes}}</view>
+      <view class="stat-label">专注分钟</view>
+    </view>
+    <view class="divider"></view>
+    <view class="stat-item">
+      <view class="stat-num">{{doneSessions}}</view>
+      <view class="stat-label">本轮完成</view>
+    </view>
+  </view>
+
+  <!-- 设置面板 -->
+  <view class="setting-mask" wx:if="{{showSettings}}" bindtap="closeSettings">
+    <view class="setting-panel" catchtap="stopProp">
+      <view class="sp-title">计时设置</view>
+      <view class="sp-row">
+        <text class="sp-label">专注时长（分钟）</text>
+        <input class="sp-input" type="number" value="{{focusLen}}" bindblur="onFocusLen" />
+      </view>
+      <view class="sp-row">
+        <text class="sp-label">休息时长（分钟）</text>
+        <input class="sp-input" type="number" value="{{breakLen}}" bindblur="onBreakLen" />
+      </view>
+      <view class="sp-tip">专注 5~60 分钟 · 休息 1~30 分钟；空闲时修改立即生效</view>
+      <view class="sp-btn" bindtap="closeSettings">完成</view>
+    </view>
+  </view>
+</view>

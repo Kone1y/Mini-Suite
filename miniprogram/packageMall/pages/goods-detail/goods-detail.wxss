@@ -1,0 +1,102 @@
+.swiper {
+  height: 620rpx;
+}
+.swp-img {
+  width: 100%;
+  height: 100%;
+}
+.dots {
+  position: absolute;
+  right: 30rpx;
+  margin-top: -60rpx;
+  background: rgba(44, 44, 42, 0.5);
+  color: #FFFFFF;
+  font-size: 22rpx;
+  padding: 4rpx 18rpx;
+  border-radius: 20rpx;
+}
+.info { margin-top: 20rpx; }
+.price {
+  color: #D84343;
+  font-size: 46rpx;
+  font-weight: 700;
+  font-family: monospace;
+}
+.price::before { content: '¥'; font-size: 28rpx; }
+.price-text { display: none; }
+.name {
+  margin-top: 10rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #2C2C2A;
+}
+.stock {
+  margin-top: 12rpx;
+  color: #888780;
+  font-size: 24rpx;
+}
+.sec-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 14rpx;
+}
+.detail-text {
+  color: #5F5E5A;
+  font-size: 26rpx;
+  line-height: 1.8;
+}
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 20rpx rgba(44, 44, 42, 0.08);
+}
+.qty-ctl {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+.qty-btn {
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 50%;
+  background: #F1EFE8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  color: #2C2C2A;
+  transition: transform 0.1s ease;
+}
+.qty-btn:active { transform: scale(0.88); background: #E8E6DE; }
+.qty-num {
+  min-width: 70rpx;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  font-family: monospace;
+}
+.bar-btn {
+  padding: 20rpx 38rpx;
+  border-radius: 999rpx;
+  font-size: 27rpx;
+  margin-left: 18rpx;
+  transition: transform 0.12s ease;
+}
+.bar-btn:active { transform: scale(0.95); }
+.bar-btn.cart {
+  border: 2rpx solid #534AB7;
+  color: #534AB7;
+  background: #FFFFFF;
+}
+.bar-btn.buy {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  color: #FFFFFF;
+  box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.35);
+  font-weight: 500;
+}

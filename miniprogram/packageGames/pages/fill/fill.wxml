@@ -1,0 +1,69 @@
+<view class="page">
+  <!-- 顶栏 -->
+  <view class="topbar">
+    <view class="lives">❤️{{3 - wrongs}}</view>
+    <view class="mid">
+      <text class="streak">✏️ {{score}} 分</text>
+    </view>
+    <view class="timer {{timeLeft <= 5 ? 'urgent' : ''}}">⏱ {{timeLeft}}s</view>
+  </view>
+  <!-- 时间条 -->
+  <view class="timebar">
+    <view class="timefill" style="width:{{timeLeft / 30 * 100}}%"></view>
+  </view>
+
+  <!-- 题面 -->
+  <view class="q-area" wx:if="{{q && !loading && !over}}">
+    <view class="q-label">点选一个空，再点下方文字填入（点已填的空可撤回）</view>
+    <!-- 词格：点空选中 → 点字填入该空 -->
+    <view class="word-row">
+      <view
+        wx:for="{{display}}"
+        wx:key="index"
+        class="wcell {{item.blank ? 'blank' : ''}} {{item.blank && selSlot === 0 && index === q.blanks[0] ? 'sel' : ''}} {{item.blank && selSlot === 1 && index === q.blanks[1] ? 'sel' : ''}}"
+        data-slot="{{index === q.blanks[0] ? 0 : (index === q.blanks[1] ? 1 : -1)}}"
+        bindtap="{{item.blank ? 'onSlotTap' : ''}}"
+      >
+        <block wx:if="{{!item.blank}}"><text class="given">{{item.ch}}</text></block>
+        <block wx:else>
+          <text wx:if="{{index === q.blanks[0] && pickedChars[0] !== null && pickedChars[0] !== undefined}}" class="given filled">{{pickedChars[0]}}</text>
+          <text wx:elif="{{index === q.blanks[1] && pickedChars[1] !== null && pickedChars[1] !== undefined}}" class="given filled">{{pickedChars[1]}}</text>
+          <text wx:else class="ph">?</text>
+        </block>
+      </view>
+    </view>
+    <!-- 候选字 -->
+    <view class="chars">
+      <view
+        wx:for="{{q.options}}"
+        wx:key="*this"
+        class="char {{pickedOptIdx.indexOf(index) >= 0 ? 'used' : ''}}"
+        data-idx="{{index}}"
+        bindtap="onCharTap"
+      >{{item}}</view>
+    </view>
+    <!-- 答后 -->
+    <view class="after" wx:if="{{correct !== null}}">
+      <view class="verdict {{correct ? 'ok' : 'no'}}">
+        {{correct ? '✓ 对！' + q.word : '✗ 是「' + q.word + '」'}}
+      </view>
+      <view class="ex-line" wx:if="{{q.explanation}}">释义：{{q.explanation}}</view>
+      <view class="next-btn" bindtap="onNext">下一题 →</view>
+    </view>
+  </view>
+  <view class="loading" wx:if="{{loading && !over}}">出题中…</view>
+
+  <!-- 结束结算 -->
+  <view class="over-card" wx:if="{{over}}">
+    <view class="ov-emoji">🏁</view>
+    <view class="ov-t">本局结束</view>
+    <view class="ov-line">得分 {{score}}</view>
+    <view class="ov-sub">错满 3 次收官，再来一把？</view>
+    <view class="ov-btns">
+      <view class="btn primary" bindtap="restart">↻ 再来一局</view>
+      <view class="btn" bindtap="goBack">← 返回玩法</view>
+    </view>
+  </view>
+
+  <view class="foot" bindtap="goBack" wx:if="{{!over}}">← 返回玩法列表</view>
+</view>

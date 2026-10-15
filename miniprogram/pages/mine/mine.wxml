@@ -1,0 +1,36 @@
+<view class="page">
+  <!-- 渐变用户卡 -->
+  <view class="user-hero">
+    <view class="user-deco d1"></view>
+    <view class="user-deco d2"></view>
+    <view class="user-row">
+      <view class="avatar">{{userInfo ? '🧑' : '👤'}}</view>
+      <view class="user-info">
+        <view class="user-name">{{userInfo ? userInfo.nickname : '未登录'}}</view>
+        <view class="user-hint">{{userInfo ? 'ID: ' + userInfo.openid : '启动后端后自动登录'}}</view>
+      </view>
+    </view>
+    <view class="stat-row">
+      <view class="stat" wx:for="{{stats}}" wx:key="name">
+        <view class="stat-num">{{item.num}}</view>
+        <view class="stat-name">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card entry-card">
+    <view class="entry" wx:for="{{entries}}" wx:key="name" data-url="{{item.url}}" bindtap="goEntry" hover-class="entry-active">
+      <view class="entry-left">
+        <view class="entry-icon" style="background: {{item.bg}}">{{item.icon}}</view>
+        <view class="entry-text">
+          <view class="entry-name">{{item.name}}</view>
+          <view class="entry-desc">{{item.desc}}</view>
+        </view>
+        <text class="badge" wx:if="{{item.badge && cartCount > 0}}">{{cartCount}}</text>
+      </view>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <view class="hint foot-hint">演示项目 · 商城为模拟交易</view>
+</view>

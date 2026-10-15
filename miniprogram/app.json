@@ -1,0 +1,114 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/hall/hall",
+    "pages/mine/mine"
+  ],
+  "subpackages": [
+    {
+      "root": "packageTools",
+      "pages": [
+        "pages/qrcode/qrcode",
+        "pages/scan/scan",
+        "pages/compress/compress",
+        "pages/countdown/countdown",
+        "pages/convert/convert",
+        "pages/decibel/decibel",
+        "pages/mortgage/mortgage",
+        "pages/speedtest/speedtest",
+        "pages/relatives/relatives",
+        "pages/random/random",
+        "pages/password/password",
+        "pages/pomodoro/pomodoro",
+        "pages/color/color",
+        "pages/base/base",
+        "pages/timestamp/timestamp",
+        "pages/json/json",
+        "pages/regex/regex",
+        "pages/diff/diff",
+        "pages/weather/weather",
+        "pages/sql/sql",
+        "pages/hex/hex",
+        "pages/hacker/hacker"
+      ]
+    },
+    {
+      "root": "packageContent",
+      "pages": [
+        "pages/poetry/poetry",
+        "pages/poetry-detail/poetry-detail",
+        "pages/wallpaper/wallpaper",
+        "pages/emoji/emoji",
+        "pages/favorites/favorites"
+      ]
+    },
+    {
+      "root": "packageMall",
+      "pages": [
+        "pages/goods/goods",
+        "pages/goods-detail/goods-detail",
+        "pages/cart/cart",
+        "pages/order/order",
+        "pages/order-detail/order-detail"
+      ]
+    },
+    {
+      "root": "packageGames",
+      "pages": [
+        "pages/g2048/g2048",
+        "pages/minesweeper/minesweeper",
+        "pages/memory/memory",
+        "pages/klotski/klotski",
+        "pages/snake/snake",
+        "pages/tetris/tetris",
+        "pages/gomoku/gomoku",
+        "pages/sokoban/sokoban",
+        "pages/sudoku/sudoku",
+        "pages/whack/whack",
+        "pages/game24/game24",
+        "pages/hanoi/hanoi",
+        "pages/sortviz/sortviz",
+        "pages/maze/maze",
+        "pages/life/life",
+        "pages/reversi/reversi",
+        "pages/nonogram/nonogram",
+        "pages/shmup/shmup",
+        "pages/akari/akari",
+        "pages/idiom/idiom",
+        "pages/guess/guess",
+        "pages/quiz/quiz",
+        "pages/chain/chain",
+        "pages/fill/fill",
+        "pages/gitgame/gitgame",
+        "pages/vim/vim",
+        "pages/regexcross/regexcross"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#534AB7",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "百宝小屋",
+    "backgroundColor": "#F6F5F2",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#888780",
+    "selectedColor": "#534AB7",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
