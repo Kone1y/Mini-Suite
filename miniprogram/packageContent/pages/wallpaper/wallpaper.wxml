@@ -2,7 +2,7 @@
   <view class="falls">
     <view class="col" wx:for="{{cols}}" wx:for-item="col" wx:key="index">
       <view class="wp-card" wx:for="{{col}}" wx:for-item="wp" wx:key="id">
-        <image class="wp-img" src="{{wp.path}}" mode="widthFix" data-path="{{wp.path}}" bindtap="preview" />
+        <image class="wp-img" src="{{wp.abs}}" mode="widthFix" data-path="{{wp.path}}" bindtap="preview" />
         <view class="wp-bar">
           <text class="wp-title">{{wp.title}}</text>
           <view class="wp-ops">

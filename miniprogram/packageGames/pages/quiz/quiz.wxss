@@ -1,5 +1,5 @@
 .page {
-  min-height: 100vh; background: #F6F4EE;
+  min-height: 100vh; background: #12121A;
   padding: 24rpx 28rpx 40rpx; box-sizing: border-box;
   display: flex; flex-direction: column;
 }
@@ -10,28 +10,28 @@
 }
 .lives { font-size: 28rpx; font-weight: 700; color: #C0564B; letter-spacing: 2rpx; }
 .mid { display: flex; gap: 18rpx; align-items: baseline; }
-.streak { font-size: 30rpx; font-weight: 800; color: #534AB7; }
+.streak { font-size: 30rpx; font-weight: 800; color: #A8A0F0; }
 .best { font-size: 22rpx; color: #A5A08F; }
 .cnt { font-size: 22rpx; color: #A5A08F; font-family: monospace; }
 
 .q-area {
-  background: #fff; border-radius: 24rpx;
+  background: rgba(22, 21, 34, 0.44); border-radius: 24rpx;
   padding: 30rpx 28rpx;
   border: 2rpx solid rgba(83,74,183,.10);
 }
 .q-label { font-size: 23rpx; color: #8A8574; margin-bottom: 14rpx; }
 .q-text {
-  font-size: 30rpx; color: #33312B; line-height: 1.7;
+  font-size: 30rpx; color: #E8E7F0; line-height: 1.7;
   min-height: 120rpx;
 }
 
 .opts { display: flex; flex-direction: column; gap: 14rpx; margin-top: 24rpx; }
 .opt {
-  background: #F6F4EE;
+  background: #12121A;
   border: 2rpx solid rgba(83,74,183,.12);
   border-radius: 16rpx;
   padding: 22rpx 24rpx;
-  font-size: 30rpx; font-weight: 600; color: #33312B;
+  font-size: 30rpx; font-weight: 600; color: #E8E7F0;
   letter-spacing: 4rpx;
   text-align: center;
 }
@@ -53,21 +53,21 @@
 .loading { text-align: center; color: #A5A08F; font-size: 26rpx; padding: 160rpx 0; }
 
 .over-card {
-  background: #fff; border-radius: 24rpx;
+  background: rgba(22, 21, 34, 0.44); border-radius: 24rpx;
   padding: 50rpx 36rpx; text-align: center;
   border: 2rpx solid rgba(83,74,183,.10);
   margin-top: 60rpx;
 }
 .ov-emoji { font-size: 70rpx; }
-.ov-t { font-size: 36rpx; font-weight: 800; color: #33312B; margin-top: 14rpx; }
-.ov-line { font-size: 28rpx; color: #534AB7; font-weight: 700; margin-top: 16rpx; }
+.ov-t { font-size: 36rpx; font-weight: 800; color: #E8E7F0; margin-top: 14rpx; }
+.ov-line { font-size: 28rpx; color: #A8A0F0; font-weight: 700; margin-top: 16rpx; }
 .ov-sub { font-size: 23rpx; color: #A5A08F; margin-top: 8rpx; }
 .ov-btns { display: flex; gap: 16rpx; margin-top: 34rpx; }
 .btn {
   flex: 1; min-width: 0;
   border-radius: 999rpx; padding: 20rpx 0;
   text-align: center; font-size: 27rpx;
-  background: #F6F4EE; color: #33312B;
+  background: #12121A; color: #E8E7F0;
   border: 2rpx solid rgba(83,74,183,.14);
 }
 .btn.primary { background: #534AB7; color: #fff; font-weight: 700; border: none; }

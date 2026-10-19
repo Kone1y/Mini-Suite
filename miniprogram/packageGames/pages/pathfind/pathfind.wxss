@@ -1,0 +1,88 @@
+page { background: #0A0A14; }
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+  background: #0A0A14;
+  padding: 12rpx 16rpx 16rpx;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 10rpx;
+}
+.bar-label {
+  color: #8B9BD4;
+  font-size: 24rpx;
+  margin-right: 4rpx;
+}
+.stats {
+  justify-content: flex-start;
+}
+.st {
+  color: #E8E7F0;
+  font-size: 24rpx;
+  background: rgba(255,255,255,0.06);
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  margin-right: 10rpx;
+}
+
+.seg {
+  display: flex;
+  background: rgba(255,255,255,0.06);
+  border-radius: 16rpx;
+  padding: 4rpx;
+  flex-wrap: wrap;
+}
+.seg.small .seg-item { font-size: 22rpx; padding: 8rpx 18rpx; }
+.seg-item {
+  color: #B8BCE0;
+  font-size: 26rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 12rpx;
+  line-height: 1.2;
+}
+.seg-item.on {
+  background: #534AB7;
+  color: #FFFFFF;
+}
+
+.canvas-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  margin: 4rpx 0;
+}
+.stage {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 10rpx;
+}
+.btn {
+  padding: 14rpx 28rpx;
+  border-radius: 14rpx;
+  font-size: 26rpx;
+  text-align: center;
+}
+.btn-primary {
+  background: #534AB7;
+  color: #FFFFFF;
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.08);
+  color: #E8E7F0;
+}

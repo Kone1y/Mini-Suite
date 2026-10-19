@@ -11,7 +11,8 @@ Page({
     moves: 0,
     thinking: false,
     canUndo: false,
-    last: null        // AI 最后一手
+    last: null,       // AI 最后一手
+    aiLevel: 2        // AI 难度：1休闲 2标准 3大师
   },
 
   onLoad(options) {
@@ -20,8 +21,22 @@ Page({
     const bw = this._winW - 56
     this._cell = Math.floor(bw / L.N)
     this._bw = this._cell * L.N
-    this.setData({ bw: this._bw, stoneFont: Math.round(this._cell * 0.5) })
+    this.setData({
+      bw: this._bw, stoneFont: Math.round(this._cell * 0.5),
+      aiLevel: wx.getStorageSync('gomoku_ai_level') || 2
+    })
     this.newGame(options.first !== 'ai')
+  },
+
+  // 难度切换（对局中切换需重开）
+  setLevel(e) {
+    const lv = Number(e.currentTarget.dataset.lv) || 2
+    if (lv === this.data.aiLevel) return
+    wx.setStorageSync('gomoku_ai_level', lv)
+    this.setData({ aiLevel: lv })
+    if (this.data.moves > 0) {
+      wx.showToast({ title: '难度已切换，下局生效', icon: 'none' })
+    }
   },
 
   newGame(playerFirst) {
@@ -102,7 +117,7 @@ Page({
     this.setData({ thinking: true })
     // 让 UI 先渲染"思考中"
     setTimeout(() => {
-      const m = L.aiMove(this._board, 2)
+      const m = L.aiMoveStrong(this._board, 2, this.data.aiLevel)
       this.setData({ thinking: false })
       this.place(m.x, m.y, 2)
     }, 30)

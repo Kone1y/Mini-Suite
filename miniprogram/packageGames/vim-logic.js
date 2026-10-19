@@ -253,7 +253,20 @@ function apply(s, input, history) {
         // 词 motion（w/e/b）× count
         for (let n = 0; n < count; n++) {
           const t = m.finder(s)
-          if (!t) break
+          if (!t) {
+            // 行尾词无下一词（w 视角）：dw 退化为删到行尾（真实 vim 行为）
+            if (mk[0] === 'w' && op === 'd') {
+              const line = s.lines[s.r]
+              if (s.c < line.length) {
+                const text = line.slice(s.c)
+                s.lines[s.r] = line.slice(0, s.c)
+                history.push({ type: 'chars', r: s.r, c: s.c, text, reg: text })
+              }
+              clampCursor(s)
+              return { ok: true }
+            }
+            break
+          }
           if (t.r !== s.r) {
             const from = Math.min(s.r, t.r), to = Math.max(s.r, t.r)
             history.push({ type: 'lines', from, to, lines: s.lines.slice(from, to + 1), reg: s.lines.slice(from, to + 1).join('\n') })

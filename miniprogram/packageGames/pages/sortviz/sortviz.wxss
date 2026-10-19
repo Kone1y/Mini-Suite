@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #F0EFEA;
+  background: #12121A;
   padding: 24rpx;
   box-sizing: border-box;
   display: flex;
@@ -17,13 +17,13 @@
 .title {
   font-size: 34rpx;
   font-weight: 800;
-  color: #26215C;
+  color: #C6C0FA;
   letter-spacing: 1rpx;
 }
 .home {
   font-size: 24rpx;
-  color: #534AB7;
-  background: #EEEDFE;
+  color: #A8A0F0;
+  background: rgba(106,90,224,.16);
   border-radius: 999rpx;
   padding: 8rpx 22rpx;
   font-weight: 600;
@@ -32,9 +32,9 @@
 /* 舞台 */
 .stage {
   width: 100%;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 18rpx;
-  border: 1rpx solid #EFEEE9;
+  border: 1rpx solid rgba(255,255,255,.10);
   box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.10);
   padding: 16rpx 16rpx 0;
   box-sizing: border-box;
@@ -57,7 +57,7 @@
 .status {
   margin: 22rpx 0 8rpx;
   font-size: 26rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   text-align: center;
   min-height: 36rpx;
 }
@@ -71,17 +71,17 @@
 }
 .label {
   font-size: 26rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   min-width: 64rpx;
 }
 .picker { flex: 1; }
 .picker-view {
-  background: #FFFFFF;
-  border: 1rpx solid #EFEEE9;
+  background: rgba(22, 21, 34, 0.44);
+  border: 1rpx solid rgba(255,255,255,.10);
   border-radius: 14rpx;
   padding: 16rpx 22rpx;
   font-size: 28rpx;
-  color: #26215C;
+  color: #C6C0FA;
   font-weight: 600;
 }
 .progress {
@@ -101,17 +101,17 @@
 .btn {
   flex: 1;
   min-width: 0;
-  background: #FFFFFF;
-  border: 1rpx solid #EFEEE9;
+  background: rgba(22, 21, 34, 0.44);
+  border: 1rpx solid rgba(255,255,255,.10);
   border-radius: 999rpx;
   padding: 20rpx 0;
   text-align: center;
   font-size: 25rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   white-space: nowrap;
 }
 .btn.ghost {
-  color: #534AB7;
+  color: #A8A0F0;
   border-color: #D9D6EE;
 }
 .btn.primary {
@@ -139,7 +139,7 @@
   align-items: center;
   gap: 10rpx;
   font-size: 23rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
 }
 .dot {
   width: 22rpx;

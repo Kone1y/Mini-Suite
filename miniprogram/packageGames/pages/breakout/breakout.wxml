@@ -1,0 +1,11 @@
+<view class="stage-wrap">
+  <canvas
+    id="stage"
+    type="2d"
+    class="stage"
+    disable-scroll="{{true}}"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+  ></canvas>
+</view>

@@ -5,7 +5,7 @@
       <!-- 底环 -->
       <view class="ring-bg"></view>
       <!-- 进度环：conic-gradient 实现（SVG 在小程序里不如 conic 简单） -->
-      <view class="ring-fill" style="background: conic-gradient({{ringColor}} {{dashArray}}, #E8E6DF 0);"></view>
+      <view class="ring-fill" style="background: conic-gradient({{ringColor}} {{dashArray}}, rgba(255,255,255,.10) 0);"></view>
       <view class="ring-mask">
         <view class="time-text">{{timeText}}</view>
         <view class="phase-text">{{mode === 'idle' ? '准备开始' : isFocus ? '🍅 专注中' : mode === 'paused' ? '⏸ 已暂停' : '☕ 休息中'}}</view>

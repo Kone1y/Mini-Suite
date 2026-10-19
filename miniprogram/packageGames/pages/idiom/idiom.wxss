@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #F6F4EE;
+  background: #12121A;
   padding: 28rpx 28rpx 40rpx;
   box-sizing: border-box;
   display: flex; flex-direction: column;
@@ -8,14 +8,14 @@
 
 /* 头部 */
 .hero { margin-bottom: 30rpx; }
-.hero-title { font-size: 44rpx; font-weight: 800; color: #33312B; }
+.hero-title { font-size: 44rpx; font-weight: 800; color: #E8E7F0; }
 .hero-sub { font-size: 24rpx; color: #8A8574; margin-top: 8rpx; }
 
 /* 玩法卡 */
 .games { display: flex; flex-direction: column; gap: 18rpx; }
 .game-card {
   display: flex; align-items: center; gap: 22rpx;
-  background: #fff;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 22rpx;
   padding: 26rpx 26rpx;
   border: 2rpx solid rgba(83,74,183,.10);
@@ -37,7 +37,7 @@
 .game-card.hard .gc-icon { background: rgba(255,255,255,.18); }
 .gc-main { flex: 1; min-width: 0; }
 .gc-name-row { display: flex; align-items: center; gap: 12rpx; }
-.gc-name { font-size: 30rpx; font-weight: 700; color: #33312B; }
+.gc-name { font-size: 30rpx; font-weight: 700; color: #E8E7F0; }
 .gc-diff {
   font-size: 19rpx; padding: 2rpx 12rpx; border-radius: 999rpx;
   background: rgba(76,158,100,.12); color: #4C9E64;
@@ -49,7 +49,7 @@
 /* 词典横幅 */
 .dict-banner {
   display: flex; align-items: center; gap: 22rpx;
-  background: #fff;
+  background: rgba(22, 21, 34, 0.44);
   border: 2rpx dashed rgba(176,113,58,.4);
   border-radius: 22rpx;
   padding: 24rpx 26rpx;

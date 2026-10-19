@@ -1,4 +1,4 @@
-const { request } = require('../../../utils/request')
+const { request, absUrl } = require('../../../utils/request')
 
 const CART_KEY = 'mall_cart'
 
@@ -18,6 +18,8 @@ Page({
     request({
       url: '/api/goods/' + this.id
     }).then(goods => {
+      // images 是后端相对路径，swiper image src 需要绝对地址
+      goods.images = (goods.images || []).map(absUrl)
       this.setData({ goods })
       wx.setNavigationBarTitle({ title: goods.name })
     })
@@ -51,8 +53,7 @@ Page({
     if (exist) {
       exist.qty += this.data.qty
     } else {
-      cart.push({ goods_id: g.id, name: g.name, price: g.price, cover: (g.images || [])[0] || '', qty: this.data.qty })
-    }
+      cart.push({ goods_id: g.id, name: g.name, price: g.price, cover: (g.images || [])[0] || '', qty: this.data.qty })    }
     this.setCart(cart)
     wx.showToast({ title: '已加入购物车', icon: 'success' })
   },

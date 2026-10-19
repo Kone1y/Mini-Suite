@@ -29,7 +29,9 @@
         "pages/weather/weather",
         "pages/sql/sql",
         "pages/hex/hex",
-        "pages/hacker/hacker"
+        "pages/hacker/hacker",
+        "pages/hash/hash",
+        "pages/ledger/ledger"
       ]
     },
     {
@@ -81,7 +83,10 @@
         "pages/fill/fill",
         "pages/gitgame/gitgame",
         "pages/vim/vim",
-        "pages/regexcross/regexcross"
+        "pages/regexcross/regexcross",
+        "pages/breakout/breakout",
+        "pages/match3/match3",
+        "pages/pathfind/pathfind"
       ]
     }
   ],
@@ -89,8 +94,8 @@
     "navigationBarBackgroundColor": "#534AB7",
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "百宝小屋",
-    "backgroundColor": "#F6F5F2",
-    "backgroundTextStyle": "dark"
+    "backgroundColor": "#12121A",
+    "backgroundTextStyle": "light"
   },
   "tabBar": {
     "color": "#888780",

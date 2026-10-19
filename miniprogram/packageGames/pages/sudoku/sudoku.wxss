@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #F6F5F2;
+  background: #12121A;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,16 +17,16 @@
   margin-bottom: 20rpx;
 }
 .level-chip {
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border: 2rpx solid #534AB7;
-  color: #534AB7;
+  color: #A8A0F0;
   font-size: 24rpx;
   padding: 10rpx 24rpx;
   border-radius: 999rpx;
 }
 .stat {
   margin-left: auto;
-  color: #5F5E5A;
+  color: #C9C7DC;
   font-size: 26rpx;
   font-family: monospace;
 }
@@ -38,7 +38,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(9, minmax(0, 1fr));
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border: 4rpx solid #534AB7;
   border-radius: 8rpx;
   overflow: hidden;
@@ -51,17 +51,17 @@
   border-right: 1rpx solid #E8E6DF;
   border-bottom: 1rpx solid #E8E6DF;
   position: relative;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
 }
 .cell:nth-child(9n) { border-right: none; }
 .cell.brd-r { border-right: 3rpx solid #534AB7; }
 .cell.brd-b { border-bottom: 3rpx solid #534AB7; }
-.cell.given .v { color: #2C2C2A; font-weight: 700; }
-.cell .v { font-size: 34rpx; color: #534AB7; font-weight: 500; }
-.cell.peer { background: #F4F3FB; }
-.cell.sel { background: #E4E1F8; }
-.cell.error .v { color: #D84343; }
-.cell.conflict { background: #FDEBEB; }
+.cell.given .v { color: #E8E7F0; font-weight: 700; }
+.cell .v { font-size: 34rpx; color: #A8A0F0; font-weight: 500; }
+.cell.peer { background: rgba(106,90,224,.14); }
+.cell.sel { background: rgba(106,90,224,.32); }
+.cell.error .v { color: #E36A6A; }
+.cell.conflict { background: rgba(216,67,67,.22); }
 /* 同值高亮：选中格有值时同值格微标——简化：选中态加内圈 */
 .cell.sel::after {
   content: '';
@@ -99,18 +99,18 @@
 }
 .num {
   aspect-ratio: 0.85;
-  background: #FFFFFF;
-  border: 1rpx solid #EFEEE9;
+  background: rgba(22, 21, 34, 0.44);
+  border: 1rpx solid rgba(255,255,255,.10);
   border-radius: 12rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 34rpx;
   font-weight: 600;
-  color: #534AB7;
+  color: #A8A0F0;
   box-shadow: 0 2rpx 8rpx rgba(44,44,42,0.04);
 }
-.num.note-on { background: #FFF7E0; border-color: #E5C96B; color: #9A7B1F; }
+.num.note-on { background: rgba(237,194,46,.18); border-color: #E5C96B; color: #EDC22E; }
 
 /* 工具行 */
 .tool-row {
@@ -122,34 +122,34 @@
 .tool {
   flex: 1;
   min-width: 0;
-  background: #FFFFFF;
-  border: 1rpx solid #EFEEE9;
+  background: rgba(22, 21, 34, 0.44);
+  border: 1rpx solid rgba(255,255,255,.10);
   border-radius: 999rpx;
   padding: 16rpx 0;
   text-align: center;
   font-size: 24rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   white-space: nowrap;
 }
 .tool.on {
-  background: #FFF7E0;
+  background: rgba(237,194,46,.18);
   border-color: #E5C96B;
-  color: #9A7B1F;
+  color: #EDC22E;
 }
 
 /* 完成遮罩 */
 .mask {
   position: absolute;
   left: 0; right: 0; top: 0; bottom: 0;
-  background: rgba(246, 245, 242, 0.92);
+  background: rgba(22, 21, 34, 0.44);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 8rpx;
 }
-.mask-title { font-size: 44rpx; font-weight: 700; color: #534AB7; }
-.mask-sub { margin-top: 14rpx; color: #5F5E5A; font-size: 26rpx; }
+.mask-title { font-size: 44rpx; font-weight: 700; color: #A8A0F0; }
+.mask-sub { margin-top: 14rpx; color: #C9C7DC; font-size: 26rpx; }
 .mask-sub.record { color: #D84343; font-weight: 600; }
 .mask-row { display: flex; gap: 16rpx; margin-top: 30rpx; }
 .mask-btn {
@@ -175,7 +175,7 @@
 }
 .level-panel {
   width: 540rpx;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 24rpx;
   padding: 32rpx;
   box-sizing: border-box;
@@ -186,9 +186,9 @@
   border-radius: 14rpx;
   text-align: center;
   font-size: 27rpx;
-  color: #2C2C2A;
+  color: #E8E7F0;
   margin-bottom: 14rpx;
-  background: #F6F5F2;
+  background: #12121A;
 }
-.lp-opt.on { background: #E4E1F8; color: #534AB7; font-weight: 600; }
+.lp-opt.on { background: rgba(106,90,224,.32); color: #C6C0FA; font-weight: 600; }
 .lp-cancel { text-align: center; padding: 20rpx; color: #9B98A8; font-size: 25rpx; }

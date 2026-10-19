@@ -1,4 +1,4 @@
-const { request } = require('../../../utils/request')
+const { request, absUrl } = require('../../../utils/request')
 
 const CART_KEY = 'mall_cart'
 
@@ -14,8 +14,10 @@ Page({
 
   refresh() {
     const items = wx.getStorageSync(CART_KEY) || []
+    // 兼容旧缓存里的相对路径 cover
+    const shown = items.map(it => Object.assign({}, it, { cover: absUrl(it.cover) }))
     const total = items.reduce((s, it) => s + it.price * it.qty, 0)
-    this.setData({ items, total: Math.round(total * 100) / 100 })
+    this.setData({ items: shown, total: Math.round(total * 100) / 100 })
   },
 
   add(e) {

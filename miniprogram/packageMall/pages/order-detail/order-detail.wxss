@@ -5,11 +5,11 @@
 .big-status {
   font-size: 40rpx;
   font-weight: 600;
-  color: #534AB7;
+  color: #A8A0F0;
 }
 .no, .time {
   margin-top: 12rpx;
-  color: #888780;
+  color: #9C99B4;
   font-size: 24rpx;
 }
 .sec {
@@ -23,7 +23,7 @@
   padding: 12rpx 0;
   font-size: 26rpx;
 }
-.price { color: #5F5E5A; }
+.price { color: #C9C7DC; }
 .sum-line {
   display: flex;
   justify-content: space-between;
@@ -33,7 +33,7 @@
 }
 .sum { color: #993C1D; font-size: 34rpx; font-weight: 600; }
 .addr {
-  color: #5F5E5A;
+  color: #C9C7DC;
   font-size: 26rpx;
   line-height: 1.7;
 }
@@ -49,7 +49,7 @@
 }
 .op.plain {
   border: 2rpx solid #B4B2A9;
-  color: #5F5E5A;
+  color: #C9C7DC;
 }
 .op.solid {
   background: #534AB7;

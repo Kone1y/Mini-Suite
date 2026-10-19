@@ -14,6 +14,14 @@
     </view>
   </view>
 
+  <!-- AI 难度选择 -->
+  <view class="lv-bar">
+    <text class="lv-label">AI</text>
+    <view class="lv-opt {{aiLevel === 1 ? 'on' : ''}}" data-lv="1" bindtap="setLevel">休闲</view>
+    <view class="lv-opt {{aiLevel === 2 ? 'on' : ''}}" data-lv="2" bindtap="setLevel">标准</view>
+    <view class="lv-opt {{aiLevel === 3 ? 'on' : ''}}" data-lv="3" bindtap="setLevel">大师</view>
+  </view>
+
   <view class="board-wrap">
     <view class="board" style="width: {{bw}}px; height: {{bw}}px;">
       <!-- 网格线 -->

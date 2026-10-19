@@ -8,18 +8,18 @@
   padding: 0 8rpx 18rpx;
 }
 .info-box {
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 14rpx;
   padding: 12rpx 26rpx;
   text-align: center;
   min-width: 120rpx;
-  border: 1rpx solid #EFEEE9;
+  border: 1rpx solid rgba(255,255,255,.10);
 }
-.info-label { font-size: 20rpx; color: #888780; }
-.info-num { font-size: 30rpx; font-weight: 700; color: #26215C; font-family: monospace; }
+.info-label { font-size: 20rpx; color: #9C99B4; }
+.info-num { font-size: 30rpx; font-weight: 700; color: #C6C0FA; font-family: monospace; }
 .title-box { text-align: center; }
-.game-title { font-size: 40rpx; font-weight: 800; color: #26215C; letter-spacing: 2rpx; }
-.game-sub { font-size: 20rpx; color: #888780; margin-top: 4rpx; }
+.game-title { font-size: 40rpx; font-weight: 800; color: #C6C0FA; letter-spacing: 2rpx; }
+.game-sub { font-size: 20rpx; color: #9C99B4; margin-top: 4rpx; }
 
 .board-wrap { position: relative; }
 .board {
@@ -65,7 +65,7 @@
 .mask {
   position: absolute;
   left: 0; top: 0; right: 0; bottom: 0;
-  background: rgba(246, 245, 242, 0.92);
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 8rpx;
   display: flex;
   flex-direction: column;
@@ -73,8 +73,8 @@
   justify-content: center;
   z-index: 10;
 }
-.mask-title { font-size: 44rpx; font-weight: 800; color: #26215C; }
-.mask-sub { font-size: 26rpx; color: #888780; margin: 14rpx 0 26rpx; }
+.mask-title { font-size: 44rpx; font-weight: 800; color: #C6C0FA; }
+.mask-sub { font-size: 26rpx; color: #9C99B4; margin: 14rpx 0 26rpx; }
 .mask-row { display: flex; gap: 20rpx; }
 .mask-btn {
   background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
@@ -85,8 +85,8 @@
   box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.3);
 }
 .mask-btn.ghost {
-  background: #FFFFFF;
-  color: #534AB7;
+  background: rgba(22, 21, 34, 0.44);
+  color: #A8A0F0;
   border: 2rpx solid #534AB7;
   box-shadow: none;
 }
@@ -112,15 +112,36 @@
   white-space: nowrap;
 }
 .ctrl-btn.ghost {
-  background: #FFFFFF;
-  color: #534AB7;
+  background: rgba(22, 21, 34, 0.44);
+  color: #A8A0F0;
   border: 2rpx solid #534AB7;
   box-shadow: none;
 }
 .ctrl-btn[disabled] {
   color: rgba(83, 74, 183, 0.4);
-  background: #F1EFE8;
+  background: rgba(255,255,255,.07);
   border-color: #E5E3DA;
 }
 .ctrl-btn::after { border: none; }
 .hint { margin-top: 18rpx; }
+
+/* AI 难度选择条 */
+.lv-bar {
+  display: flex; align-items: center; gap: 12rpx;
+  margin: 0 24rpx 8rpx;
+}
+.lv-label {
+  font-size: 22rpx; color: #9C99B4; font-weight: 700;
+}
+.lv-opt {
+  font-size: 23rpx; color: rgba(255,255,255,.6);
+  background: rgba(255,255,255,.08);
+  border: 1rpx solid rgba(255,255,255,.14);
+  border-radius: 999rpx;
+  padding: 8rpx 26rpx;
+}
+.lv-opt.on {
+  background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
+  border-color: rgba(255,255,255,.28);
+  color: #fff; font-weight: 600;
+}

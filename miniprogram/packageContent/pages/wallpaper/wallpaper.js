@@ -1,4 +1,4 @@
-const { request } = require('../../../utils/request')
+const { request, absUrl } = require('../../../utils/request')
 const app = getApp()
 
 Page({
@@ -17,10 +17,12 @@ Page({
       url: '/api/media',
       data: { type: 'wallpaper' }
     }).then(res => {
+      // 渲染用绝对地址（后端相对路径不能直接给 image src）
+      const items = (res.items || []).map(i => ({ ...i, abs: absUrl(i.path) }))
       const cols = [[], []]
-      ;(res.items || []).forEach((it, i) => cols[i % 2].push(it))
-      this.setData({ items: res.items || [], cols, loading: false })
-      this.allUrls = (res.items || []).map(i => app.globalData.apiBase + i.path)
+      items.forEach((it, i) => cols[i % 2].push(it))
+      this.setData({ items, cols, loading: false })
+      this.allUrls = items.map(i => i.abs)
     }).catch(() => this.setData({ loading: false }))
   },
 

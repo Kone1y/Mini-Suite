@@ -13,7 +13,21 @@
       <view class="info-num">{{matchedCount}}/{{level.pairs}}</view>
     </view>
   </view>
-  <view class="best-line" wx:if="{{best !== null}}">🏆 本关最少步数 {{best}}</view>
+
+  <!-- 模式切换 + 计时 HUD -->
+  <view class="mode-bar">
+    <view class="mode-switch">
+      <view class="mode-opt {{!timed ? 'on' : ''}}" data-mode="classic" bindtap="toggleTimed">经典</view>
+      <view class="mode-opt {{timed ? 'on' : ''}}" data-mode="timed" bindtap="toggleTimed">⏱ 计时挑战</view>
+    </view>
+    <view class="time-hud" wx:if="{{timed}}">
+      <text class="time-score">{{timeScore}} 分</text>
+      <text class="time-left {{timeLeft <= 10 ? 'urgent' : ''}}">{{timeLeft}}s</text>
+      <text class="time-combo" wx:if="{{combo >= 2}}">🔥 x{{combo}}</text>
+    </view>
+  </view>
+  <view class="best-line" wx:if="{{timed && timeBest > 0}}">🏆 计时模式最佳 {{timeBest}} 分</view>
+  <view class="best-line" wx:elif="{{!timed && best !== null}}">🏆 本关最少步数 {{best}}</view>
 
   <!-- 关卡选择 -->
   <view class="level-panel" wx:if="{{showLevelPicker}}">
@@ -49,13 +63,24 @@
 
     <view class="mask" wx:if="{{won}}">
       <view class="mask-title">🎉 本关完成！</view>
-      <view class="mask-sub">共 {{steps}} 步{{best === steps ? ' · 新纪录！' : ''}}</view>
+      <view class="mask-sub" wx:if="{{timed}}">{{timeScore}} 分 · 最大连击 x{{maxCombo}}{{timeScore >= timeBest ? ' · 新纪录！' : ''}}</view>
+      <view class="mask-sub" wx:else>共 {{steps}} 步{{best === steps ? ' · 新纪录！' : ''}}</view>
       <view class="mask-row" wx:if="{{!isLastLevel}}">
         <button class="mask-btn ghost" bindtap="restart">再玩本关</button>
         <button class="mask-btn" bindtap="nextLevel">下一关 →</button>
       </view>
       <view class="mask-row" wx:else>
         <button class="mask-btn" bindtap="restart">全部通关，再来一轮</button>
+      </view>
+    </view>
+
+    <!-- 计时模式时间到 -->
+    <view class="mask" wx:if="{{timeUp && !won}}">
+      <view class="mask-title">⏰ 时间到！</view>
+      <view class="mask-sub">配对 {{matchedCount}}/{{level.pairs}} · 得分 {{timeScore}} · 最大连击 x{{maxCombo}}</view>
+      <view class="mask-row">
+        <button class="mask-btn" bindtap="restart">再来一次</button>
+        <button class="mask-btn ghost" bindtap="goHome">返回小屋</button>
       </view>
     </view>
   </view>
@@ -65,5 +90,5 @@
     <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="togglePicker">选关卡</button>
     <button class="ctrl-btn ghost" hover-class="btn-hover" bindtap="goHome">返回小屋</button>
   </view>
-  <view class="hint center">点两张牌，图案相同即配对成功</view>
+  <view class="hint center">{{timed ? '限时配对！连击越高分越高，通关剩余时间 ×2 加分' : '点两张牌，图案相同即配对成功'}}</view>
 </view>

@@ -17,10 +17,16 @@ function createRepo() {
     branches: new Map(),     // name -> commitId
     HEAD: { type: 'branch', name: 'main' },   // or {type:'commit', id}
     tags: new Map(),         // name -> commitId
+    remote: null,            // N10 远程仓库：{branches: Map('o/main'->id)}（null=未 clone）
     reflog: [],              // 命令历史（undo 用）
     snapshots: [],           // 每步仓库快照（undo 用）
     cmdCount: 0              // git golf 计数
   }
+}
+
+// N10：创建"远程镜像"（关卡用：远程有独立历史）
+function createRemoteRepo() {
+  return { branches: new Map() }
 }
 
 // ---------- 内部工具 ----------
@@ -45,6 +51,7 @@ function cloneRepo(repo) {
     branches: new Map(repo.branches),
     HEAD: { ...repo.HEAD },
     tags: new Map(repo.tags),
+    remote: repo.remote ? { branches: new Map(repo.remote.branches) } : null,
     reflog: repo.reflog.slice(),
     snapshots: [],
     cmdCount: repo.cmdCount
@@ -104,6 +111,13 @@ function layout(repo) {
   for (const [b, id] of repo.branches) {
     if (!labels.has(id)) labels.set(id, [])
     labels.get(id).push(b)
+  }
+  // N10：远程分支标签（o/xxx 前缀，渲染层区分颜色）
+  if (repo.remote) {
+    for (const [b, id] of repo.remote.branches) {
+      if (!labels.has(id)) labels.set(id, [])
+      labels.get(id).push('o/' + b)
+    }
   }
   for (const [t, id] of repo.tags) {
     if (!labels.has(id)) labels.set(id, [])
@@ -175,8 +189,12 @@ function serialize(repo) {
   })
   // 分支结构（分支名与树结构一起算——关卡判定含分支状态）
   const bs = [...repo.branches.entries()].map(([n, id]) => n + '->' + (rid.get(id) ?? '-')).sort()
+  // N10：远程分支参与判定（远程关卡）
+  const rs = repo.remote
+    ? [...repo.remote.branches.entries()].map(([n, id]) => n + '->' + (rid.get(id) ?? '-')).sort()
+    : []
   // tags 不参与判定（简化）
-  return lines.join('\n') + '\n#' + bs.join(';')
+  return lines.join('\n') + '\n#' + bs.join(';') + '\n@' + rs.join(';')
 }
 
 // ---------- 内容合并（简化三向）----------
@@ -236,9 +254,18 @@ function exec(repo, line) {
       return r
     case 'log': r = cmdLog(repo); break
     case 'status': r = cmdStatus(repo); break
+    // N10 远程
+    case 'clone': r = cmdClone(repo); break
+    case 'fetch': r = cmdFetch(repo); break
+    case 'pull': r = cmdPull(repo, args); break
+    case 'push': r = cmdPush(repo, args); break
+    case 'remote':
+      if (args[0] === 'setup') r = cmdRemoteSetup(repo, args.slice(1))
+      else r = { ok: true, out: repo.remote ? 'origin\n  ' + [...repo.remote.branches.entries()].map(([n, id]) => 'o/' + n + ' → ' + id).join('\n  ') : '（无远程）' }
+      break
     default:
       repo.snapshots.pop()
-      return { ok: false, out: '未知命令：' + cmd + '（可用：commit/branch/checkout/merge/rebase/cherry-pick/reset/revert/tag/undo）' }
+      return { ok: false, out: '未知命令：' + cmd + '（可用：commit/branch/checkout/merge/rebase/cherry-pick/reset/revert/tag/clone/fetch/pull/push/undo）' }
   }
   if (r.ok) {
     repo.cmdCount++
@@ -453,6 +480,78 @@ function cmdTag(repo, args) {
   return { ok: true, out: 'tag ' + args[0] + ' → ' + headCommitId(repo) }
 }
 
+// ---------- N10 远程命令 ----------
+// remote setup（隐藏命令，关卡构建用）：给定远程分支初始状态
+function cmdRemoteSetup(repo, args) {
+  // remote setup main=<commitId> ...
+  repo.remote = { branches: new Map() }
+  for (const a of args) {
+    const m = a.match(/^([\w\/-]+)=(.+)$/)
+    if (m) repo.remote.branches.set(m[1], m[2])
+  }
+  return { ok: true, out: '远程已配置: ' + [...repo.remote.branches.keys()].join(', ') }
+}
+
+function cmdFetch(repo) {
+  if (!repo.remote) return { ok: false, out: '没有远程仓库（先 clone）' }
+  // 模拟：远程分支已在 repo.remote.branches（远程历史在关卡 setup 时就已注入 commits）
+  const list = [...repo.remote.branches.entries()].map(([n, id]) => 'o/' + n + ' → ' + id)
+  return { ok: true, out: '已获取远程更新:\n' + (list.join('\n') || '（无远程分支）') }
+}
+
+function cmdPull(repo, args) {
+  if (!repo.remote) return { ok: false, out: '没有远程仓库（先 clone）' }
+  const rb = args[0] || (repo.remote.branches.has('main') ? 'main' : [...repo.remote.branches.keys()][0])
+  if (!repo.remote.branches.has(rb)) return { ok: false, out: '远程无分支 ' + rb }
+  const remoteId = repo.remote.branches.get(rb)
+  const localId = repo.branches.get(rb)
+  if (!localId) {
+    // 本地无此分支：直接建立跟踪
+    repo.branches.set(rb, remoteId)
+    repo.HEAD = { type: 'branch', name: rb }
+    return { ok: true, out: '新建分支 ' + rb + ' 跟踪 o/' + rb + ' @ ' + remoteId }
+  }
+  if (localId === remoteId) return { ok: true, out: 'Already up to date.' }
+  if (isAncestor(repo, remoteId, localId)) {
+    return { ok: true, out: '本地领先，Already up to date.（需 push）' }
+  }
+  if (isAncestor(repo, localId, remoteId)) {
+    // fast-forward
+    repo.branches.set(rb, remoteId)
+    repo.HEAD = { type: 'branch', name: rb }
+    return { ok: true, out: 'Fast-forward\n ' + localId + '…' + remoteId }
+  }
+  // 分叉：合并（复用 merge 逻辑）
+  repo.HEAD = { type: 'branch', name: rb }
+  const r = cmdMerge(repo, ['o/' + rb])
+  return { ok: r.ok, out: r.ok ? 'Merge made by pull.\n' + r.out : r.out }
+}
+
+function cmdPush(repo, args) {
+  if (!repo.remote) return { ok: false, out: '没有远程仓库（先 clone）' }
+  const rb = args[0] || (repo.remote.branches.has('main') ? 'main' : [...repo.remote.branches.keys()][0])
+  const localId = repo.branches.get(rb)
+  if (!localId) return { ok: false, out: '本地无分支 ' + rb }
+  if (!repo.remote.branches.has(rb)) {
+    // 新推分支
+    repo.remote.branches.set(rb, localId)
+    return { ok: true, out: '新建远程分支 o/' + rb + ' @ ' + localId }
+  }
+  const remoteId = repo.remote.branches.get(rb)
+  if (remoteId === localId) return { ok: true, out: 'Everything up-to-date' }
+  if (!isAncestor(repo, remoteId, localId)) {
+    return { ok: false, out: '! [推送被拒] 远程有新提交（non-fast-forward）\n先 pull --rebase 或 merge 再 push' }
+  }
+  repo.remote.branches.set(rb, localId)
+  return { ok: true, out: ' ' + remoteId + '…' + localId + '  ' + rb + ' → o/' + rb }
+}
+
+function cmdClone(repo) {
+  // clone = 初始化远程 + fetch（关卡里远程历史已在 commits 中，分支按 remote 建好）
+  if (repo.remote) return { ok: false, out: '已有远程' }
+  return { ok: true, out: 'Cloning…（本关已预配置远程，直接 fetch/pull/push 操作）' }
+}
+
 function cmdUndo(repo) {
   const snap = repo.snapshots.pop()
   if (!snap) return { ok: false, out: '无可撤销' }
@@ -489,6 +588,7 @@ function cmdStatus(repo) {
 // ---------- 命令构造 API（页面层用）----------
 const api = {
   createRepo, exec, serialize, layout, currentBranch, headCommitId,
+  createRemoteRepo,
   // 测试/关卡构建用
   _newId: newId, _resetIds: resetIds
 }

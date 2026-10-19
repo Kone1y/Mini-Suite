@@ -1,0 +1,31 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">哈希计算 · 离线离线无后端</view>
+    <view class="hint">支持 MD5 / SHA-1 / SHA-256，文本经 UTF-8 编码后计算，纯本地完成。</view>
+    <textarea class="tarea" value="{{input}}" bindinput="onInput" placeholder="在此输入要计算的文本…" auto-height maxlength="-1" />
+
+    <view class="seg">
+      <view
+        class="seg-item {{algo === item.key ? 'on' : ''}}"
+        wx:for="{{algos}}"
+        wx:key="key"
+        data-algo="{{item.key}}"
+        bindtap="setAlgo"
+      >{{item.label}}</view>
+    </view>
+
+    <view class="btn-row">
+      <view class="btn" bindtap="compute">计算</view>
+      <view class="btn ghost" bindtap="clear">清空</view>
+    </view>
+
+    <view class="msg {{msgType}}" wx:if="{{msg}}">{{msg}}</view>
+
+    <block wx:if="{{output}}">
+      <view class="out-label">结果（十六进制）</view>
+      <view class="out-box" user-select="true" selectable="true">{{output}}</view>
+      <view class="btn ghost copy" bindtap="copy">复制结果</view>
+    </block>
+  </view>
+  <view class="foot">— 哈希计算 —</view>
+</view>

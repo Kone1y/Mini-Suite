@@ -28,11 +28,11 @@
   margin-top: 10rpx;
   font-size: 32rpx;
   font-weight: 600;
-  color: #2C2C2A;
+  color: #E8E7F0;
 }
 .stock {
   margin-top: 12rpx;
-  color: #888780;
+  color: #9C99B4;
   font-size: 24rpx;
 }
 .sec-title {
@@ -41,7 +41,7 @@
   margin-bottom: 14rpx;
 }
 .detail-text {
-  color: #5F5E5A;
+  color: #C9C7DC;
   font-size: 26rpx;
   line-height: 1.8;
 }
@@ -50,7 +50,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   display: flex;
   align-items: center;
   padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
@@ -65,15 +65,15 @@
   width: 58rpx;
   height: 58rpx;
   border-radius: 50%;
-  background: #F1EFE8;
+  background: rgba(255,255,255,.07);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 34rpx;
-  color: #2C2C2A;
+  color: #E8E7F0;
   transition: transform 0.1s ease;
 }
-.qty-btn:active { transform: scale(0.88); background: #E8E6DE; }
+.qty-btn:active { transform: scale(0.88); background: rgba(255,255,255,.12); }
 .qty-num {
   min-width: 70rpx;
   text-align: center;
@@ -91,8 +91,8 @@
 .bar-btn:active { transform: scale(0.95); }
 .bar-btn.cart {
   border: 2rpx solid #534AB7;
-  color: #534AB7;
-  background: #FFFFFF;
+  color: #A8A0F0;
+  background: rgba(22, 21, 34, 0.44);
 }
 .bar-btn.buy {
   background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);

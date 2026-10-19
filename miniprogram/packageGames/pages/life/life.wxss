@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: linear-gradient(160deg, #F3F1FE 0%, #ECEAF8 100%);
+  background: linear-gradient(180deg, rgba(18,18,26,.92) 0%, #12121A 60%);
   padding: 24rpx;
   box-sizing: border-box;
   display: flex;
@@ -11,7 +11,7 @@
 /* 玩法说明卡 */
 .intro-card {
   width: 100%;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 20rpx;
   box-shadow: 0 6rpx 18rpx rgba(83, 74, 183, 0.10);
   margin-bottom: 20rpx;
@@ -26,7 +26,7 @@
 .intro-title {
   font-size: 27rpx;
   font-weight: 700;
-  color: #534AB7;
+  color: #A8A0F0;
 }
 .intro-arrow {
   font-size: 22rpx;
@@ -38,17 +38,17 @@
 }
 .intro-p {
   font-size: 24rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   line-height: 1.7;
   margin-top: 14rpx;
 }
 .intro-li {
   font-size: 24rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   line-height: 1.8;
   padding-left: 16rpx;
 }
-.intro-p .em, .intro-li .em { font-weight: 700; color: #534AB7; }
+.intro-p .em, .intro-li .em { font-weight: 700; color: #A8A0F0; }
 
 /* 顶栏 */
 .topbar {
@@ -64,20 +64,20 @@
 .stat-num {
   font-size: 40rpx;
   font-weight: 800;
-  color: #534AB7;
+  color: #A8A0F0;
   font-family: monospace;
   line-height: 1.2;
 }
 .title {
   font-size: 34rpx;
   font-weight: 800;
-  color: #2C2C2A;
+  color: #E8E7F0;
   letter-spacing: 2rpx;
 }
 
 /* 棋盘卡片 */
 .board-card {
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 20rpx;
   padding: 14rpx;
   box-shadow: 0 8rpx 24rpx rgba(83, 74, 183, 0.14);
@@ -91,12 +91,12 @@
 }
 .cell {
   box-sizing: border-box;
-  background: #ECEAF4;
+  background: rgba(255,255,255,.08);
   border: 1rpx solid #E0DCF2;
 }
 .cell.alive {
   background: #534AB7;
-  border-color: #534AB7;
+  border-color: #A8A0F0;
 }
 .cell:active { filter: brightness(0.9); }
 
@@ -118,13 +118,13 @@
 .btn {
   flex: 1;
   min-width: 0;
-  background: #FFFFFF;
-  border: 1rpx solid #EFEEE9;
+  background: rgba(22, 21, 34, 0.44);
+  border: 1rpx solid rgba(255,255,255,.10);
   border-radius: 999rpx;
   padding: 20rpx 0;
   text-align: center;
   font-size: 26rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   white-space: nowrap;
   box-shadow: 0 4rpx 10rpx rgba(83, 74, 183, 0.08);
 }
@@ -136,8 +136,8 @@
   font-weight: 600;
 }
 .btn.ghost {
-  background: #FFFFFF;
-  color: #534AB7;
+  background: rgba(22, 21, 34, 0.44);
+  color: #A8A0F0;
   border: 2rpx solid #534AB7;
   box-shadow: none;
 }
@@ -152,11 +152,11 @@
   width: 100%;
   box-sizing: border-box;
 }
-.speed-label { font-size: 24rpx; color: #5F5E5A; white-space: nowrap; }
+.speed-label { font-size: 24rpx; color: #C9C7DC; white-space: nowrap; }
 .slider { flex: 1; min-width: 0; }
 .speed-val {
   font-size: 24rpx;
-  color: #534AB7;
+  color: #A8A0F0;
   font-family: monospace;
   white-space: nowrap;
   min-width: 96rpx;

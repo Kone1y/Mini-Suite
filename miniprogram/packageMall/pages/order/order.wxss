@@ -5,7 +5,7 @@
   padding-bottom: 16rpx;
   border-bottom: 1rpx solid #F1EFE8;
 }
-.no { font-size: 24rpx; color: #888780; font-family: monospace; }
+.no { font-size: 24rpx; color: #9C99B4; font-family: monospace; }
 .status {
   font-size: 22rpx;
   font-weight: 500;
@@ -16,8 +16,8 @@
   padding: 12rpx 0;
   font-size: 26rpx;
 }
-.it-name { color: #2C2C2A; }
-.it-price { color: #5F5E5A; font-family: monospace; }
+.it-name { color: #E8E7F0; }
+.it-price { color: #C9C7DC; font-family: monospace; }
 .foot {
   display: flex;
   justify-content: space-between;
@@ -25,8 +25,8 @@
   padding-top: 16rpx;
   border-top: 1rpx solid #F1EFE8;
 }
-.time { font-size: 22rpx; color: #B4B2A9; }
-.total { font-size: 24rpx; color: #5F5E5A; }
+.time { font-size: 22rpx; color: #7A7890; }
+.total { font-size: 24rpx; color: #C9C7DC; }
 .total-num { font-size: 30rpx; color: #D84343; font-weight: 700; font-family: monospace; }
 .ops { display: flex; }
 .op-btn {
@@ -38,8 +38,8 @@
 }
 .op-btn.plain {
   border: 2rpx solid #D9D7CE;
-  color: #5F5E5A;
-  background: #FFFFFF;
+  color: #C9C7DC;
+  background: rgba(22, 21, 34, 0.44);
 }
 .op-btn.solid {
   background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
@@ -50,7 +50,7 @@
 
 .load-line {
   text-align: center;
-  color: #B4B2A9;
+  color: #7A7890;
   font-size: 24rpx;
   padding: 30rpx 0 60rpx;
 }

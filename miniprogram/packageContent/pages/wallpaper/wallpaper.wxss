@@ -8,7 +8,7 @@
   padding: 0 12rpx;
 }
 .wp-card {
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 16rpx;
   overflow: hidden;
   margin-bottom: 24rpx;
@@ -26,18 +26,18 @@
 }
 .wp-title {
   font-size: 24rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
 }
 .wp-ops { display: flex; }
 .op {
   font-size: 24rpx;
-  color: #534AB7;
+  color: #A8A0F0;
   margin-left: 22rpx;
 }
 .op.strong { font-weight: 600; }
 .load-line {
   text-align: center;
-  color: #B4B2A9;
+  color: #7A7890;
   font-size: 24rpx;
   padding: 20rpx 0 50rpx;
 }

@@ -105,8 +105,15 @@ Page({
       cmdInput: '',
       goalOpen: false,
       status: '在下方输入 git 命令，让仓库达到目标结构',
-      quickCmds: ['commit', 'branch dev', 'checkout main', 'checkout dev', 'merge dev', 'rebase main', 'undo']
+      quickCmds: this.quickCmdsFor(lv.cat)
     })
+  },
+
+  // 按关卡类别给快捷命令（远程关多 push/pull/fetch）
+  quickCmdsFor(cat) {
+    const base = ['commit', 'branch dev', 'checkout main', 'checkout dev', 'merge dev', 'rebase main', 'undo']
+    if (cat === '远程') return ['commit', 'checkout main', 'fetch', 'pull', 'push', 'remote', 'undo']
+    return base
   },
 
   onQuickCmd(e) {

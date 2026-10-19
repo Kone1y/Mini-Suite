@@ -22,3 +22,7 @@ soft_miniapp/*.exe
 # OS
 .DS_Store
 Thumbs.db
+
+# Runtime artifacts
+server/*.db.bak*
+server/scripts/_cache/

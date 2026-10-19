@@ -85,6 +85,34 @@ const LESSONS = [
     task: '用 LEFT JOIN 连接员工与部门，选出员工名与部门名（部门可空）。',
     answer: 'SELECT e.name, d.name FROM employees e LEFT JOIN departments d ON e.department_id = d.id',
     expectCols: ['name', 'name'], expectRows: 7
+  },
+  {
+    id: 13, name: 'IN 子查询', cat: '子查询', sandbox: 'employees',
+    desc: '子查询是查询里的查询：WHERE x IN (SELECT ...) 先执行括号里的查询，再用结果过滤外层。',
+    task: '查出在 Engineering 部门工作的员工名字（用 IN + 子查询，不使用 JOIN）。',
+    answer: "SELECT name FROM employees WHERE department_id IN (SELECT id FROM departments WHERE name = 'Engineering')",
+    expectCols: ['name'], expectRows: 3
+  },
+  {
+    id: 14, name: '标量子查询', cat: '子查询', sandbox: 'employees',
+    desc: '返回单值的子查询可以像数值一样用在比较里：WHERE salary > (SELECT AVG(salary) FROM employees)。',
+    task: '查出工资高于全公司平均工资的员工名字与工资。',
+    answer: 'SELECT name, salary FROM employees WHERE salary > (SELECT AVG(salary) FROM employees)',
+    expectCols: ['name', 'salary'], expectRows: 3
+  },
+  {
+    id: 15, name: 'UNION 合并结果', cat: '集合', sandbox: 'employees',
+    desc: 'UNION 把两个查询的结果上下拼接（自动去重）；UNION ALL 不去重、更快。两边列数必须相同。',
+    task: '把 Engineering 部门和 Design 部门的员工名字合并成一个列表（分别查两部门再 UNION，结果按名字排序）。',
+    answer: "SELECT name FROM employees WHERE department_id = (SELECT id FROM departments WHERE name = 'Engineering') UNION SELECT name FROM employees WHERE department_id = (SELECT id FROM departments WHERE name = 'Design') ORDER BY name",
+    expectCols: ['name'], expectRows: 5
+  },
+  {
+    id: 16, name: '窗口函数 ROW_NUMBER', cat: '窗口', sandbox: 'employees',
+    desc: '窗口函数不压缩行数，而是给每行附加计算值：ROW_NUMBER() OVER (PARTITION BY 部门 ORDER BY 工资 DESC) 给每组编号。经典用法：组内 Top-N。',
+    task: '给每个部门的员工按工资从高到低编号（输出：name, department_id, salary, rn），只取编号 rn = 1 的行——即每个部门工资最高的人。',
+    answer: 'SELECT name, department_id, salary, rn FROM (SELECT name, department_id, salary, ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rn FROM employees) WHERE rn = 1',
+    expectCols: ['name', 'department_id', 'salary', 'rn'], expectRows: 3
   }
 ]
 

@@ -4,7 +4,8 @@ const WORDS = [
   { w: '爸爸', icon: '👨' }, { w: '妈妈', icon: '👩' },
   { w: '哥哥', icon: '👦' }, { w: '姐姐', icon: '👧' },
   { w: '弟弟', icon: '🧒' }, { w: '妹妹', icon: '👧' },
-  { w: '儿子', icon: '👶' }, { w: '女儿', icon: '👶' }
+  { w: '儿子', icon: '👶' }, { w: '女儿', icon: '👶' },
+  { w: '老公', icon: '🤵' }, { w: '老婆', icon: '👰' }
 ]
 
 Page({
@@ -17,8 +18,8 @@ Page({
 
   addWord(e) {
     const w = e.currentTarget.dataset.w
-    if (this.data.chain.length >= 4) {
-      wx.showToast({ title: '最多 4 层关系', icon: 'none' })
+    if (this.data.chain.length >= 5) {
+      wx.showToast({ title: '最多 5 层关系', icon: 'none' })
       return
     }
     this.setData({ chain: this.data.chain.concat(w) }, () => this.calc())

@@ -1,4 +1,4 @@
-const { request } = require('../../../utils/request')
+const { request, absUrl } = require('../../../utils/request')
 
 Page({
   data: {
@@ -27,7 +27,9 @@ Page({
       url: '/api/favorites/detail',
       data: { kind: this.data.current }
     }).then(res => {
-      this.setData({ items: res.items || [], loading: false })
+      // 壁纸/表情的 path 是后端相对路径，渲染/预览都要拼绝对地址
+      const items = (res.items || []).map(i => Object.assign({}, i, { path: i.path ? absUrl(i.path) : '' }))
+      this.setData({ items, loading: false })
     }).catch(() => this.setData({ loading: false, items: [] }))
   },
 

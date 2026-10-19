@@ -6,15 +6,15 @@
 }
 .goods-card {
   min-width: 0;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 20rpx;
   overflow: hidden;
-  border: 1rpx solid #EFEEE9;
+  border: 1rpx solid rgba(255,255,255,.10);
   box-shadow: 0 4rpx 14rpx rgba(44, 44, 42, 0.05);
 }
 .goods-img-wrap {
   position: relative;
-  background: #F6F5F2;
+  background: #12121A;
 }
 .sold-badge {
   position: absolute;
@@ -46,7 +46,7 @@
 }
 .goods-name {
   font-size: 26rpx;
-  color: #2C2C2A;
+  color: #E8E7F0;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -67,15 +67,15 @@
 .price-num { font-size: 32rpx; font-family: monospace; }
 .goods-go {
   font-size: 20rpx;
-  color: #B4B2A9;
-  background: #F6F5F2;
+  color: #7A7890;
+  background: #12121A;
   border-radius: 999rpx;
   padding: 6rpx 14rpx;
 }
 
 .load-line {
   text-align: center;
-  color: #B4B2A9;
+  color: #7A7890;
   font-size: 24rpx;
   padding: 24rpx 0 120rpx;
 }

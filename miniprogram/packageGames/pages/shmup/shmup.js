@@ -1,4 +1,5 @@
 const L = require('../../shmup-logic')
+const { ShmupAudio } = require('../../shmup-audio')
 
 Page({
   data: {
@@ -23,7 +24,10 @@ Page({
     upgrades: null,       // {fire:0..2, shield:0..2, bomb:0..2, odTime:0..3, score:0..3}
     // 关卡选择
     maxLevel: 1,          // 已解锁最高起始关（storage）
-    startLevel: 1         // 标题屏当前选中起始关
+    startLevel: 1,        // 标题屏当前选中起始关
+    soundOn: true,        // 音效开关（storage）
+    dailyBest: 0,         // 今日每日挑战最佳（storage，按日期重置）
+    dailyDate: ''         // 今日日期串
   },
 
   // 实例字段
@@ -54,13 +58,81 @@ Page({
     let upg = wx.getStorageSync(this._upgKey)
     if (!upg || typeof upg !== 'object') upg = { fire: 0, shield: 0, bomb: 0, odTime: 0, score: 0 }
     const maxLv = Math.max(1, wx.getStorageSync(this._maxLevelKey) || 1)
+    // 音效开关存档
+    this._soundKey = 'shmup_sound'
+    const soundOn = wx.getStorageSync(this._soundKey)
+    const snd = soundOn === false ? false : true   // 未设置=默认开
+    // 每日挑战存档（按日期重置）
+    this._dailyKey = 'shmup_daily'
+    const today = this.todayStr()
+    const dailyRec = wx.getStorageSync(this._dailyKey) || {}
+    const dailyBest = dailyRec.date === today ? (dailyRec.best || 0) : 0
+    // 音频引擎（WebAudio 惰性初始化：首次进对局再建 ctx，规避标题屏占用）
+    this._audio = new ShmupAudio()
+    this._audioReady = false
+    // 页面存活标志：onHide/onUnload 置 false，彻底掐断渲染循环（不依赖 cancelAnimationFrame 是否生效）
+    this._alive = true
     this.setData({
       highScore: hs,
       crystals: wx.getStorageSync(this._crystalKey) || 0,
       upgrades: upg,
       maxLevel: maxLv,
-      startLevel: 1
+      startLevel: 1,
+      soundOn: snd,
+      dailyBest,
+      dailyDate: today
     })
+  },
+
+  todayStr() {
+    const d = new Date()
+    const m = d.getMonth() + 1
+    const day = d.getDate()
+    return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day)
+  },
+
+  // 每日挑战入口
+  startDaily() {
+    this.ensureAudio()
+    this._game = L.createDailyGame(this.todayStr())
+    this._bankedC = 0
+    this._bankedS = 0
+    this.setData({
+      screen: 'playing',
+      score: 0, level: 0, hp: 3, bombs: 2, power: 1, combo: 0,
+      progress: 0, bossHpRatio: 0, finalScore: 0, finalCrystals: 0
+    })
+    this._lastT = 0
+    this._hudTimer = 0
+  },
+
+  // 音频懒初始化（真机首次交互后创建；失败静默降级）
+  ensureAudio() {
+    if (this._audioReady || !this.data.soundOn) return
+    this._audioReady = true
+    try {
+      const ctx = wx.createWebAudioContext()
+      this._audio.init(ctx)
+      this._audio.setMuted(!this.data.soundOn)
+    } catch (e) { this._audio.ctx = null }
+  },
+
+  // 音效开关切换（标题屏按钮）
+  toggleSound() {
+    const on = !this.data.soundOn
+    this.setData({ soundOn: on })
+    wx.setStorageSync(this._soundKey, on)
+    if (on) {
+      this.ensureAudio()
+      this._audio.setMuted(false)
+      this._audio.play('stageStart')   // 试听音
+    } else {
+      this._audio.setMuted(true)
+    }
+  },
+
+  sfx(name, opt) {
+    if (this.data.soundOn) this._audio.play(name, opt)
   },
 
   // ================= 强化系统 =================
@@ -175,6 +247,7 @@ Page({
   // ================= 游戏流程 =================
   startGame(fromLevel) {
     const lv = Math.max(1, fromLevel || this.data.startLevel || 1)
+    this.ensureAudio()   // 首次开局初始化 WebAudio（用户手势内）
     this._game = L.createGame({ startLevel: lv })
     this.applyUpgrades(this._game)   // 局外强化应用
     this._bankedC = 0
@@ -190,6 +263,7 @@ Page({
 
   nextLevel() {
     if (!this._game) return
+    if (this._game.daily) { this.backTitle(); return }   // 每日局通关回标题
     L.startLevel(this._game, this._game.level + 1)
     this.setData({ screen: 'playing', bossHpRatio: 0 })
   },
@@ -212,7 +286,9 @@ Page({
 
   // ================= 主循环 =================
   startLoop() {
+    if (this._rafId) return   // 防止重复启动产生多条循环链
     const loop = (t) => {
+      if (!this._alive) { this._rafId = null; return }   // 页面已隐藏/卸载：JS 层彻底停循环
       this._rafId = this._canvas.requestAnimationFrame(loop)
       const dt = this._lastT ? Math.min(0.05, (t - this._lastT) / 1000) : 0.016
       this._lastT = t
@@ -237,16 +313,28 @@ Page({
 
   consumeEvents(events) {
     for (const e of events) {
-      if (e.type === 'kill') { if (e.enemy === 'mid' || e.enemy === 'large') wx.vibrateShort({ type: 'light' }) }
-      else if (e.type === 'hurt') { wx.vibrateShort({ type: 'medium' }); this._flashT = 0.25 }
-      else if (e.type === 'bomb') { this._flashT = 0.5; wx.vibrateShort({ type: 'heavy' }) }
-      else if (e.type === 'bossEnter') wx.vibrateShort({ type: 'heavy' })
-      else if (e.type === 'bossDown') wx.vibrateShort({ type: 'heavy' })
-      else if (e.type === 'playerDown') this._flashT = 0.4
+      if (e.type === 'kill') {
+        if (e.enemy === 'mid' || e.enemy === 'large') wx.vibrateShort({ type: 'light' })
+        this.sfx('kill', e)
+      }
+      else if (e.type === 'hurt') { wx.vibrateShort({ type: 'medium' }); this._flashT = 0.25; this.sfx('hurt') }
+      else if (e.type === 'bomb') { this._flashT = 0.5; wx.vibrateShort({ type: 'heavy' }); this.sfx('bomb') }
+      else if (e.type === 'bossEnter') { wx.vibrateShort({ type: 'heavy' }); this.sfx('bossEnter') }
+      else if (e.type === 'bossDown') { wx.vibrateShort({ type: 'heavy' }); this.sfx('bossDown') }
+      else if (e.type === 'playerDown') { this._flashT = 0.4; this.sfx('playerDown') }
+      else if (e.type === 'crystal') this.sfx('crystal')
+      else if (e.type === 'item') this.sfx('item')
+      else if (e.type === 'shoot') this.sfx('shoot')
+      else if (e.type === 'warning') this.sfx('warning')
+      else if (e.type === 'bossPhase') this.sfx('bossPhase')
+      else if (e.type === 'shieldBreak') this.sfx('shieldBreak')
+      else if (e.type === 'overdriveStart') this.sfx('overdrive')
+      else if (e.type === 'stageStart') this.sfx('stageStart')
     }
   },
 
   updateHUD(dt) {
+    if (!this._alive) return
     this._hudTimer -= dt
     if (this._hudTimer > 0) return
     this._hudTimer = 0.15
@@ -286,8 +374,10 @@ Page({
     if (s > this.data.highScore) {
       wx.setStorageSync(this._highScoreKey, s)
     }
+    this.sfx('gameover')
+    if (this._game.daily) this.recordDaily(s)
     this.setData({
-      screen: 'gameover', finalScore: s, finalLevel: this._game.level,
+      screen: 'gameover', finalScore: s, finalLevel: this._game.daily ? 0 : this._game.level,
       highScore: Math.max(s, this.data.highScore),
       finalCrystals: earned
     })
@@ -298,6 +388,17 @@ Page({
     const earned = this.settleCrystals()
     if (s > this.data.highScore) {
       wx.setStorageSync(this._highScoreKey, s)
+    }
+    this.sfx('victory')
+    if (this._game.daily) {
+      // 每日局：通关即结算回标题（不进下一关）
+      this.recordDaily(s)
+      this.setData({
+        screen: 'victory', finalScore: s, finalLevel: 0,
+        highScore: Math.max(s, this.data.highScore),
+        finalCrystals: earned
+      })
+      return
     }
     // 通关解锁下一关为起始关
     const nextLv = this._game.level + 1
@@ -310,6 +411,16 @@ Page({
       finalCrystals: earned,
       maxLevel: Math.max(nextLv, this.data.maxLevel)
     })
+  },
+
+  // 每日成绩记录（刷新今日最佳）
+  recordDaily(score) {
+    const today = this.todayStr()
+    const rec = wx.getStorageSync(this._dailyKey) || {}
+    if (rec.date !== today || score > (rec.best || 0)) {
+      wx.setStorageSync(this._dailyKey, { date: today, best: score })
+      if (score > this.data.dailyBest) this.setData({ dailyBest: score, dailyDate: today })
+    }
   },
 
   // ================= 操控 =================
@@ -329,7 +440,8 @@ Page({
       const lx = t0.x / this._scale
       const UI = this.uiLayout()
       if (this.hit(lx, ly, UI.quitSmall)) { this.backTitle(); return }
-      this.startGame()
+      if (this._game && this._game.daily) this.startDaily()
+      else this.startGame()
       return
     }
     if (scr === 'victory') {
@@ -358,6 +470,10 @@ Page({
       if (this.hit(lx, ly, UI.titleLvPlus)) { this.changeStartLevel(1); return }
       // 强化机库
       if (this.hit(lx, ly, UI.titleUpgBtn)) { this.openUpgrades(); return }
+      // 音效开关
+      if (this.hit(lx, ly, UI.soundBtn)) { this.toggleSound(); return }
+      // 每日挑战
+      if (this.hit(lx, ly, UI.dailyBtn)) { this.startDaily(); return }
       this.startGame()
       return
     }
@@ -534,6 +650,7 @@ Page({
     const scr = this.data.screen
     const W = L.W, H = L.H
     const now = Date.now()
+    const UI = this.uiLayout()
     ctx.textBaseline = 'top'
     if (scr === 'playing') {
       const g = this._game
@@ -618,10 +735,10 @@ Page({
         ctx.textAlign = 'center'
         ctx.fillStyle = '#FFFFFF'
         ctx.font = 'bold 34px sans-serif'
-        ctx.fillText('STAGE ' + g.level, W / 2, H * 0.38)
+        ctx.fillText(g.daily ? 'DAILY CHALLENGE' : 'STAGE ' + g.level, W / 2, H * 0.38)
         ctx.font = '13px monospace'
-        ctx.fillStyle = '#8B9BD4'
-        ctx.fillText('— 击败关底 BOSS —', W / 2, H * 0.38 + 34)
+        ctx.fillStyle = g.daily ? '#FFD66B' : '#8B9BD4'
+        ctx.fillText(g.daily ? '★ ' + (g.dailyDate || '') + ' · 全世界同一关卡' : '— 击败关底 BOSS —', W / 2, H * 0.38 + 34)
         ctx.globalAlpha = 1
       }
       // BOSS WARNING 警告
@@ -668,8 +785,22 @@ Page({
       ctx.fillStyle = '#FFD66B'
       ctx.fillText('最高分  ' + this.data.highScore, W / 2, H * 0.57)
 
+      // ---- 每日挑战入口（金色）----
+      const db = UI.dailyBtn
+      ctx.fillStyle = 'rgba(255,214,107,0.12)'
+      ctx.strokeStyle = '#FFD66B'
+      ctx.lineWidth = 1.5
+      this.roundRect(ctx, db.x, db.y, db.w, db.h, 23)
+      ctx.fill()
+      ctx.stroke()
+      ctx.fillStyle = '#FFD66B'
+      ctx.font = 'bold 17px sans-serif'
+      ctx.fillText('★ 每日挑战', W / 2, db.y + 16)
+      ctx.fillStyle = '#8B9BD4'
+      ctx.font = '10px monospace'
+      ctx.fillText(this.data.dailyBest > 0 ? '今日最佳 ' + this.data.dailyBest : '全世界同一关卡 · 每日刷新', W / 2, db.y + 33)
+
       // ---- 关卡选择器（− N +）----
-      const UI = this.uiLayout()
       const lvY = UI.titleLvMinus.y
       // 当前起始关
       ctx.textAlign = 'center'
@@ -707,6 +838,17 @@ Page({
       ctx.fillStyle = '#C9C0FF'
       ctx.font = 'bold 16px sans-serif'
       ctx.fillText('◆ 强化机库（' + this.data.crystals + '）', W / 2, upgY + 14)
+      // 音效开关（左下角）
+      const sb = UI.soundBtn
+      ctx.strokeStyle = this.data.soundOn ? '#4BD9E0' : '#3A3A52'
+      ctx.lineWidth = 1.5
+      this.roundRect(ctx, sb.x, sb.y, sb.w, sb.h, 8)
+      ctx.stroke()
+      ctx.fillStyle = this.data.soundOn ? '#4BD9E0' : '#5A5A72'
+      ctx.font = 'bold 18px sans-serif'
+      ctx.fillText(this.data.soundOn ? '♪' : '×', sb.x + sb.w / 2, sb.y + 13)
+      ctx.font = '9px monospace'
+      ctx.fillText(this.data.soundOn ? '音效' : '静音', sb.x + sb.w / 2, sb.y + 30)
       ctx.fillStyle = '#8B9BD4'
       ctx.font = '11px monospace'
       ctx.fillText('点 击 屏 幕 其 他 位 置 直 接 出 击', W / 2, H - 38)
@@ -844,14 +986,13 @@ Page({
     } else if (scr === 'paused') {
       ctx.fillStyle = 'rgba(10,10,20,0.72)'
       ctx.fillRect(0, 0, W, H)
-      const UI = this.uiLayout()
       ctx.textAlign = 'center'
       ctx.fillStyle = '#FFFFFF'
       ctx.font = 'bold 30px sans-serif'
       ctx.fillText('已 暂 停', W / 2, H * 0.30)
       ctx.font = '13px monospace'
       ctx.fillStyle = '#8B9BD4'
-      ctx.fillText('第 ' + (this._game ? this._game.level : this.data.level) + ' 关 · 得分 ' + this.data.score, W / 2, H * 0.30 + 42)
+      ctx.fillText((this._game && this._game.daily ? '每日挑战' : '第 ' + (this._game ? this._game.level : this.data.level) + ' 关') + ' · 得分 ' + this.data.score, W / 2, H * 0.30 + 42)
       // 返回游戏按钮
       ctx.fillStyle = 'rgba(106,90,224,0.30)'
       ctx.strokeStyle = '#6A5AE0'
@@ -910,6 +1051,8 @@ Page({
       titleUpgBtn: { x: L.W / 2 - 100, y: L.H - 100, w: 200, h: 44 },          // 强化机库
       titleLvMinus: { x: L.W / 2 - 130, y: L.H - 172, w: 56, h: 40 },          // 关卡 -
       titleLvPlus: { x: L.W / 2 + 74, y: L.H - 172, w: 56, h: 40 },            // 关卡 +
+      soundBtn: { x: 16, y: L.H - 56, w: 40, h: 40 },                          // 音效开关（左下）
+      dailyBtn: { x: L.W / 2 - 110, y: L.H * 0.64, w: 220, h: 46 },            // 每日挑战
       // 暂停菜单（两按钮）
       pauseResume: { x: L.W / 2 - 110, y: L.H * 0.44, w: 220, h: 52 },
       pauseQuit: { x: L.W / 2 - 110, y: L.H * 0.44 + 72, w: 220, h: 52 },
@@ -1123,6 +1266,31 @@ Page({
           }
           break
         }
+        case 'zigzag': {  // 之字机：箭头（朝下）+双翼
+          const r = e.r
+          ctx.moveTo(0, r)
+          ctx.lineTo(-r * 0.4, -r * 0.2)
+          ctx.lineTo(-r, -r * 0.8)
+          ctx.lineTo(-r * 0.3, -r * 0.5)
+          ctx.lineTo(0, -r * 0.85)
+          ctx.lineTo(r * 0.3, -r * 0.5)
+          ctx.lineTo(r, -r * 0.8)
+          ctx.lineTo(r * 0.4, -r * 0.2)
+          break
+        }
+        case 'kamikaze':  // 自爆机：圆头+引爆纹（闪电感）
+          ctx.arc(0, 0, e.r * 0.85, 0, Math.PI * 2)
+          break
+        case 'spiral': {  // 螺旋机：风车四叶
+          const r = e.r
+          for (let i = 0; i < 4; i++) {
+            const a0 = (Math.PI * i) / 2 + e.t * 3
+            ctx.moveTo(0, 0)
+            ctx.lineTo(Math.cos(a0) * r, Math.sin(a0) * r)
+            ctx.lineTo(Math.cos(a0 + 0.9) * r * 0.75, Math.sin(a0 + 0.9) * r * 0.75)
+          }
+          break
+        }
       }
       ctx.closePath()
       ctx.fill()
@@ -1161,6 +1329,32 @@ Page({
       ctx.arc(0, e.r * 0.3, 3, 0, Math.PI * 2)
       ctx.fill()
       ctx.globalAlpha = 1
+    }
+    if (e.type === 'kamikaze') {
+      // 自爆机：锁定后核心闪红 + 引爆纹
+      const locked = e._locked
+      ctx.strokeStyle = locked ? '#FF4B6E' : def.color
+      ctx.globalAlpha = locked ? 0.6 + Math.sin(e.t * 18) * 0.4 : 0.7
+      ctx.lineWidth = 1.2
+      ctx.beginPath()
+      ctx.moveTo(-e.r * 0.5, -e.r * 0.5)
+      ctx.lineTo(0, 0)
+      ctx.lineTo(-e.r * 0.2, e.r * 0.55)
+      ctx.lineTo(e.r * 0.35, -e.r * 0.1)
+      ctx.stroke()
+      ctx.globalAlpha = 1
+      ctx.fillStyle = locked ? '#FF4B6E' : def.color
+      ctx.beginPath()
+      ctx.arc(0, 0, e.r * 0.28, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    if (e.type === 'zigzag') {
+      // 之字机航向灯（左右交替闪）
+      const left = Math.sin(e.t * 7 + e.seed) > 0
+      ctx.fillStyle = left ? def.color : 'rgba(75,224,176,.25)'
+      ctx.beginPath(); ctx.arc(-e.r * 0.75, -e.r * 0.55, 2.2, 0, Math.PI * 2); ctx.fill()
+      ctx.fillStyle = left ? 'rgba(75,224,176,.25)' : def.color
+      ctx.beginPath(); ctx.arc(e.r * 0.75, -e.r * 0.55, 2.2, 0, Math.PI * 2); ctx.fill()
     }
     ctx.restore()
   },
@@ -1210,7 +1404,73 @@ Page({
       ctx.fillRect(dx - 3, b.r * 0.55, 6, 10)
     }
     ctx.fillRect(-4, b.r * 0.8, 8, 8)
-    ctx.restore()
+    ctx.restore()   // 恢复世界坐标系（变体绘制用世界坐标）
+
+    // ===== 变体专属绘制（世界坐标） =====
+    if (b.variant === 'worm') {
+      // 蠕虫体节（从头后第一节开始，尺寸递减，渐隐）
+      ctx.save()
+      b.wormSegs.forEach((seg, i) => {
+        const alpha = 0.85 - i * 0.13
+        const segColor = b.phase >= 3 ? '#E0524B' : (b.phase === 2 ? '#E8923A' : '#9B59E0')
+        ctx.globalAlpha = alpha
+        this.glow(ctx, segColor, 8, () => {
+          ctx.fillStyle = hitFlash ? '#FFFFFF' : '#170F1F'
+          ctx.strokeStyle = segColor
+          ctx.lineWidth = 2
+          ctx.beginPath()
+          ctx.arc(seg.x, seg.y, seg.r, 0, Math.PI * 2)
+          ctx.fill()
+          ctx.stroke()
+        })
+        // 体节核心
+        ctx.globalAlpha = alpha * 0.9
+        ctx.fillStyle = segColor
+        ctx.beginPath()
+        ctx.arc(seg.x, seg.y, seg.r * 0.3, 0, Math.PI * 2)
+        ctx.fill()
+      })
+      ctx.globalAlpha = 1
+      ctx.restore()
+    } else if (b.laserState === 1 || b.laserState === 2) {
+      // 执政官激光：预警=细红线闪烁；发射=高亮宽束
+      ctx.save()
+      const len = Math.max(L.W, L.H) * 1.2
+      const ex = b.x + Math.cos(b.laserA) * len
+      const ey = b.y + Math.sin(b.laserA) * len
+      if (b.laserState === 1) {
+        ctx.globalAlpha = 0.35 + Math.sin(b.t * 24) * 0.25
+        ctx.strokeStyle = '#FF4B4B'
+        ctx.lineWidth = 1.5
+        ctx.setLineDash([8, 6])
+        ctx.beginPath()
+        ctx.moveTo(b.x, b.y)
+        ctx.lineTo(ex, ey)
+        ctx.stroke()
+        ctx.setLineDash([])
+      } else {
+        // 外层宽半透束
+        ctx.globalAlpha = 0.35
+        ctx.strokeStyle = '#FFD66B'
+        ctx.lineWidth = 7
+        ctx.beginPath()
+        ctx.moveTo(b.x, b.y)
+        ctx.lineTo(ex, ey)
+        ctx.stroke()
+        // 内层亮芯
+        this.glow(ctx, '#FF6B4B', 12, () => {
+          ctx.globalAlpha = 0.95
+          ctx.strokeStyle = '#FF6B4B'
+          ctx.lineWidth = 2.5
+          ctx.beginPath()
+          ctx.moveTo(b.x, b.y)
+          ctx.lineTo(ex, ey)
+          ctx.stroke()
+        })
+      }
+      ctx.globalAlpha = 1
+      ctx.restore()
+    }
   },
 
   // ---- 敌弹 ----
@@ -1245,9 +1505,21 @@ Page({
   },
 
   onHide() {
+    this._alive = false
     this.pauseGame()
+    if (this._canvas && this._rafId) { this._canvas.cancelAnimationFrame(this._rafId); this._rafId = null }
+  },
+  onShow() {
+    this._alive = true
+    if (this._canvas && !this._rafId) this.startLoop()
   },
   onUnload() {
-    if (this._canvas && this._rafId) this._canvas.cancelAnimationFrame(this._rafId)
+    this._alive = false
+    if (this._canvas && this._rafId) { this._canvas.cancelAnimationFrame(this._rafId); this._rafId = null }
+    // 释放音频上下文
+    try {
+      if (this._audio && this._audio.ctx && this._audio.ctx.close) this._audio.ctx.close()
+    } catch (e) { }
+    this._audio = null
   }
 })

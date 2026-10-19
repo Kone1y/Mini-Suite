@@ -1,10 +1,10 @@
 .mode-bar {
   display: flex;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 16rpx;
   padding: 8rpx;
   margin: 20rpx 24rpx;
-  border: 1rpx solid #EFEEE9;
+  border: 1rpx solid rgba(255,255,255,.10);
 }
 .mode-item {
   flex: 1;
@@ -14,11 +14,11 @@
   padding: 14rpx 0;
   border-radius: 12rpx;
   font-size: 22rpx;
-  color: #888780;
+  color: #9C99B4;
 }
 .mode-item.on {
-  background: #EEEDFE;
-  color: #534AB7;
+  background: rgba(106,90,224,.16);
+  color: #A8A0F0;
   font-weight: 600;
 }
 .mode-icon { font-size: 40rpx; line-height: 1; margin-bottom: 6rpx; }
@@ -29,7 +29,7 @@
 .dice {
   font-size: 180rpx;
   line-height: 1;
-  color: #534AB7;
+  color: #A8A0F0;
   margin-bottom: 30rpx;
 }
 .dice.rolling { animation: shake 0.1s infinite; }
@@ -37,14 +37,14 @@
   0%, 100% { transform: rotate(-8deg); }
   50% { transform: rotate(8deg); }
 }
-.his-line { margin-top: 20rpx; font-size: 24rpx; color: #888780; }
+.his-line { margin-top: 20rpx; font-size: 24rpx; color: #9C99B4; }
 
 /* Yes/No */
 .yn-answer {
   font-size: 64rpx;
   font-weight: 800;
   min-height: 90rpx;
-  color: #B4B2A9;
+  color: #7A7890;
   margin-bottom: 30rpx;
 }
 .yn-answer.show { animation: pop 0.3s ease-out; }
@@ -54,10 +54,10 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
-.label { font-size: 26rpx; color: #5F5E5A; margin: 10rpx 0; }
+.label { font-size: 26rpx; color: #C9C7DC; margin: 10rpx 0; }
 .label.left { text-align: left; }
 .ta {
-  background: #F6F5F2;
+  background: #12121A;
   border-radius: 12rpx;
   padding: 20rpx;
   width: auto;
@@ -70,7 +70,7 @@
   margin-top: 24rpx;
   font-size: 36rpx;
   font-weight: 700;
-  color: #534AB7;
+  color: #A8A0F0;
   animation: pop 0.3s ease-out;
 }
 
@@ -94,7 +94,7 @@
   border: 8rpx solid #534AB7;
   box-shadow: 0 8rpx 24rpx rgba(83, 74, 183, 0.3);
   transition: transform 3.2s cubic-bezier(0.2, 0.6, 0.05, 1);
-  background: #F6F5F2;
+  background: #12121A;
 }
 .wheel-pie {
   position: absolute;
@@ -118,7 +118,7 @@
   transform: translate(-50%, -50%);
   width: 72rpx; height: 72rpx;
   border-radius: 50%;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border: 6rpx solid #534AB7;
   z-index: 4;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.2);
@@ -126,8 +126,8 @@
 .wheel-ops { display: flex; gap: 16rpx; margin-top: 8rpx; }
 .wheel-ops .act { flex: 1; }
 .wheel-ops .apply {
-  background: #FFFFFF;
-  color: #534AB7;
+  background: rgba(22, 21, 34, 0.44);
+  color: #A8A0F0;
   border: 2rpx solid #534AB7;
   border-radius: 12rpx;
   font-size: 28rpx;

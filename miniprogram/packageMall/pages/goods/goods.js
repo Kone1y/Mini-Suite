@@ -1,4 +1,4 @@
-const { request } = require('../../../utils/request')
+const { request, absUrl } = require('../../../utils/request')
 
 Page({
   data: {
@@ -29,7 +29,9 @@ Page({
       url: '/api/goods',
       data: { page, size: 10 }
     }).then(res => {
-      const items = reset ? res.items : this.data.items.concat(res.items)
+      // cover 是后端相对路径，image src 需要绝对地址
+      const fresh = (res.items || []).map(i => Object.assign({}, i, { cover: absUrl(i.cover) }))
+      const items = reset ? fresh : this.data.items.concat(fresh)
       this.setData({
         items,
         page,

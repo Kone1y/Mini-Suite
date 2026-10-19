@@ -29,14 +29,18 @@ const WINGMAN_OFFSET_Y = 18         // 僚机纵向偏移
 // 敌机类型
 // dart=直冲 weaver=横摆 snav=S形 turret=悬停扇射 sniper=蓄力狙击
 // mid=中型混合 large=大型六边
+// zigzag=之字俯冲(锁x往返) kamikaze=自爆冲撞(锁定玩家加速) spiral=螺旋下潜(阿基米德螺线)
 const ENEMY_DEFS = {
-  dart:   { hp: 1,  r: 12, speed: 150, score: 100,  fire: null,        color: '#E0524B' },
-  weaver: { hp: 2,  r: 13, speed: 110, score: 150,  fire: 'single',    color: '#E8923A', fireCd: 2.2 },
-  snav:   { hp: 2,  r: 13, speed: 95,  score: 180,  fire: 'aimed',     color: '#D9B23A', fireCd: 2.6 },
-  turret: { hp: 5,  r: 16, speed: 55,  score: 300,  fire: 'fan',       color: '#8A5AE0', fireCd: 2.0, stopY: null },
-  sniper: { hp: 4,  r: 15, speed: 70,  score: 280,  fire: 'charge',    color: '#4B8AE0', fireCd: 3.2 },
-  mid:    { hp: 12, r: 22, speed: 60,  score: 600,  fire: 'radial',    color: '#C94BC9', fireCd: 2.4 },
-  large:  { hp: 26, r: 30, speed: 40,  score: 1200, fire: 'radialAim', color: '#E04B9B', fireCd: 2.8, stopY: null }
+  dart:     { hp: 1,  r: 12, speed: 150, score: 100,  fire: null,        color: '#E0524B' },
+  weaver:   { hp: 2,  r: 13, speed: 110, score: 150,  fire: 'single',    color: '#E8923A', fireCd: 2.2 },
+  snav:     { hp: 2,  r: 13, speed: 95,  score: 180,  fire: 'aimed',     color: '#D9B23A', fireCd: 2.6 },
+  turret:   { hp: 5,  r: 16, speed: 55,  score: 300,  fire: 'fan',       color: '#8A5AE0', fireCd: 2.0, stopY: null },
+  sniper:   { hp: 4,  r: 15, speed: 70,  score: 280,  fire: 'charge',    color: '#4B8AE0', fireCd: 3.2 },
+  mid:      { hp: 12, r: 22, speed: 60,  score: 600,  fire: 'radial',    color: '#C94BC9', fireCd: 2.4 },
+  large:    { hp: 26, r: 30, speed: 40,  score: 1200, fire: 'radialAim', color: '#E04B9B', fireCd: 2.8, stopY: null },
+  zigzag:   { hp: 3,  r: 13, speed: 130, score: 260,  fire: null,        color: '#4BE0B0', fireCd: 0 },
+  kamikaze: { hp: 2,  r: 14, speed: 95,  score: 320,  fire: null,        color: '#FF4B6E', fireCd: 0 },
+  spiral:   { hp: 4,  r: 14, speed: 105, score: 340,  fire: 'single',    color: '#9BD24B', fireCd: 1.6 }
 }
 
 // 道具
@@ -59,7 +63,7 @@ const BOSS_HP_BASE = 220            // ×关卡缩放
 const BOSS_SCORE = 5000
 
 // 掉落概率
-const DROP_TABLE = { dart: 0.06, weaver: 0.10, snav: 0.10, turret: 0.30, sniper: 0.25, mid: 0.70, large: 1.0 }
+const DROP_TABLE = { dart: 0.06, weaver: 0.10, snav: 0.10, turret: 0.30, sniper: 0.25, mid: 0.70, large: 1.0, zigzag: 0.12, kamikaze: 0.15, spiral: 0.20 }
 const DROP_KINDS = ['POWER', 'POWER', 'POWER', 'SHIELD', 'BOMB', 'BOMB', 'SPEED', 'LIFE']  // 加权
 
 // ================= 注入式 RNG =================
@@ -198,14 +202,18 @@ function buildWave(level) {
   } else if (level === 2) {
     add('dart', 8, 0.8)
     add('snav', 5, 1.0)
+    add('zigzag', 4, 0.9)
     add('turret', 2, 2.2)
     add('weaver', 6, 0.8)
     add('snav', 6, 0.9)
+    add('zigzag', 5, 0.7)
   } else if (level === 3) {
     add('weaver', 7, 0.7)
     add('turret', 3, 2.0)
     add('sniper', 2, 2.4)
+    add('zigzag', 6, 0.7)
     add('dart', 10, 0.6)
+    add('kamikaze', 3, 1.6)
     add('snav', 6, 0.8)
     add('turret', 3, 1.8)
   } else {
@@ -216,6 +224,9 @@ function buildWave(level) {
     add('snav', 5 + Math.floor(lv / 2), 0.8)
     add('turret', 3 + Math.floor(lv / 3), 1.8)
     add('sniper', 2 + Math.floor(lv / 3), 2.2)
+    add('zigzag', 5 + Math.floor(lv / 2), 0.6)
+    add('kamikaze', 2 + Math.floor(lv / 3), 1.4)
+    add('spiral', 2 + Math.floor(lv / 4), 1.9)
     if (lv >= 5) add('mid', 1 + Math.floor((lv - 4) / 2), 3.0)
     if (lv >= 6) add('large', Math.floor((lv - 4) / 3), 3.5)
     add('dart', 10 + lv, 0.5)
@@ -246,6 +257,11 @@ function spawnEnemy(g, type, x, y) {
   e.stopY = type === 'turret' || type === 'large'
     ? 60 + g.rng() * (H * 0.28)
     : null
+  // 新敌机临时状态复位（对象池复用防串味）
+  e._locked = false
+  e._lockA = 0
+  e._cy = null
+  e._cx = null
   return e
 }
 
@@ -289,10 +305,14 @@ function enemyFire(g, e) {
 }
 
 // ================= Boss =================
+// 两形态轮换：archon=星座执政官（激光预警/螺旋，奇数关）worm=深渊蠕虫（弹环/蠕行横扫，偶数关）
 function spawnBoss(g) {
   const s = lvScale(g.level)
-  const hp = Math.ceil(BOSS_HP_BASE * Math.pow(1.18, g.level - 1))
+  const variant = (g.level % 2 === 1) ? 'archon' : 'worm'
+  const hpMult = variant === 'worm' ? 1.12 : 1.0   // 蠕虫血稍厚
+  const hp = Math.ceil(BOSS_HP_BASE * hpMult * Math.pow(1.18, g.level - 1))
   g.boss = {
+    variant,
     x: W / 2, y: -BOSS_R - 20,
     hp, maxHp: hp, r: BOSS_R,
     phase: 0,                       // 0 入场 1 2 3 战斗阶段
@@ -300,7 +320,15 @@ function spawnBoss(g) {
     entering: true,
     warningT: 1.8,                  // WARNING 演出（boss 出现前）
     flash: 0,
-    swingT: 0
+    swingT: 0,
+    laserT: 0,                      // archon：激光预警→发射
+    laserState: 0,                  // 0 无 1 预警 2 发射
+    wormSegs: [],                   // worm：体节链
+    wormHeadX: W / 2, wormDir: 1
+  }
+  if (variant === 'worm') {
+    // 初始化体节（视觉+碰撞均用）
+    for (let i = 0; i < 5; i++) g.boss.wormSegs.push({ x: W / 2, y: -BOSS_R - 20 - i * 26, r: 18 - i * 2 })
   }
   g.bossActive = true
   g.bossEntering = true
@@ -334,9 +362,54 @@ function bossFire(g, dt) {
     // 阶段切换：清弹 + 冲击波
     boss.phase = phase
     boss.fireT = 1.2
+    boss.laserState = 0
     clearEBullets(g)
     ring(g, boss.x, boss.y, '#FFFFFF', 26, 0.7)
     g.events.push({ type: 'bossPhase', phase })
+    return
+  }
+
+  // ================= 蠕虫变体 =================
+  if (boss.variant === 'worm') {
+    const lvSpeedup = 1 + (g.level - 1) * 0.03
+    if (phase === 1) {
+      // P1：膨胀弹环（从头部 + 各体节交替放慢速大环）
+      if (boss.fireT <= 0) {
+        const src = boss.wormSegs.length ? boss.wormSegs[Math.floor(g.rng() * boss.wormSegs.length)] : boss
+        radial(src.x, src.y, 10, spd * 0.62, g.rng() * Math.PI, out)
+        boss.fireT = 1.35 / lvSpeedup
+      }
+      if (boss.fireT2 <= 0) {
+        aimed(boss.x, boss.y + 16, p.x, p.y, spd * 1.6, out)
+        boss.fireT2 = 1.0 / lvSpeedup
+      }
+    } else if (phase === 2) {
+      // P2：蠕行横扫——沿体节逐节喷出自机狙弹（扫射波）+ 头部环
+      if (boss.fireT <= 0) {
+        const seg = boss.wormSegs[Math.floor(boss.t * 3) % boss.wormSegs.length]
+        aimed(seg.x, seg.y, p.x, p.y, spd * 1.15, out)
+        aimed(seg.x, seg.y + 6, p.x, p.y, spd * 1.15, out)
+        boss.fireT = 0.16
+      }
+      if (boss.fireT2 <= 0) {
+        radial(boss.x, boss.y, 12, spd * 0.58, boss.swingT, out)
+        boss.swingT += 0.35
+        boss.fireT2 = 1.6 / lvSpeedup
+      }
+    } else {
+      // P3：狂乱——头体全弹幕（双环反向）+ 追踪弹 + 快速换向
+      boss.swingT += dt * 3
+      if (boss.fireT <= 0) {
+        radial(boss.x, boss.y, 8, spd * 0.7, boss.swingT, out)
+        radial(boss.x, boss.y, 8, spd * 0.7, -boss.swingT + 0.39, out)
+        boss.fireT = 0.42 / lvSpeedup
+      }
+      if (boss.fireT2 <= 0) {
+        homing(boss.x, boss.y + 18, p.x, p.y, spd * 0.5, out)
+        boss.fireT2 = 2.4 / lvSpeedup
+      }
+      if (g.rng() < 0.02) boss.wormDir *= -1
+    }
     return
   }
   const lvSpeedup = 1 + (g.level - 1) * 0.03
@@ -352,7 +425,7 @@ function bossFire(g, dt) {
       boss.fireT2 = 0.9 / lvSpeedup
     }
   } else if (phase === 2) {
-    // 双向螺旋 + 瞄准狙击
+    // 双向螺旋 + 瞄准狙击 + 激光（archon 专属）
     boss.swingT += dt * 2.6
     if (boss.fireT <= 0) {
       const a = boss.swingT
@@ -368,6 +441,44 @@ function bossFire(g, dt) {
     if (boss.fireT2 <= 0) {
       aimed(boss.x, boss.y + 20, p.x, p.y, spd * 2.3, out)
       boss.fireT2 = 1.1 / lvSpeedup
+    }
+    // 激光状态机：0 无 → 1 预警(0.8s 细红线) → 2 发射(0.5s 持续伤害束) → 冷却
+    if (boss.laserState === 0) {
+      boss.laserT -= dt
+      if (boss.laserT <= 0) {
+        boss.laserState = 1
+        boss.laserT = 0.8                     // 预警时长
+        boss.laserA = Math.atan2(p.y - boss.y, p.x - boss.x)   // 锁定角度（预警期缓慢修正）
+        boss._laserAimT = 0.8
+        g.events.push({ type: 'laserWarn' })
+      }
+    } else if (boss.laserState === 1) {
+      // 预警期：前 60% 追踪玩家角度，后 40% 锁死
+      if (boss.laserT > 0.8 * 0.4) {
+        const ta = Math.atan2(p.y - boss.y, p.x - boss.x)
+        let d = ta - boss.laserA
+        while (d > Math.PI) d -= Math.PI * 2
+        while (d < -Math.PI) d += Math.PI * 2
+        boss.laserA += d * Math.min(1, dt * 2.2)
+      }
+      boss.laserT -= dt
+      if (boss.laserT <= 0) {
+        boss.laserState = 2
+        boss.laserT = 0.5                     // 发射时长
+        g.events.push({ type: 'laserFire' })
+      }
+    } else {
+      // 发射期：沿激光方向撒高密度窄束弹（模拟持续束）
+      boss.laserT -= dt
+      for (let i = 0; i < 3; i++) {
+        const d = 34 + g.rng() * (H)
+        out(boss.x + Math.cos(boss.laserA) * d, boss.y + Math.sin(boss.laserA) * d,
+          Math.cos(boss.laserA) * 60, Math.sin(boss.laserA) * 60, 'bolt')
+      }
+      if (boss.laserT <= 0) {
+        boss.laserState = 0
+        boss.laserT = 2.6 / lvSpeedup          // 下次激光冷却
+      }
     }
   } else {
     // P3：花瓣放射 + 波状 + 追踪
@@ -455,6 +566,9 @@ function playerFire(g) {
   const p = g.player
   const pw = p.power
   const dmgMult = p.overdrive > 0 ? OVERDRIVE_DMG_MULT : 1
+  // 射击音（每 2 发一次，避免音墙）
+  g._fireCnt = (g._fireCnt || 0) + 1
+  if (g._fireCnt % 2 === 1) g.events.push({ type: 'shoot' })
   const out = (dx, vx, x, y) => {
     const b = g.pbullets.get()
     b.x = x != null ? x : p.x + dx
@@ -637,6 +751,48 @@ function moveEnemy(g, e, dt) {
       e.x += Math.cos(e.t * 1.5 + e.seed) * 60 * dt
       if (e.y > H * 0.3) e.vy = Math.max(30, e.vy - 40 * dt)
       break
+    case 'zigzag':
+      // 之字俯冲：竖直下落 + x 方向三角波（往返周期 ~0.9s）
+      e.y += e.vy * dt
+      e.x += Math.sin(e.t * 7 + e.seed) * 160 * dt
+      if (e.x < e.r) e.x = e.r
+      if (e.x > W - e.r) e.x = W - e.r
+      break
+    case 'kamikaze': {
+      // 自爆冲撞：进场减速瞄准 → 2 秒后锁定方向加速冲撞（尾焰粒子）
+      e.y += e.vy * dt
+      if (e.t < 2) {
+        // 瞄准阶段：缓慢逼近玩家 x
+        const dx = g.player.x - e.x
+        e.x += Math.sign(dx) * Math.min(Math.abs(dx), 60 * dt)
+        if (e.y > H * 0.25) e.vy = Math.max(40, e.vy - 50 * dt)
+        if (!e._locked && e.t >= 1.6) {
+          // 锁定冲刺方向（一次性）
+          const a = Math.atan2(g.player.y - e.y, g.player.x - e.x)
+          e._lockA = a
+          e._locked = true
+          e.flash = 0.3
+        }
+      } else {
+        if (!e._locked) {   // 保险：迟锁定
+          const a = Math.atan2(g.player.y - e.y, g.player.x - e.x)
+          e._lockA = a; e._locked = true
+        }
+        const spd = 320
+        e.x += Math.cos(e._lockA) * spd * dt
+        e.y += Math.sin(e._lockA) * spd * dt
+        // 尾焰
+        if (g.rng() < 0.5) puff(g, e.x, e.y, '#FF7B4B', 1)
+      }
+      break
+    }
+    case 'spiral':
+      // 螺旋下潜：中心 x 缓慢下移 + 半径呼吸的圆周运动
+      e._cy = (e._cy == null ? e.y : e._cy) + e.vy * 0.6 * dt
+      e._rad = 46 + 26 * Math.sin(e.t * 1.2 + e.seed)
+      e.y = e._cy + Math.sin(e.t * 3.4 + e.seed) * e._rad * 0.5
+      e.x = Math.max(e.r, Math.min(W - e.r, (e._cx == null ? (e._cx = e.x) : e._cx) + Math.cos(e.t * 3.4 + e.seed) * e._rad))
+      break
   }
   // 开火
   const def = ENEMY_DEFS[e.type]
@@ -702,8 +858,23 @@ function step(g, dt) {
         boss.y += 60 * dt
         if (boss.y >= 110) { boss.y = 110; boss.entering = false; g.bossEntering = false }
       } else {
-        // 左右缓慢巡航
-        boss.x = W / 2 + Math.sin(boss.t * 0.5) * (W / 2 - BOSS_R - 24)
+        if (boss.variant === 'worm') {
+          // 蠕虫：头左右快速蠕行（比 archon 快），体节拖尾跟随（每节朝前节插值）
+          boss.x += boss.wormDir * 95 * dt
+          if (boss.x < BOSS_R + 16) { boss.x = BOSS_R + 16; boss.wormDir = 1 }
+          if (boss.x > W - BOSS_R - 16) { boss.x = W - BOSS_R - 16; boss.wormDir = -1 }
+          // 偶尔换向（相位 2 起更频繁）
+          if (g.rng() < (bossPhaseOf(boss) >= 2 ? 0.012 : 0.006)) boss.wormDir *= -1
+          let px = boss.x, py = boss.y
+          for (const seg of boss.wormSegs) {
+            seg.x += (px - seg.x) * Math.min(1, dt * 6)
+            seg.y += (py - seg.y) * Math.min(1, dt * 6)
+            px = seg.x; py = seg.y
+          }
+        } else {
+          // archon：左右缓慢巡航
+          boss.x = W / 2 + Math.sin(boss.t * 0.5) * (W / 2 - BOSS_R - 24)
+        }
         bossFire(g, dt)
       }
     }
@@ -803,6 +974,20 @@ function step(g, dt) {
         if (dx * dx + dy * dy < rr * rr) {
           b.active = false
           damageBoss(g, b.dmg)
+          continue
+        }
+        // 蠕虫体节命中（伤害打主血条）
+        if (boss.variant === 'worm') {
+          let segHit = false
+          for (const seg of boss.wormSegs) {
+            const sx = b.x - seg.x, sy = b.y - seg.y
+            const sr = b.r + seg.r
+            if (sx * sx + sy * sy < sr * sr) { segHit = true; break }
+          }
+          if (segHit) {
+            b.active = false
+            damageBoss(g, b.dmg * 0.7)   // 打体节伤害略低
+          }
         }
       }
     }
@@ -901,11 +1086,61 @@ function startLevel(g, level) {
   g.events.push({ type: 'stageStart', level })
 }
 
+// ================= 每日挑战 =================
+// 日期 → 种子（YYYYMMDD → int）；同一自然日全世界同一关卡
+function dailySeed(dateStr) {
+  const d = dateStr || new Date().toISOString().slice(0, 10)
+  const n = parseInt(d.replace(/-/g, ''), 10)
+  return isFinite(n) ? n : 20261015
+}
+
+// 每日波次：seed 驱动（8~12 波，敌机池全量，数量偏多、间隔偏短——固定挑战难度）
+function buildDailyWave(seed) {
+  const rng = mulberry32(seed)
+  const pool = ['dart', 'weaver', 'snav', 'zigzag', 'kamikaze', 'spiral', 'turret', 'sniper', 'mid']
+  const waves = []
+  const nWaves = 8 + Math.floor(rng() * 5)          // 8~12 波
+  for (let i = 0; i < nWaves; i++) {
+    // 前两波温和（小机型），后面从全池抽
+    const t = i < 2
+      ? (rng() < 0.5 ? 'dart' : 'weaver')
+      : pool[Math.floor(rng() * pool.length)]
+    const cnt = 3 + Math.floor(rng() * 5) + Math.floor(i / 3)   // 3~7+ 递增
+    const gap = 0.5 + rng() * 0.6
+    waves.push({ type: t, count: cnt, gap })
+  }
+  // 收尾猛冲
+  waves.push({ type: 'dart', count: 14, gap: 0.42 })
+  waves.push({ type: 'weaver', count: 10, gap: 0.5 })
+  return waves
+}
+
+// 创建每日挑战局（页面调用）：seed 固定、难度系数 +1 关等效、Boss 变体按 seed 奇偶
+function createDailyGame(dateStr, opts) {
+  const seed = dailySeed(dateStr)
+  const o = Object.assign({}, opts || {})
+  o.rng = mulberry32(seed ^ 0x5EED)          // 局内 RNG 也固定（掉落/走位可复现）
+  o.startLevel = 4                            // 等效难度基准（4 关系数）
+  const g = createGame(o)
+  g.daily = true
+  g.dailySeedVal = seed
+  g.dailyDate = dateStr || new Date().toISOString().slice(0, 10)
+  g.wave = buildDailyWave(seed)
+  g.waveIdx = 0
+  g.waveTimer = 0.5
+  // 每日局不用局外强化（公平起见）
+  g.upgrades = null
+  g.events.length = 0
+  g.events.push({ type: 'stageStart', level: 'DAILY' })
+  return g
+}
+
 module.exports = {
   FIXED_DT, W, H,
   PLAYER_R_HIT, PLAYER_R_VIS, PLAYER_MAX_HP, PLAYER_MAX_POWER,
   OVERDRIVE_DURATION, WINGMAN_OFFSET_X, WINGMAN_OFFSET_Y,
   ENEMY_DEFS, ITEM_DEFS, BOSS_R,
   mulberry32, createGame, step, startLevel, spawnEnemy, spawnBoss,
-  bossPhaseOf, lvScale, buildWave, applyItem, useBomb, damageEnemy, damageBoss, hitPlayer, float, dropItem
+  bossPhaseOf, lvScale, buildWave, applyItem, useBomb, damageEnemy, damageBoss, hitPlayer, float, dropItem,
+  dailySeed, buildDailyWave, createDailyGame
 }

@@ -4,11 +4,24 @@ const BG_PREFIX = 'hall_bg_'      // hall_bg_tools = 文件路径
 const ICON_KEY = 'hall_icon_map'  // { url: 文件路径 }
 
 // 各大厅默认壁纸（包内 assets，WXSS 不支持本地图背景所以用 image 组件）
+// 分配依据 2026-10-15 PIL 特征分析：bg1 最暗深青→首页；bg3 亮低饱和→工具（简洁）；
+// bg2 暗红调→游戏（热烈）；bg4 最亮偏灰蓝→内容馆（明亮阅读）；bg5 暖红粉→商城（促销暖）
 const DEFAULT_BG = {
-  tools: '/assets/wallpapers/bg2.jpg',
-  games: '/assets/wallpapers/bg3.jpg',
+  tools: '/assets/wallpapers/bg3.jpg',
+  games: '/assets/wallpapers/bg2.jpg',
   content: '/assets/wallpapers/bg4.jpg',
   mall: '/assets/wallpapers/bg5.jpg'
+}
+// 壁纸亮度档位（PIL 实测均值/255）：亮壁纸 veil 加强、暗壁纸调轻；自定义图默认中档
+const BG_LUMA = {
+  '/assets/wallpapers/bg2.jpg': 'dark',   // 71
+  '/assets/wallpapers/bg3.jpg': 'mid',    // 91
+  '/assets/wallpapers/bg4.jpg': 'light',  // 147
+  '/assets/wallpapers/bg5.jpg': 'mid'     // 70 但高饱和偏暖，中档即可
+}
+
+function veilClassOf(bg) {
+  return bg && BG_LUMA[bg] ? 'veil-' + BG_LUMA[bg] : ''
 }
 
 Page({
@@ -18,8 +31,10 @@ Page({
     shownTools: [],      // 过滤后（含 brick/iconSrc）
     recent: [],
     bgImage: '',         // 自定义背景（空=默认）
+    veilCls: '',         // 遮罩档位：veil-dark/veil-light/''(中档)
     iconMap: {},         // 自定义图标映射
-    animated: false      // 入场动画开关（切分类重放）
+    animated: false,     // 入场动画开关（切分类重放）
+    scrolled: false       // 是否已下滑（控制悬浮条浮现）
   },
 
   onLoad(opts) {
@@ -37,7 +52,8 @@ Page({
     } catch (e) { this._iconMap = {} }
     // 校验图标文件仍存在（saveFile 持久路径）
     this.validateIcons()
-    this.setData({ mod, iconMap: this._iconMap, bgImage: wx.getStorageSync(BG_PREFIX + mod.key) || DEFAULT_BG[mod.key] || '' })
+    const bg = wx.getStorageSync(BG_PREFIX + mod.key) || DEFAULT_BG[mod.key] || ''
+    this.setData({ mod, iconMap: this._iconMap, bgImage: bg, veilCls: veilClassOf(bg) })
     this.applyCat(0)
     this.loadRecentList()
     // 入场动画（下一帧触发，保证初始态渲染）
@@ -116,7 +132,7 @@ Page({
             const old = wx.getStorageSync(BG_PREFIX + this._mod.key)
             if (old) { try { wx.getFileSystemManager().unlinkSync(old) } catch (e) { } }
             wx.setStorageSync(BG_PREFIX + this._mod.key, saved)
-            this.setData({ bgImage: saved })
+            this.setData({ bgImage: saved, veilCls: veilClassOf(saved) })
             wx.showToast({ title: '背景已更换', icon: 'success' })
           })
           .catch((err) => {
@@ -138,7 +154,8 @@ Page({
       try { wx.getFileSystemManager().unlinkSync(cur) } catch (e) { }
       wx.removeStorageSync(BG_PREFIX + this._mod.key)
     }
-    this.setData({ bgImage: DEFAULT_BG[this._mod.key] || '' })
+    const def = DEFAULT_BG[this._mod.key] || ''
+    this.setData({ bgImage: def, veilCls: veilClassOf(def) })
     wx.showToast({ title: '已恢复默认', icon: 'none' })
   },
 
@@ -200,5 +217,16 @@ Page({
 
   goHome() {
     wx.navigateBack()
+  },
+
+  // 下滑超过阈值才浮现悬浮条（避免顶部冗余）
+  onPageScroll(e) {
+    const s = (e.scrollTop || 0) > 320
+    if (s !== this.data.scrolled) this.setData({ scrolled: s })
+  },
+
+  // 一键回顶（露出头部分类 / 最近使用）
+  toTop() {
+    wx.pageScrollTo({ scrollTop: 0, duration: 260 })
   }
 })

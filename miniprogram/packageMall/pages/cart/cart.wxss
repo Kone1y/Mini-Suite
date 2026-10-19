@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   padding: 20rpx 30rpx 0;
-  color: #888780;
+  color: #9C99B4;
   font-size: 24rpx;
 }
 .clear { color: #A32D2D; }
@@ -14,7 +14,7 @@
   width: 140rpx;
   height: 140rpx;
   border-radius: 12rpx;
-  background: #F6F5F2;
+  background: #12121A;
   flex-shrink: 0;
 }
 .mid {
@@ -42,7 +42,7 @@
   width: 48rpx;
   height: 48rpx;
   border-radius: 50%;
-  background: #F1EFE8;
+  background: rgba(255,255,255,.07);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,20 +66,20 @@
   padding-top: 180rpx;
 }
 .empty-icon { font-size: 90rpx; }
-.empty-text { color: #888780; margin-top: 20rpx; font-size: 26rpx; }
+.empty-text { color: #9C99B4; margin-top: 20rpx; font-size: 26rpx; }
 .bottom-bar {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
   box-shadow: 0 -2rpx 12rpx rgba(44, 44, 42, 0.06);
 }
-.total { margin-right: auto; font-size: 26rpx; color: #5F5E5A; }
+.total { margin-right: auto; font-size: 26rpx; color: #C9C7DC; }
 .total-num { color: #993C1D; font-size: 36rpx; font-weight: 600; }
 .checkout-btn {
   background: #534AB7;

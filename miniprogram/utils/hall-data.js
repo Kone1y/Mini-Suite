@@ -1,6 +1,11 @@
 // 模块数据（首页与大厅页共享）
 // 每个模块：key/标题/主题色/渐变/图标/描述 + tools（含分类 tags）
 
+// ========== 商城开关（个人主体提审：商城/交易类内容需隐藏） ==========
+// false = 提审态：首页无商城卡、大厅不可达、「我的」无订单/购物车入口
+// true  = 开发态：商城全量可见
+const MALL_ENABLED = false
+
 const MODULES = [
   {
     key: 'tools',
@@ -40,7 +45,9 @@ const MODULES = [
       { name: '网络测速', sub: '四轮测速', icon: '📶', url: '/packageTools/pages/speedtest/speedtest', cat: 'fun' },
       { name: '分贝仪', sub: '环境噪音', icon: '🔊', url: '/packageTools/pages/decibel/decibel', cat: 'fun' },
       { name: '随机决定', sub: '骰子转盘', icon: '🎲', url: '/packageTools/pages/random/random', cat: 'fun' },
-      { name: '密码生成', sub: '高强度', icon: '🔐', url: '/packageTools/pages/password/password', cat: 'fun' }
+      { name: '密码生成', sub: '高强度', icon: '🔐', url: '/packageTools/pages/password/password', cat: 'fun' },
+      { name: '哈希计算', sub: 'MD5/SHA', icon: '🔑', url: '/packageTools/pages/hash/hash', cat: 'dev' },
+      { name: '记账本', sub: '收支统计', icon: '📒', url: '/packageTools/pages/ledger/ledger', cat: 'life' }
     ]
   },
   {
@@ -82,7 +89,10 @@ const MODULES = [
       { name: 'Git 修炼场', sub: '命令闯关', icon: '🌳', url: '/packageGames/pages/gitgame/gitgame', cat: 'algo' },
       { name: 'Vim 修炼场', sub: '键位闯关', icon: '⌨️', url: '/packageGames/pages/vim/vim', cat: 'algo' },
       { name: '正则填字', sub: 'NP 谜题', icon: '🔢', url: '/packageGames/pages/regexcross/regexcross', cat: 'puzzle' },
-      { name: '星陨突袭', sub: '弹幕闯关', icon: '🚀', url: '/packageGames/pages/shmup/shmup', cat: 'action' }
+      { name: '星陨突袭', sub: '弹幕闯关', icon: '🚀', url: '/packageGames/pages/shmup/shmup', cat: 'action' },
+      { name: '打砖块', sub: '经典街机', icon: '🧱', url: '/packageGames/pages/breakout/breakout', cat: 'casual' },
+      { name: '消消乐', sub: '三消闯关', icon: '🍬', url: '/packageGames/pages/match3/match3', cat: 'casual' },
+      { name: '寻路可视化', sub: 'BFS/Dijkstra/A*', icon: '🧭', url: '/packageGames/pages/pathfind/pathfind', cat: 'algo' }
     ]
   },
   {
@@ -122,7 +132,13 @@ const MODULES = [
 ]
 
 function getModule(key) {
+  if (key === 'mall' && !MALL_ENABLED) return null  // 提审态：商城模块不可达
   return MODULES.find(m => m.key === key) || null
+}
+
+// 首页轮播用：仅返回可见模块（提审态过滤商城）
+function visibleModules() {
+  return MALL_ENABLED ? MODULES : MODULES.filter(m => m.key !== 'mall')
 }
 
 // ---------- 最近使用（storage，每模块最多 4 条） ----------
@@ -167,4 +183,4 @@ function decorate(key) {
   }))
 }
 
-module.exports = { MODULES, getModule, loadRecent, pushRecent, decorate, BRICKS }
+module.exports = { MODULES, getModule, visibleModules, loadRecent, pushRecent, decorate, BRICKS, MALL_ENABLED }

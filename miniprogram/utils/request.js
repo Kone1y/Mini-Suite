@@ -28,4 +28,13 @@ function request(options) {
   })
 }
 
-module.exports = { request }
+// 后端静态资源路径转绝对 URL：/static/xxx -> http://host/static/xxx
+// 小程序 image 组件不会自动拼域名，直接把后端相对路径塞 src 会被当包内本地资源（500）
+function absUrl(path) {
+  if (!path) return ''
+  if (/^https?:\/\//.test(path) || /^wxfile:/.test(path)) return path
+  const app = getApp()
+  return app.globalData.apiBase + path
+}
+
+module.exports = { request, absUrl }

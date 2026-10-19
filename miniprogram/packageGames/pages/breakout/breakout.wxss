@@ -1,0 +1,3 @@
+page { background: #0A0A14; }
+.stage-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0A0A14; }
+.stage { width: 100%; height: 100%; }

@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: linear-gradient(160deg, #F3F1FB 0%, #EDEAF9 100%);
+  background: linear-gradient(180deg, rgba(18,18,26,.92) 0%, #12121A 60%);
   padding: 24rpx;
   box-sizing: border-box;
   display: flex;
@@ -18,20 +18,20 @@
 .title {
   font-size: 34rpx;
   font-weight: 800;
-  color: #26215C;
+  color: #C6C0FA;
   letter-spacing: 2rpx;
 }
 .steps {
   font-size: 26rpx;
   font-weight: 700;
-  color: #534AB7;
+  color: #A8A0F0;
   font-family: monospace;
 }
 
 /* 滑杆面板：卡片圆角 + 轻阴影 */
 .panel {
   width: 100%;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 20rpx;
   padding: 18rpx 24rpx 8rpx;
   box-shadow: 0 6rpx 18rpx rgba(83, 74, 183, 0.10);
@@ -44,8 +44,8 @@
   align-items: center;
   margin-bottom: 4rpx;
 }
-.label { font-size: 26rpx; color: #2C2C2A; font-weight: 600; }
-.label-val { font-size: 26rpx; color: #534AB7; font-weight: 700; }
+.label { font-size: 26rpx; color: #E8E7F0; font-weight: 600; }
+.label-val { font-size: 26rpx; color: #A8A0F0; font-weight: 700; }
 
 /* 棋盘 */
 .board {
@@ -112,13 +112,13 @@
 .btn {
   flex: 1;
   min-width: 0;
-  background: #FFFFFF;
-  border: 1rpx solid #EFEEE9;
+  background: rgba(22, 21, 34, 0.44);
+  border: 1rpx solid rgba(255,255,255,.10);
   border-radius: 999rpx;
   padding: 18rpx 0;
   text-align: center;
   font-size: 25rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   white-space: nowrap;
 }
 .btn.primary {
@@ -128,8 +128,8 @@
   font-weight: 600;
 }
 .btn.ghost {
-  background: #FFFFFF;
-  color: #534AB7;
+  background: rgba(22, 21, 34, 0.44);
+  color: #A8A0F0;
   border: 2rpx solid #534AB7;
   box-shadow: none;
 }

@@ -1,0 +1,11 @@
+.page { padding: 24rpx; background: #12121A; min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
+.topbar { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 10rpx 8rpx 20rpx; }
+.stat { font-size: 26rpx; color: #9C99B4; }
+.stat .num { display: block; text-align: center; font-size: 40rpx; font-weight: 700; color: #E8E7F0; font-family: monospace; }
+.restart { padding: 12rpx 28rpx; border-radius: 12rpx; font-size: 26rpx; color: #A8A0F0; background: rgba(106,90,224,.16); border: 2rpx solid rgba(106,90,224,.4); }
+
+/* 棋盘区：正方形画布，宽=屏宽-边距，高按 1:1 显式给（aspect-ratio 真机兼容性差，不用） */
+.stage-wrap { width: 100%; position: relative; }
+.stage { width: 100%; height: 702rpx; display: block; }
+
+.foot { text-align: center; color: #aaa; font-size: 24rpx; padding: 26rpx 0 40rpx; }

@@ -1,7 +1,7 @@
 <view class="page" wx:if="{{mod}}">
   <!-- 自定义背景层（image 绝对定位铺底，WXSS 不支持本地 background-image） -->
   <image wx:if="{{bgImage}}" class="bg-layer" src="{{bgImage}}" mode="aspectFill"></image>
-  <view wx:if="{{bgImage}}" class="bg-veil"></view>
+  <view wx:if="{{bgImage}}" class="bg-veil {{veilCls}}"></view>
 
   <!-- 沉浸式模块头（渐变 + 波浪收边） -->
   <view class="head" style="background: linear-gradient(135deg, {{mod.color}} 0%, {{mod.color2}} 100%)">
@@ -73,4 +73,10 @@
   </view>
 
   <view class="foot">— {{mod.title}} · 长按卡片可自定义图标 —</view>
+
+  <!-- 悬浮操作条：长列表下滑后浮现，回顶 / 返回主页（自定义导航无原生返回键） -->
+  <view class="floatbar {{scrolled ? 'show' : ''}}">
+    <view class="fbtn" bindtap="toTop">↑</view>
+    <view class="fbtn back" bindtap="goHome">‹</view>
+  </view>
 </view>

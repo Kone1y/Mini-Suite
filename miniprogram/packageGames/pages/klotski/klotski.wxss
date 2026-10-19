@@ -8,42 +8,42 @@
   padding: 0 8rpx 20rpx;
 }
 .info-box {
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 14rpx;
   padding: 12rpx 26rpx;
   text-align: center;
   min-width: 130rpx;
-  border: 1rpx solid #EFEEE9;
+  border: 1rpx solid rgba(255,255,255,.10);
 }
-.info-label { font-size: 20rpx; color: #888780; }
-.info-num { font-size: 32rpx; font-weight: 700; color: #26215C; font-family: monospace; }
+.info-label { font-size: 20rpx; color: #9C99B4; }
+.info-num { font-size: 32rpx; font-weight: 700; color: #C6C0FA; font-family: monospace; }
 .title-box { text-align: center; }
-.game-title { font-size: 38rpx; font-weight: 800; color: #26215C; letter-spacing: 2rpx; }
+.game-title { font-size: 38rpx; font-weight: 800; color: #C6C0FA; letter-spacing: 2rpx; }
 .lv-tag {
   font-size: 20rpx;
   font-weight: 500;
-  color: #534AB7;
-  background: #EEEDFE;
+  color: #A8A0F0;
+  background: rgba(106,90,224,.16);
   border-radius: 8rpx;
   padding: 2rpx 10rpx;
   margin-left: 6rpx;
   vertical-align: middle;
 }
-.game-sub { font-size: 20rpx; color: #888780; margin-top: 4rpx; }
+.game-sub { font-size: 20rpx; color: #9C99B4; margin-top: 4rpx; }
 
 .level-panel { display: flex; gap: 14rpx; margin-bottom: 16rpx; }
 .level-opt {
-  background: #FFFFFF;
-  border: 2rpx solid #EFEEE9;
+  background: rgba(22, 21, 34, 0.44);
+  border: 2rpx solid rgba(255,255,255,.12);
   border-radius: 999rpx;
   padding: 12rpx 30rpx;
   font-size: 24rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
 }
 .level-opt.on {
-  border-color: #534AB7;
-  color: #534AB7;
-  background: #EEEDFE;
+  border-color: #A8A0F0;
+  color: #A8A0F0;
+  background: rgba(106,90,224,.16);
   font-weight: 600;
 }
 
@@ -52,7 +52,7 @@
   width: 100%;
   display: grid;
   gap: 10rpx;
-  background: #D9D7CE;
+  background: rgba(15,15,24,.55);
   border-radius: 16rpx;
   padding: 10rpx;
   box-sizing: border-box;
@@ -63,12 +63,12 @@
   height: 100%;
   background: linear-gradient(160deg, #FFFFFF 0%, #F4F2FC 100%);
   border-radius: 16rpx;
-  border: 1rpx solid #EFEEE9;
+  border: 1rpx solid rgba(255,255,255,.10);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: #534AB7;
+  color: #A8A0F0;
   font-family: monospace;
   box-shadow: 0 4rpx 10rpx rgba(44, 44, 42, 0.08);
   transition: transform 0.1s ease;
@@ -78,7 +78,7 @@
 .mask {
   position: absolute;
   left: 0; top: 0; right: 0; bottom: 0;
-  background: rgba(246, 245, 242, 0.92);
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 16rpx;
   display: flex;
   flex-direction: column;
@@ -86,8 +86,8 @@
   justify-content: center;
   z-index: 10;
 }
-.mask-title { font-size: 44rpx; font-weight: 800; color: #26215C; }
-.mask-sub { font-size: 26rpx; color: #888780; margin: 14rpx 0 26rpx; }
+.mask-title { font-size: 44rpx; font-weight: 800; color: #C6C0FA; }
+.mask-sub { font-size: 26rpx; color: #9C99B4; margin: 14rpx 0 26rpx; }
 .mask-btn {
   background: linear-gradient(135deg, #6A5AE0 0%, #534AB7 100%);
   color: #FFFFFF;
@@ -118,8 +118,8 @@
   white-space: nowrap;
 }
 .ctrl-btn.ghost {
-  background: #FFFFFF;
-  color: #534AB7;
+  background: rgba(22, 21, 34, 0.44);
+  color: #A8A0F0;
   border: 2rpx solid #534AB7;
   box-shadow: none;
 }

@@ -32,5 +32,6 @@
     </view>
   </view>
 
-  <view class="hint foot-hint">演示项目 · 商城为模拟交易</view>
+  <view class="hint foot-hint" wx:if="{{mallOn}}">演示项目 · 商城为模拟交易</view>
+  <view class="hint foot-hint" wx:else bindtap="onEggTap">百宝小屋 · 让日常更顺手</view>
 </view>

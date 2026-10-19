@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #F6F4EE;
+  background: #12121A;
   padding: 24rpx 28rpx 40rpx;
   box-sizing: border-box;
   display: flex; flex-direction: column;
@@ -9,7 +9,7 @@
 /* 顶栏 */
 .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20rpx; }
 .mode-tabs {
-  display: flex; background: #EBE8DF;
+  display: flex; background: rgba(255,255,255,.08);
   border-radius: 999rpx; padding: 6rpx;
 }
 .tab { font-size: 25rpx; color: #8A8574; padding: 10rpx 26rpx; border-radius: 999rpx; }
@@ -23,11 +23,11 @@
 .cell-group { display: flex; gap: 10rpx; }
 .cell {
   flex: 1; height: 92rpx;
-  background: #fff;
+  background: rgba(22, 21, 34, 0.44);
   border: 2rpx solid rgba(83,74,183,.12);
   border-radius: 14rpx;
   display: flex; align-items: center; justify-content: center;
-  font-size: 46rpx; font-weight: 700; color: #33312B;
+  font-size: 46rpx; font-weight: 700; color: #E8E7F0;
 }
 .cell.dim { border-style: dashed; }
 .cell.hit { background: #4C9E64; border-color: #4C9E64; color: #fff; }
@@ -49,18 +49,18 @@
 
 /* 玩法说明 */
 .help-card {
-  background: #fff;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 16rpx;
   padding: 20rpx 24rpx;
   margin-bottom: 16rpx;
   border: 2rpx solid rgba(83,74,183,.10);
 }
-.help-head { display: flex; justify-content: space-between; align-items: center; font-size: 26rpx; font-weight: 600; color: #534AB7; }
+.help-head { display: flex; justify-content: space-between; align-items: center; font-size: 26rpx; font-weight: 600; color: #A8A0F0; }
 .help-arrow { font-size: 22rpx; color: #A5A08F; transition: transform .2s; display: inline-block; }
 .help-arrow.open { transform: rotate(180deg); }
 .help-body { margin-top: 16rpx; border-top: 2rpx solid rgba(83,74,183,.08); padding-top: 16rpx; }
 .help-p { font-size: 24rpx; color: #6B675A; line-height: 1.7; margin-bottom: 8rpx; }
-.help-p .em { font-weight: 700; color: #534AB7; }
+.help-p .em { font-weight: 700; color: #A8A0F0; }
 .help-li { font-size: 23rpx; color: #8A8574; line-height: 1.8; padding-left: 16rpx; }
 .demo { display: inline-block; color: #fff; border-radius: 6rpx; padding: 0 8rpx; font-size: 20rpx; }
 .demo.hit { background: #4C9E64; }
@@ -74,18 +74,18 @@
 }
 .inp {
   flex: 1; min-width: 0;
-  background: #fff; border: 2rpx solid rgba(83,74,183,.14);
+  background: rgba(22, 21, 34, 0.44); border: 2rpx solid rgba(83,74,183,.14);
   border-radius: 999rpx; padding: 18rpx 28rpx;
-  font-size: 28rpx; color: #33312B;
+  font-size: 28rpx; color: #E8E7F0;
 }
 .ph { color: #B8B3A2; }
 .method-btn {
-  flex: none; font-size: 22rpx; color: #534AB7;
+  flex: none; font-size: 22rpx; color: #A8A0F0;
   border: 2rpx solid #534AB7; border-radius: 999rpx;
   padding: 12rpx 22rpx;
 }
 .cands {
-  margin-top: 12rpx; background: #fff;
+  margin-top: 12rpx; background: rgba(22, 21, 34, 0.44);
   border: 2rpx solid rgba(83,74,183,.10);
   border-radius: 18rpx; overflow: hidden;
 }
@@ -96,7 +96,7 @@
 }
 .cand:last-child { border-bottom: none; }
 .cand:active { background: rgba(83,74,183,.06); }
-.cand-w { font-size: 32rpx; font-weight: 700; color: #33312B; letter-spacing: 4rpx; }
+.cand-w { font-size: 32rpx; font-weight: 700; color: #E8E7F0; letter-spacing: 4rpx; }
 .cand-p { font-size: 20rpx; color: #A5A08F; }
 .empty-sug { padding: 18rpx; text-align: center; }
 .cand-none { font-size: 24rpx; color: #A5A08F; }
@@ -110,20 +110,20 @@
 
 /* 结算卡 */
 .result-card {
-  margin-top: 20rpx; background: #fff;
+  margin-top: 20rpx; background: rgba(22, 21, 34, 0.44);
   border-radius: 22rpx; padding: 30rpx;
   border: 2rpx solid rgba(83,74,183,.10);
 }
 .rc-head { text-align: center; font-size: 34rpx; font-weight: 800; }
 .rc-head.win { color: #4C9E64; }
 .rc-head.lose { color: #C25B4E; }
-.rc-word { text-align: center; font-size: 52rpx; font-weight: 800; color: #33312B; letter-spacing: 10rpx; margin-top: 14rpx; }
+.rc-word { text-align: center; font-size: 52rpx; font-weight: 800; color: #E8E7F0; letter-spacing: 10rpx; margin-top: 14rpx; }
 .rc-py { text-align: center; font-size: 22rpx; color: #A5A08F; margin-top: 6rpx; }
 .rc-explain { font-size: 25rpx; color: #55524A; line-height: 1.7; margin-top: 16rpx; }
 .rc-derive { font-size: 22rpx; color: #A5A08F; margin-top: 10rpx; line-height: 1.6; }
 .rc-btns { display: flex; gap: 14rpx; margin-top: 22rpx; }
 .rc-btn {
-  flex: 1; text-align: center; font-size: 25rpx; color: #534AB7;
+  flex: 1; text-align: center; font-size: 25rpx; color: #A8A0F0;
   border: 2rpx solid #534AB7; border-radius: 999rpx; padding: 14rpx 0;
 }
 .rc-btn.primary { background: #534AB7; color: #fff; }
@@ -142,18 +142,18 @@
 }
 .dict-panel {
   width: 100%; max-height: 78vh;
-  background: #FDFCF8;
+  background: #1D1C2C;
   border-radius: 30rpx 30rpx 0 0;
   padding: 30rpx 30rpx 40rpx;
   box-sizing: border-box;
   display: flex; flex-direction: column;
 }
 .dict-head { display: flex; justify-content: space-between; align-items: center; }
-.dict-title { font-size: 32rpx; font-weight: 800; color: #33312B; }
+.dict-title { font-size: 32rpx; font-weight: 800; color: #E8E7F0; }
 .dict-close { font-size: 30rpx; color: #A5A08F; padding: 8rpx; }
 .dict-search { display: flex; gap: 12rpx; margin-top: 20rpx; }
 .dict-inp {
-  flex: 1; min-width: 0; background: #fff;
+  flex: 1; min-width: 0; background: rgba(22, 21, 34, 0.44);
   border: 2rpx solid rgba(83,74,183,.14);
   border-radius: 999rpx; padding: 14rpx 24rpx; font-size: 26rpx;
 }
@@ -165,10 +165,10 @@
 .dict-tip { font-size: 21rpx; color: #A5A08F; margin: 12rpx 4rpx 0; }
 .dict-list { flex: 1; min-height: 300rpx; margin-top: 12rpx; }
 .dict-item {
-  background: #fff; border-radius: 16rpx;
+  background: rgba(22, 21, 34, 0.44); border-radius: 16rpx;
   padding: 18rpx 22rpx; margin-bottom: 12rpx;
 }
-.di-w { font-size: 30rpx; font-weight: 700; color: #33312B; letter-spacing: 3rpx; display: inline-block; margin-right: 16rpx; }
+.di-w { font-size: 30rpx; font-weight: 700; color: #E8E7F0; letter-spacing: 3rpx; display: inline-block; margin-right: 16rpx; }
 .di-p { font-size: 20rpx; color: #A5A08F; display: inline-block; }
 .di-e { font-size: 22rpx; color: #77746A; margin-top: 8rpx; line-height: 1.6; }
 .dict-none { text-align: center; color: #A5A08F; font-size: 24rpx; padding: 60rpx 0; }
@@ -181,14 +181,14 @@
   padding: 60rpx;
 }
 .dd-card {
-  width: 100%; background: #FDFCF8;
+  width: 100%; background: #1D1C2C;
   border-radius: 26rpx; padding: 40rpx 34rpx;
   max-height: 70vh; overflow-y: auto;
 }
-.dd-word { text-align: center; font-size: 48rpx; font-weight: 800; letter-spacing: 8rpx; color: #33312B; }
+.dd-word { text-align: center; font-size: 48rpx; font-weight: 800; letter-spacing: 8rpx; color: #E8E7F0; }
 .dd-py { text-align: center; font-size: 22rpx; color: #A5A08F; margin-top: 6rpx; }
 .dd-explain { font-size: 26rpx; color: #55524A; line-height: 1.8; margin-top: 20rpx; }
 .dd-derive { font-size: 22rpx; color: #A5A08F; margin-top: 14rpx; line-height: 1.6; }
 .dd-example { font-size: 22rpx; color: #77746A; margin-top: 10rpx; line-height: 1.6; background: rgba(83,74,183,.05); border-radius: 12rpx; padding: 14rpx; }
 
-.foot { text-align: center; color: #B5B1A4; font-size: 22rpx; padding: 30rpx 0 10rpx; }
+.foot { text-align: center; color: #7A7890; font-size: 22rpx; padding: 30rpx 0 10rpx; }

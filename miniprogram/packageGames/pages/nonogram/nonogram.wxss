@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #F0EFEA;
+  background: #12121A;
   padding: 24rpx;
   box-sizing: border-box;
   display: flex;
@@ -13,11 +13,11 @@
   align-items: baseline;
   margin-bottom: 16rpx;
 }
-.title { font-size: 34rpx; font-weight: 800; color: #26215C; }
-.status { font-size: 22rpx; color: #534AB7; max-width: 60%; text-align: right; }
+.title { font-size: 34rpx; font-weight: 800; color: #C6C0FA; }
+.status { font-size: 22rpx; color: #A8A0F0; max-width: 60%; text-align: right; }
 
 .panel {
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 20rpx;
   padding: 20rpx 24rpx;
   box-shadow: 0 6rpx 14rpx rgba(83, 74, 183, 0.10);
@@ -25,21 +25,21 @@
 }
 .row { display: flex; align-items: center; gap: 16rpx; }
 .row.btns { margin-top: 16rpx; }
-.lbl { font-size: 26rpx; color: #5F5E5A; }
+.lbl { font-size: 26rpx; color: #C9C7DC; }
 .pick {
-  background: #EEEDFE; color: #534AB7;
+  background: rgba(106,90,224,.16); color: #A8A0F0;
   border-radius: 12rpx; padding: 10rpx 22rpx;
   font-size: 26rpx; font-weight: 600;
 }
 
 .btn {
-  background: #FFFFFF;
-  border: 1rpx solid #EFEEE9;
+  background: rgba(22, 21, 34, 0.44);
+  border: 1rpx solid rgba(255,255,255,.10);
   border-radius: 999rpx;
   padding: 12rpx 26rpx;
   text-align: center;
   font-size: 25rpx;
-  color: #5F5E5A;
+  color: #C9C7DC;
   white-space: nowrap;
 }
 .btn.primary {
@@ -47,7 +47,7 @@
   color: #fff; border: none; font-weight: 600;
   margin-left: auto;
 }
-.btn.ghost { color: #534AB7; border: 2rpx solid #534AB7; }
+.btn.ghost { color: #A8A0F0; border: 2rpx solid #534AB7; }
 .btn:active { opacity: 0.8; }
 
 /* 棋盘区 */
@@ -58,7 +58,7 @@
 .col-clue {
   display: flex; flex-direction: column;
   justify-content: flex-end; align-items: center;
-  font-size: 20rpx; color: #5F5E5A;
+  font-size: 20rpx; color: #C9C7DC;
   line-height: 1.15;
   padding-bottom: 8rpx;
   box-sizing: border-box;
@@ -68,14 +68,14 @@
 .row-clue {
   display: flex; align-items: center; justify-content: flex-end;
   padding-right: 10rpx;
-  font-size: 20rpx; color: #5F5E5A;
+  font-size: 20rpx; color: #C9C7DC;
   font-family: monospace;
   box-sizing: border-box;
   min-width: 56rpx;
 }
 .grid {
   display: grid;
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 8rpx;
   box-shadow: 0 6rpx 16rpx rgba(83, 74, 183, 0.12);
   overflow: hidden;
@@ -83,14 +83,14 @@
 .cell {
   box-sizing: border-box;
   border: 1rpx solid #E5E2F0;
-  background: #F7F6FC;
+  background: rgba(255,255,255,.06);
   display: flex; align-items: center; justify-content: center;
 }
 .cell.filled {
   background: #534AB7;
   border-color: #463E9E;
 }
-.cell.blank { background: #E8E5F0; }
+.cell.blank { background: rgba(255,255,255,.05); }
 .cell.blank .cross { color: #B4AFCF; font-size: 26rpx; font-weight: 700; }
 .cell.hinting { animation: blink 0.6s ease-in-out infinite; }
 @keyframes blink {
@@ -107,7 +107,7 @@
 
 /* 说明卡 */
 .intro-card {
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 20rpx;
   box-shadow: 0 6rpx 18rpx rgba(83, 74, 183, 0.10);
   margin-top: 24rpx;
@@ -117,10 +117,10 @@
   display: flex; justify-content: space-between; align-items: center;
   padding: 20rpx 26rpx;
 }
-.intro-title { font-size: 27rpx; font-weight: 700; color: #534AB7; }
+.intro-title { font-size: 27rpx; font-weight: 700; color: #A8A0F0; }
 .intro-arrow { font-size: 22rpx; color: #9B98AE; }
 .intro-body { padding: 0 26rpx 22rpx; border-top: 1rpx solid #F0EEF8; }
-.intro-li { font-size: 24rpx; color: #5F5E5A; line-height: 1.8; }
+.intro-li { font-size: 24rpx; color: #C9C7DC; line-height: 1.8; }
 
 .ctrl-row {
   display: flex; gap: 14rpx;

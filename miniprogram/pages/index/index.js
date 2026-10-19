@@ -3,7 +3,7 @@ const H = require('../../utils/hall-data')
 
 Page({
   data: {
-    modules: H.MODULES,
+    modules: H.visibleModules(),   // 提审态自动过滤商城模块
     backendOk: null,
     greeting: { text: '', emoji: '' },
     dateLine: '',
@@ -24,7 +24,7 @@ Page({
     const d = new Date()
     const week = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()]
     const dateLine = d.getMonth() + 1 + ' 月 ' + d.getDate() + ' 日 · 星期' + week
-    const total = H.MODULES.reduce((s, m) => s + m.tools.length, 0)
+    const total = this.data.modules.reduce((s, m) => s + m.tools.length, 0)
     const games = (H.getModule('games') || { tools: [] }).tools.length
     const tools = (H.getModule('tools') || { tools: [] }).tools.length
     this.setData({
@@ -39,7 +39,7 @@ Page({
   },
 
   setPicks(idx) {
-    const mod = H.MODULES[idx]
+    const mod = this.data.modules[idx]
     if (!mod) return
     const picks = H.decorate(mod.key).slice(0, 4)
     this.setData({ curIdx: idx, picks })
@@ -100,7 +100,7 @@ Page({
   goPick(e) {
     const url = e.currentTarget.dataset.url
     if (!url) return
-    const mod = H.MODULES[this.data.curIdx]
+    const mod = this.data.modules[this.data.curIdx]
     const tool = mod && mod.tools.find(t => t.url === url)
     if (tool) H.pushRecent(mod.key, tool)
     wx.navigateTo({ url })

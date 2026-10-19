@@ -97,6 +97,22 @@ const LEVELS = [
     target: ['commit -m A', 'branch feature', 'checkout feature', 'commit -m F1', 'commit -m F2', 'checkout main', 'commit -m B', 'checkout feature', 'rebase main', 'checkout main', 'merge feature'],
     hint: 'rebase + merge 组合拳：feature 变基后 main 直接 FF 到顶端。',
     disable: '', golf: 11
+  },
+  {
+    id: 13, name: '首次推送', cat: '远程',
+    goal: '本地 main 领先 1 个提交，把它推到远程（o/main 同步到最新）',
+    setup: ['commit -m A', 'remote setup main=C1'],
+    target: ['commit -m A', 'remote setup main=C1', 'commit -m B', 'push'],
+    hint: 'push 把本地分支推到远程同名分支；远程落后时可以 fast-forward 推上去。',
+    disable: '', golf: 2
+  },
+  {
+    id: 14, name: '团队协作', cat: '远程',
+    goal: '队友已把 C2 推到远程。先拉取远程更新（快进到 C2），再做你的提交 C3，最后推送（o/main 到 C3）',
+    setup: ['commit -m A', 'commit -m B', 'remote setup main=C2', 'reset C1'],
+    target: ['commit -m A', 'commit -m B', 'remote setup main=C2', 'reset C1', 'pull', 'commit -m C', 'push'],
+    hint: '本地落后时 pull 直接快进；然后 commit 你的工作；push 前远程没变即可直推。',
+    disable: '', golf: 3
   }
 ]
 

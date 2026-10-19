@@ -7,13 +7,21 @@
   width: 100%; height: 100%;
   z-index: 0;
 }
-/* 深色遮罩：压暗壁纸统一玻璃基调（无背景时 page 自带深底色） */
+/* 深色遮罩：压暗壁纸统一玻璃基调（无背景时 page 自带深底色）；按壁纸亮度分档（JS 切换） */
 .bg-veil {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   background: linear-gradient(180deg, rgba(18,18,26,.74) 0%, rgba(18,18,26,.52) 45%, rgba(18,18,26,.68) 100%);
   z-index: 1;
+}
+/* 暗壁纸：遮罩调轻，让壁纸呼吸 */
+.bg-veil.veil-dark {
+  background: linear-gradient(180deg, rgba(18,18,26,.62) 0%, rgba(18,18,26,.40) 45%, rgba(18,18,26,.56) 100%);
+}
+/* 亮壁纸：遮罩加强，保文字可读 */
+.bg-veil.veil-light {
+  background: linear-gradient(180deg, rgba(18,18,26,.82) 0%, rgba(18,18,26,.60) 45%, rgba(18,18,26,.74) 100%);
 }
 /* 有背景时内容层提权 + 卡片磨砂 */
 .page > .head, .page > .recent, .page > .cats, .page > .grid, .page > .foot { position: relative; z-index: 2; }
@@ -74,7 +82,7 @@
 .recent-scroll { white-space: nowrap; }
 .recent-item {
   display: inline-flex; align-items: center; gap: 10rpx;
-  background: rgba(22,21,34,.46);
+  background: rgba(22,21,34,.48);
   backdrop-filter: blur(16rpx);
   -webkit-backdrop-filter: blur(16rpx);
   border: 1rpx solid rgba(255,255,255,.18);
@@ -96,7 +104,7 @@
 .cat-chip {
   display: inline-block;
   font-size: 25rpx; color: rgba(255,255,255,.75);
-  background: rgba(22,21,34,.46);
+  background: rgba(22,21,34,.48);
   backdrop-filter: blur(16rpx);
   -webkit-backdrop-filter: blur(16rpx);
   border: 1rpx solid rgba(255,255,255,.18);
@@ -162,3 +170,27 @@
 .empty-icon { font-size: 56rpx; display: block; margin-bottom: 12rpx; }
 
 .foot { text-align: center; color: rgba(255,255,255,.30); font-size: 20rpx; padding: 26rpx 0 10rpx; position: relative; z-index: 2; }
+
+/* ---------- 悬浮操作条（自定义导航无原生返回键，长列表下滑后浮现） ---------- */
+.floatbar {
+  position: fixed;
+  left: 24rpx; bottom: 44rpx;
+  display: flex; flex-direction: column; gap: 20rpx;
+  z-index: 50;
+  opacity: 0; transform: translateY(24rpx);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.floatbar.show { opacity: 1; transform: none; pointer-events: auto; }
+.fbtn {
+  width: 88rpx; height: 88rpx; line-height: 86rpx;
+  text-align: center; font-size: 44rpx; color: #fff;
+  background: rgba(106,90,224,.62);
+  backdrop-filter: blur(12rpx); -webkit-backdrop-filter: blur(12rpx);
+  border: 1rpx solid rgba(255,255,255,.28);
+  border-radius: 50%;
+  box-shadow: 0 8rpx 22rpx -8rpx rgba(0,0,0,.5);
+}
+.fbtn:active { transform: scale(.92); background: rgba(106,90,224,.82); }
+.fbtn.back { font-size: 52rpx; background: rgba(22,21,34,.62); }
+.fbtn.back:active { background: rgba(22,21,34,.82); }

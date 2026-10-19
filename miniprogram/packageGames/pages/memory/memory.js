@@ -6,9 +6,19 @@ const LEVELS = [
   { pairs: 8,  cols: 4, label: '第 4 关 · 瞬间记忆', flash: true }
 ]
 
+// 计时挑战模式：限时配对，连击加分
+const TIME_MODE = {
+  base: 60,            // 基础倒计时（秒），按 pairs 缩放
+  perPair: 4,          // 每对额外秒数
+  matchScore: 10,      // 每对基础分
+  comboBonus: 5        // 连击每层额外分（combo n → +10+5n）
+}
+
 const EMOJI_POOL = ['🍎', '🍇', '🍑', '🍒', '🥑', '🍋', '🥕', '🍉', '🍍', '🥝', '🍓', '🍌']
 const PROGRESS_KEY = 'memory_progress'   // 已解锁关卡
 const BEST_KEY_PREFIX = 'memory_best_l'
+const TIME_BEST_KEY = 'memory_time_best' // 计时挑战最佳分
+const TIME_MODE_KEY = 'memory_time_mode' // 上次模式选择
 
 Page({
   data: {
@@ -24,7 +34,15 @@ Page({
     level: LEVELS[0],
     unlocked: 1,     // 已解锁到第几关（1-based）
     isLastLevel: false,
-    showLevelPicker: false
+    showLevelPicker: false,
+    // 计时挑战
+    timed: false,    // 当前是否计时模式
+    timeLeft: 0,     // 剩余秒
+    timeScore: 0,    // 计时模式得分
+    combo: 0,        // 当前连击（连续配对成功）
+    maxCombo: 0,
+    timeBest: 0,     // 计时模式最佳分
+    timeUp: false    // 时间到结算
   },
 
   onLoad(options) {
@@ -33,7 +51,11 @@ Page({
     if (idx >= unlocked) idx = 0   // 未解锁的关回落到第 1 关
     // 真实屏宽（px），用于精确计算卡片尺寸
     try { this._winW = wx.getSystemInfoSync().windowWidth } catch (e) { this._winW = 375 }
-    this.setData({ unlocked })
+    this.setData({
+      unlocked,
+      timed: wx.getStorageSync(TIME_MODE_KEY) === true,
+      timeBest: wx.getStorageSync(TIME_BEST_KEY) || 0
+    })
     this.applyLevel(idx)
   },
 
@@ -63,6 +85,53 @@ Page({
   // 从分享/入口带 level 参数进入
   onShow() {},
 
+  // ================= 模式切换 =================
+  toggleTimed() {
+    const timed = !this.data.timed
+    wx.setStorageSync(TIME_MODE_KEY, timed)
+    this.setData({ timed })
+    this.restart()
+  },
+
+  timeLimitOf(pairs) {
+    return TIME_MODE.base + pairs * TIME_MODE.perPair
+  },
+
+  startTimer() {
+    this.stopTimer()
+    this._timer = setInterval(() => {
+      if (this.data.won || this.data.timeUp) { this.stopTimer(); return }
+      const t = this.data.timeLeft - 1
+      if (t <= 0) {
+        this.setData({ timeLeft: 0 })
+        this.stopTimer()
+        this.onTimeUp()
+      } else {
+        this.setData({ timeLeft: t })
+      }
+    }, 1000)
+  },
+
+  stopTimer() {
+    if (this._timer) { clearInterval(this._timer); this._timer = null }
+  },
+
+  onTimeUp() {
+    // 时间到：结算（未完成的局直接结束，不翻完）
+    this.stopTimer()
+    this.setData({ timeUp: true, locked: true })
+    this.saveTimeBest()
+    wx.vibrateShort({ type: 'medium' })
+  },
+
+  saveTimeBest() {
+    const s = this.data.timeScore
+    if (s > 0 && s > (wx.getStorageSync(TIME_BEST_KEY) || 0)) {
+      wx.setStorageSync(TIME_BEST_KEY, s)
+      this.setData({ timeBest: s })
+    }
+  },
+
   restart() {
     const lv = this.data.level
     // 取前 pairs 个 emoji，复制成对后洗牌
@@ -74,6 +143,7 @@ Page({
     }
     this._first = null    // 用 null 显式表示未选（修复 0 号牌 falsy bug）
     if (this._flashTimer) { clearTimeout(this._flashTimer); this._flashTimer = null }
+    this.stopTimer()
     const cards = deck.map(e => ({ emoji: e, flipped: false, matched: false }))
     this.setData({
       cards,
@@ -81,9 +151,14 @@ Page({
       matchedCount: 0,
       won: false,
       locked: false,
-      flashing: false
+      flashing: false,
+      combo: 0,
+      maxCombo: 0,
+      timeUp: false,
+      timeScore: 0,
+      timeLeft: this.data.timed ? this.timeLimitOf(lv.pairs) : 0
     })
-    // 瞬间记忆关：全部翻开预览 2 秒后盖回
+    // 瞬间记忆关：全部翻开预览 2 秒后盖回（计时模式预览结束才起表，公平）
     if (lv.flash) {
       this.setData({ cards: cards.map(c => Object.assign({}, c, { flipped: true })), flashing: true, locked: true })
       this._flashTimer = setTimeout(() => {
@@ -93,12 +168,15 @@ Page({
           locked: false
         })
         wx.vibrateShort({ type: 'light' })
+        if (this.data.timed && !this.data.won) this.startTimer()
       }, 2000)
     }
+    // 计时模式起表（flash 关预览完才开始更公平——flash 关在预览结束时起表）
+    if (this.data.timed && !lv.flash) this.startTimer()
   },
 
   tapCard(e) {
-    if (this.data.locked || this.data.won) return
+    if (this.data.locked || this.data.won || this.data.timeUp) return
     const idx = Number(e.currentTarget.dataset.idx)
     const card = this.data.cards[idx]
     if (card.flipped || card.matched) return
@@ -119,23 +197,37 @@ Page({
     const cards = this.data.cards
     if (cards[first].emoji === cards[idx].emoji) {
       // 配对成功：标记 matched（matched 卡保持正面）
-      this.setData({
+      const combo = this.data.combo + 1
+      const gained = TIME_MODE.matchScore + TIME_MODE.comboBonus * (combo - 1)
+      const patch = {
         [`cards[${first}].matched`]: true,
         [`cards[${idx}].matched`]: true,
-        matchedCount: this.data.matchedCount + 1
-      })
+        matchedCount: this.data.matchedCount + 1,
+        combo,
+        maxCombo: Math.max(this.data.maxCombo, combo)
+      }
+      if (this.data.timed) patch.timeScore = this.data.timeScore + gained
+      this.setData(patch)
       wx.vibrateShort({ type: 'light' })
       const matched = this.data.matchedCount
       if (matched === this.data.level.pairs) {
         // 通关
+        this.stopTimer()
         this.setData({ won: true })
-        this.saveBest()
+        // 计时模式：剩余时间奖励（每秒 ×2 分）
+        if (this.data.timed) {
+          const bonus = this.data.timeLeft * 2
+          this.setData({ timeScore: this.data.timeScore + bonus })
+          this.saveTimeBest()
+        } else {
+          this.saveBest()
+        }
         this.unlockNext()
         wx.vibrateShort({ type: 'medium' })
       }
     } else {
-      // 不匹配：短暂展示后一起翻回
-      this.setData({ locked: true })
+      // 不匹配：短暂展示后一起翻回；连击断
+      this.setData({ locked: true, combo: 0 })
       setTimeout(() => {
         this.flip(first, false)
         this.flip(idx, false)
@@ -188,6 +280,7 @@ Page({
 
   onUnload() {
     if (this._flashTimer) clearTimeout(this._flashTimer)
+    this.stopTimer()
   },
 
   goHome() {

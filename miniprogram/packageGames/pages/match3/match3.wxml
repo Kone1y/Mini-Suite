@@ -1,0 +1,14 @@
+<view class="page">
+  <view class="topbar">
+    <view class="stat">分数<text class="num">{{score}}</text></view>
+    <view class="stat">最高<text class="num">{{best}}</text></view>
+    <view class="stat">步数<text class="num">{{moves}}</text></view>
+    <view class="restart" bindtap="restart">重开</view>
+  </view>
+
+  <view class="stage-wrap">
+    <canvas id="stage" type="2d" class="stage" bindtouchstart="onTouchStart"></canvas>
+  </view>
+
+  <view class="foot">— 消消乐 · 点选相邻方块交换，三连即消，连锁加分 —</view>
+</view>

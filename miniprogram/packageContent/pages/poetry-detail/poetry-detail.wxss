@@ -1,5 +1,5 @@
 .poem-card {
-  background: #FFFFFF;
+  background: rgba(22, 21, 34, 0.44);
   border-radius: 20rpx;
   margin: 24rpx;
   padding: 48rpx 36rpx;
@@ -9,17 +9,17 @@
 .title {
   font-size: 40rpx;
   font-weight: 600;
-  color: #26215C;
+  color: #C6C0FA;
 }
 .meta {
   margin: 18rpx 0 34rpx;
-  color: #888780;
+  color: #9C99B4;
   font-size: 24rpx;
 }
 .line {
   font-size: 30rpx;
   line-height: 2.1;
-  color: #2C2C2A;
+  color: #E8E7F0;
   letter-spacing: 2rpx;
 }
 .actions {
@@ -33,7 +33,7 @@
   padding: 16rpx 44rpx;
   border-radius: 40rpx;
   border: 2rpx solid #534AB7;
-  color: #534AB7;
+  color: #A8A0F0;
   font-size: 26rpx;
 }
 .share-btn {

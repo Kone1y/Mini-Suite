@@ -143,7 +143,7 @@ page { background: #12121A; }
   display: flex; flex-direction: column; justify-content: center;
   padding: 0 44rpx;
   /* 玻璃底：透出壁纸，blur 磨砂（不支持 blur 的机型退化为纯半透依然可读） */
-  background: rgba(22, 21, 34, 0.42);
+  background: rgba(22, 21, 34, 0.44);
   backdrop-filter: blur(24rpx);
   -webkit-backdrop-filter: blur(24rpx);
   border: 1.5rpx solid rgba(255,255,255,.22);

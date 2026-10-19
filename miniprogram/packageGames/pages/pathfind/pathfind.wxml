@@ -1,0 +1,52 @@
+<view class="page">
+  <view class="bar">
+    <text class="bar-label">算法</text>
+    <view class="seg">
+      <view class="seg-item {{algo==='bfs'?'on':''}}" data-v="bfs" bindtap="onAlgo">BFS</view>
+      <view class="seg-item {{algo==='dijkstra'?'on':''}}" data-v="dijkstra" bindtap="onAlgo">Dijkstra</view>
+      <view class="seg-item {{algo==='astar'?'on':''}}" data-v="astar" bindtap="onAlgo">A*</view>
+    </view>
+  </view>
+
+  <view class="bar">
+    <text class="bar-label">画笔</text>
+    <view class="seg">
+      <view class="seg-item {{mode==='start'?'on':''}}" data-v="start" bindtap="onMode">起点</view>
+      <view class="seg-item {{mode==='end'?'on':''}}" data-v="end" bindtap="onMode">终点</view>
+      <view class="seg-item {{mode==='wall'?'on':''}}" data-v="wall" bindtap="onMode">墙</view>
+      <view class="seg-item {{mode==='slow'?'on':''}}" data-v="slow" bindtap="onMode">慢速</view>
+      <view class="seg-item {{mode==='erase'?'on':''}}" data-v="erase" bindtap="onMode">擦除</view>
+    </view>
+  </view>
+
+  <view class="bar stats">
+    <text class="st">已探索 {{visitCount}}</text>
+    <text class="st">路径长 {{pathLen}}</text>
+    <text class="st" wx:if="{{status==='done'}}">{{found?'✓ 找到路径':'✗ 无路径'}}</text>
+    <text class="st" wx:if="{{status==='running'}}">搜索中…</text>
+  </view>
+
+  <view class="canvas-wrap">
+    <canvas
+      id="stage"
+      type="2d"
+      class="stage"
+      disable-scroll="{{true}}"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+    ></canvas>
+  </view>
+
+  <view class="actions">
+    <view class="btn btn-primary" bindtap="onStart">{{status==='running'?'运行中…':'▶ 开始'}}</view>
+    <view class="btn btn-ghost" bindtap="onReset">重置</view>
+    <view class="btn btn-ghost" bindtap="onClear">清墙</view>
+    <view class="btn btn-ghost" bindtap="onRandom">随机</view>
+    <view class="seg small">
+      <view class="seg-item {{speed==='slow'?'on':''}}" data-v="slow" bindtap="onSpeed">慢</view>
+      <view class="seg-item {{speed==='mid'?'on':''}}" data-v="mid" bindtap="onSpeed">中</view>
+      <view class="seg-item {{speed==='fast'?'on':''}}" data-v="fast" bindtap="onSpeed">快</view>
+    </view>
+  </view>
+</view>

@@ -1,17 +1,17 @@
 .group-line {
   font-size: 30rpx;
   font-weight: 600;
-  color: #534AB7;
+  color: #A8A0F0;
   padding: 10rpx 0 24rpx;
 }
-.arrow { color: #B4B2A9; margin-left: 8rpx; }
+.arrow { color: #7A7890; margin-left: 8rpx; }
 .row {
   display: flex;
   align-items: center;
 }
 .value-input {
   flex: 1;
-  background: #F6F5F2;
+  background: #12121A;
   border-radius: 12rpx;
   padding: 22rpx 20rpx;
   font-size: 34rpx;
@@ -27,8 +27,8 @@
 }
 .unit-picker { margin-left: 20rpx; }
 .unit-line {
-  background: #EEEDFE;
-  color: #534AB7;
+  background: rgba(106,90,224,.16);
+  color: #A8A0F0;
   border-radius: 12rpx;
   padding: 18rpx 24rpx;
   font-size: 26rpx;
@@ -37,7 +37,7 @@
 }
 .equal {
   text-align: center;
-  color: #888780;
+  color: #9C99B4;
   font-size: 34rpx;
   margin: 16rpx 0;
 }
